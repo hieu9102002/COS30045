@@ -1,96 +1,77 @@
 import json
 import pandas as pd
 
-# parameters
-
-FILE_DATASET = "database.csv"
-FILE_DESCRIPTION = "Codes_and_Descriptions.csv"
+# filenames
+FILE_DATASET = "complete_seds.csv"
+FILE_MSN = "msn.csv"
+FILE_STATECODE = "statecode.csv"
 
 #  get needed msn
-
-DF_DESCRIPTIONS = pd.read_csv(FILE_DESCRIPTION, encoding='unicode_escape')
-
-NEEDED_DESCRIPTIONS = {
-    'Geothermal energy total consumption': "Geothermal",
-    'Biomass total consumption': "Biomass",
-    'Hydropower total consumption': "Hydropower",
-    'Solar energy total consumption': "Solar",
-    'Wind energy total consumption': "Wind",
-    'Renewable energy total consumption': "TotalRenewable",
-    'Total energy consumption': "TotalPrimary"
+NEEDED_MSN = {
+    'GETCB': "Geothermal",
+    'BMTCB': "Biomass",
+    'HYTCB': "Hydropower",
+    'SOTCB': "Solar",
+    'WYTCB': "Wind",
+    'RETCB': "TotalRenewable",
+    'TETCB': "TotalPrimary"
 }
-
-DESCRIPTIONS = DF_DESCRIPTIONS[DF_DESCRIPTIONS["Description"].isin(NEEDED_DESCRIPTIONS.keys())].set_index("MSN").to_dict("index")
-
-NEEDED_MSN = {msn : NEEDED_DESCRIPTIONS[value["Description"]] for msn, value in DESCRIPTIONS.items() }
 
 # select needed years
 NEEDED_YEARS = range(2000, 2020)
 
 # read data
-DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["State", "Year", "MSN", "Value"])
+DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
 # filter dataset
-
 DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN.keys())]
-
 DF_DATASET["MSN"] = DF_DATASET["MSN"].transform(lambda x: NEEDED_MSN[x])
+DF_DATASET["Data"] = DF_DATASET["Data"].transform(lambda x: float(x))
 
-DF_DATASET["Value"] = DF_DATASET["Value"].transform(lambda x: float(x))
+# add other renewables data
 
-# transform to dict
+# pivot data
+DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], values=["Data"])["Data"]
 
-DATA = DF_DATASET.groupby("State")[["Year", "MSN", "Value"]].apply(
-    lambda x: x.groupby("Year")[["MSN", "Value"]].apply(
-        lambda x: x.set_index("MSN")["Value"].to_dict()
-    ).to_dict()
-).to_dict()
+# change to normal dataframe
+# https://stackoverflow.com/questions/43756052/transform-pandas-pivot-table-to-regular-dataframe
+DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 
-# write to json
-open("database.json", "w").write(json.dumps(DATA, sort_keys=False, indent='\t'))
+# add other renewables data
+DF_DATASET['OtherRenewables'] = DF_DATASET['TotalRenewable']
 
+for msn in NEEDED_MSN.values():
+    if(msn != "TotalRenewable" and msn != "TotalPrimary"):
+        DF_DATASET['OtherRenewables'] -= DF_DATASET[msn]
 
-# add others data
+DF_DATASET['OtherRenewables'] = DF_DATASET['OtherRenewables'].transform(lambda x: 0 if x < 0 else x)
 
-for state in DATA.keys():
+# DF_DATASET["Parts"] = DF_DATASET["MSN"].transform(lambda x: 2 if x == "TotalPrimary" else 1 if x == "TotalRenewable" else 0)
 
-    for year in DATA[state].keys():
+# # DF_DATASET.groupby(["StateCode", "Year"]).sum()
 
-        sum = 0
-        
-        for item in DATA[state][year].keys():
+DF_DATASET.to_csv("new.csv")
 
-            if(item != "TotalRenewable" and item != "TotalPrimary"):
-                print(DATA[state][year][item])
-                sum += DATA[state][year][item]
-        
-        other = DATA[state][year]["TotalRenewable"] - sum
+# # reformat data
 
-        if(other < 0):
-            other = 0.0
-            
-        DATA[state][year]["OtherRenewables"] = other
+# FORMATTED_DATA = { "data" : [] }
 
-# reformat data
+# for state in DATA.keys():
+#     state_obj = { 
+#         "code": state,
+#         "years": []
+#     }
 
-FORMATTED_DATA = { "data" : [] }
+#     for year in DATA[state].keys():
+#         year_obj = { 
+#             "year" : int(year)
+#         }
+#         year_obj.update(DATA[state][year])
 
-for state in DATA.keys():
-    state_obj = { 
-        "code": state,
-        "years": []
-    }
-
-    for year in DATA[state].keys():
-        year_obj = { 
-            "year" : int(year)
-        }
-        year_obj.update(DATA[state][year])
-
-        state_obj["years"].append(year_obj)
+#         state_obj["years"].append(year_obj)
     
-    FORMATTED_DATA["data"].append(state_obj)
+#     FORMATTED_DATA["data"].append(state_obj)
 
-import json
 
-open("transformed2new.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
+
+# open("transformed.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
