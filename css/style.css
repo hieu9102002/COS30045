@@ -13,3 +13,9 @@
     visibility:visible;
     fill:black;
 }
+
+.small-multiples-border{
+    fill:white;
+    stroke:black;
+    stroke-width: 1;
+}

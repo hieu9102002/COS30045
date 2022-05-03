@@ -10,31 +10,27 @@ window.onload = () => {
             code: d.code,
             row: +d.row-1,
             col: +d.col-1,
-            data: []
+            years:[]
         }
     }).then(statesCell => {
-        d3.csv("./data/state-data.csv", d=>{
-            return {
-                code: d.State,
-                renewables: +d["Renewable energy total consumption"],
-                non_renewables: 1 - parseFloat(d["Renewable energy total consumption"])
-            }
-        }).then(stateData =>{
+        d3.json("./data/transformed2new.json").then(stateData =>{
             //calculate cell size
-            var pie = d3.pie();
 
             statesCell.forEach(stateCell => {
-                const data = stateData.find(state => state.code == stateCell.code);
-
-                stateCell.data.push(data.renewables);
-                stateCell.data.push(data.non_renewables);
-
-                stateCell.pie = pie(stateCell.data);
-                stateCell.pie.forEach(pie=>pie.code = stateCell.code)
+                const data = stateData.data.find(state => state.code == stateCell.code);
+                stateCell.years = data.years.map(year => {
+                    return{
+                        year: year.year,
+                        Biomass: year.Biomass/year.TotalPrimary,
+                        Geothermal: year.Geothermal/year.TotalPrimary,
+                        Hydropower: year.Hydropower/year.TotalPrimary,
+                        Solar: year.Solar/year.TotalPrimary,
+                        Wind: year.Wind/year.TotalPrimary,
+                        Other: year.OtherRenewables/year.TotalPrimary
+                    }
+                })
             });
             
-            console.log(statesCell)
-
             var maxRow = d3.max(statesCell, d => parseInt(d.row))+1;
             var maxCol = d3.max(statesCell, d => parseInt(d.col))+1;
 
@@ -48,14 +44,26 @@ window.onload = () => {
                 .range([0,width])
                 .paddingInner(innerPadding);
 
+            let stack = d3.stack()
+                .keys(["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Other"]);
+
+            let color = d3.scaleOrdinal(d3.schemeCategory10);
+
             var colBandwidth = colScale.bandwidth();
             var rowBandwidth = rowScale.bandwidth();
+
+            var xScale = d3.scaleBand()
+                .domain(d3.range(18))
+                .range([0,colBandwidth]);
+
+            var yScale = d3.scaleLinear()
+                .domain([0,1])
+                .range([rowBandwidth,0]);
 
             var svg = d3.select("#svg-div")
                 .append("svg")
                 .attr("width", width+margin.right+margin.left)
                 .attr("height", height+margin.top+margin.bottom)
-                .attr("fill", "grey")
                 .append("g")
                 .attr("transform", "translate("+margin.left+","+ margin.top+")");
 
@@ -66,46 +74,34 @@ window.onload = () => {
                 .attr("class", "state")
                 .attr("id", d=>d.code)
                 .attr("transform", d=>"translate(" + colScale(d.col) +","+rowScale(d.row)+")" );
-                
-            let color = d3.scaleOrdinal(['#7fbf7b','#af8dc3']);
-            var outerRadius = rowBandwidth/2;
-            var innerRadius = 0;
-        
-            var arc = d3.arc()
-                .outerRadius(outerRadius)
-                .innerRadius(innerRadius);
-        
-        
-            var arcs = state.selectAll("g.arc")
-                .data(d=>d.pie)
+
+            state.append("rect")
+                .attr("height", rowBandwidth)
+                .attr("width", colBandwidth)
+                .attr("class", "small-multiples-border");
+            
+            var groups = state.selectAll("g.small-multiples")
+                .data(d=>stack(d.years))
                 .enter()
                 .append("g")
-                .attr("class", "arc")
-                .attr("transform", "translate("+outerRadius+","+outerRadius+")");
-        
-            arcs.append("path")
-                .attr("fill", (_,i)=>color(i))
-                .attr("d", (d,i)=>arc(d,i))
-                .on("mouseover", function(_,i){
-                    var label = d3.select("#label-"+i.code+i.index);
-                    label.attr("class", "mouseover-label-selected")
-                })
-                .on("mouseout", function(_,i){
-                    var label = d3.select("#label-"+i.code+i.index);
-                    label.attr("class", "mouseover-label")
-                });
+                .attr("class", "small-multiples")
+                .style("fill", (_,i)=>color(i));
+
+            var rects = groups.selectAll("rect.state-data")
+                .data(d=>d)
+                .enter()
+                .append("rect")
+                .attr("x", (_,i)=>xScale(i))
+                .attr("y", d=>yScale(d[1]))
+                .attr("height", d=>yScale(d[0])-yScale(d[1]))
+                .attr("width", xScale.bandwidth())
+                .attr("class", "state-data");
 
             state.append("text")
                 .attr("class", "state-label")
                 .text(d=>d.code)
                 .attr("x", 0)
                 .attr("y", textMargin);
-
-            arcs.append("text")
-                .text(d=>parseInt(d.value*100))
-                .attr("transform",d=>"translate("+arc.centroid(d)+")")
-                .attr("class", "mouseover-label")
-                .attr("id", d=>"label-"+d.code+d.index);
         })
     })
 }
