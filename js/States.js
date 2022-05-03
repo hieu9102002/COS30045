@@ -116,13 +116,13 @@ window.onload = () => {
 
             function onDataMouseOver(e, d) {
 
-                const year = d.data.year;
                 const state = d3.select(this.parentNode.parentNode).datum().code;
 
-                const subgroupName = d3.select(this.parentNode).datum().key;
-                const subgroupValue = d.data[subgroupName];
+                let yearData = ""
+
+                Object.keys(d.data).forEach(k=>yearData+=k=="year"?k+": "+d.data[k]+"<br>":k+": "+(d.data[k]*100).toFixed(2)+"%<br>");
                 d3.select("#tooltip")
-                    .html("State: " + state + "<br>" + "Year: " + year)
+                    .html("State: " + state +"<br>"+yearData)
 
             }
 
