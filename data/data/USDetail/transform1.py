@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from collections import defaultdict
 
 # filenames
 FILE_DATASET = "complete_seds.csv"
@@ -15,6 +16,13 @@ NEEDED_MSN = {
     'WYTCB': "Wind",
     'RETCB': "TotalRenewable",
     'TETCB': "TotalPrimary"
+}
+RENEWABLE_MSN = {
+    'GETCB': "Geothermal",
+    'BMTCB': "Biomass",
+    'HYTCB': "Hydropower",
+    'SOTCB': "Solar",
+    'WYTCB': "Wind",
 }
 
 # select needed years
@@ -38,40 +46,39 @@ DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], valu
 DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 
 # add other renewables data
-DF_DATASET['OtherRenewables'] = DF_DATASET['TotalRenewable']
-
-for msn in NEEDED_MSN.values():
-    if(msn != "TotalRenewable" and msn != "TotalPrimary"):
-        DF_DATASET['OtherRenewables'] -= DF_DATASET[msn]
-
+DF_DATASET['OtherRenewables'] = DF_DATASET['TotalRenewable'] - DF_DATASET[list(RENEWABLE_MSN.values())].sum(axis=1)
 DF_DATASET['OtherRenewables'] = DF_DATASET['OtherRenewables'].transform(lambda x: 0 if x < 0 else x)
 
-# DF_DATASET["Parts"] = DF_DATASET["MSN"].transform(lambda x: 2 if x == "TotalPrimary" else 1 if x == "TotalRenewable" else 0)
-
-# # DF_DATASET.groupby(["StateCode", "Year"]).sum()
-
-DF_DATASET.to_csv("new.csv")
-
-# # reformat data
-
-# FORMATTED_DATA = { "data" : [] }
-
-# for state in DATA.keys():
-#     state_obj = { 
-#         "code": state,
-#         "years": []
-#     }
-
-#     for year in DATA[state].keys():
-#         year_obj = { 
-#             "year" : int(year)
-#         }
-#         year_obj.update(DATA[state][year])
-
-#         state_obj["years"].append(year_obj)
-    
-#     FORMATTED_DATA["data"].append(state_obj)
+# unpivot data
+DF_DATASET= pd.melt(frame=DF_DATASET, id_vars=["StateCode", "Year"], var_name="MSN", value_name="Data")
 
 
+# reformat data
 
-# open("transformed.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
+# transform to dict
+
+data = DF_DATASET.groupby(["StateCode", "Year", "MSN"])["Data"].sum().to_dict()
+
+# transform tuple key to nested dict
+DATA = defaultdict(lambda: defaultdict(dict))
+for key, value in data.items():
+    state, year, msn = key
+    DATA[state][year]["year"] = year
+    DATA[state][year][msn] = value
+
+
+# reformat data
+
+FORMATTED_DATA = { 
+    "data" : [
+        { 
+            "code": state,
+            "years": [DATA[state][year] for year in DATA[state].keys()]
+        } 
+        for state in DATA.keys()
+    ] 
+}
+
+
+
+open("transformed.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
