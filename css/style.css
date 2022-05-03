@@ -15,7 +15,13 @@
 }
 
 .small-multiples-border{
-    fill:white;
+    fill:#8e0152;
     stroke:black;
-    stroke-width: 1;
+    stroke-width: 0;
+}
+
+.vertical-line{
+    stroke:#000; 
+    stroke-width: '1px';
+    pointer-events: none;
 }
