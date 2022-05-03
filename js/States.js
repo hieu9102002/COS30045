@@ -1,3 +1,4 @@
+
 window.onload = () => {
     var margin = { top: 10, right: 0, bottom: 20, left: 10 },
         width = 900 - margin.left - margin.right,
