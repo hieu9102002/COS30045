@@ -1,0 +1,10 @@
+.state-label{
+    fill:white;
+    stroke:black;
+    stroke-width: 1;
+    font-weight: bold;
+}
+
+.mouseover-label{
+    visibility: hidden;
+}
