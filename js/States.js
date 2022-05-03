@@ -85,7 +85,15 @@ window.onload = () => {
         
             arcs.append("path")
                 .attr("fill", (_,i)=>color(i))
-                .attr("d", (d,i)=>arc(d,i));
+                .attr("d", (d,i)=>arc(d,i))
+                .on("mouseover", function(_,i){
+                    var label = d3.select("#label-"+i.code+i.index);
+                    label.attr("class", "mouseover-label-selected")
+                })
+                .on("mouseout", function(_,i){
+                    var label = d3.select("#label-"+i.code+i.index);
+                    label.attr("class", "mouseover-label")
+                });
 
             state.append("text")
                 .attr("class", "state-label")

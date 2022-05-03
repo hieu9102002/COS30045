@@ -8,3 +8,8 @@
 .mouseover-label{
     visibility: hidden;
 }
+
+.mouseover-label-selected{
+    visibility:visible;
+    fill:black;
+}
