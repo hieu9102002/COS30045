@@ -39,4 +39,36 @@ Flowchart:
 - https://www.eia.gov/totalenergy/data/flow-graphs/total-energy.php
 - https://www.eia.gov/totalenergy/data/flow-graphs/export-data/total-energy.xls
 
-## Database creation
+## Data selection
+
+Below is the MSN and their names to be used for the energy consumption breakdown:
+
+| MSN   | Name              |
+|-------|-------------------|
+| WDTCB | Wood              |
+| WSTCB | Waste             |
+| WWTCB | WoodAndWaste      |
+| BFTCB | Biofuels          |
+| BMTCB | Biomass           |
+| SOTCB | Solar             |
+| WYTCB | Wind              |
+| GETCB | Geothermal        |
+| HYTCB | Hydropower        |
+| RETCB | TotalRenewable    |
+| PMTCB | Petroleum         |
+| NNTCB | NaturalGas        |
+| CLTCB | Coal              |
+| CCNIB | CoalCokeNetImport |
+| FFTCB | TotalFossilFuel   |
+| NUETB | Nuclear           |
+| ELEXB | ElectricityExport |
+| ELIMB | ElectricityImport |
+| TETCB | TotalConsumption  |
+
+A breakdown of MSN:
+
+- TETCB = ELEXB - ELIMB + NUETB + FFTCB + RETCB
+    - FFTCB = PMTCB + NNTCB + CLTCB + CCNIB
+    - RETCB = HYTCB + GETCB + WYTCB + SOTCB + BMTCB
+        - BMTCB = BFTCB + WWTCB
+            -  WWTCB = WSTCB + WDTCB
