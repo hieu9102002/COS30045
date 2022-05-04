@@ -8,3 +8,20 @@
 .mouseover-label{
     visibility: hidden;
 }
+
+.mouseover-label-selected{
+    visibility:visible;
+    fill:black;
+}
+
+.small-multiples-border{
+    fill:#8e0152;
+    stroke:black;
+    stroke-width: 0;
+}
+
+.vertical-line{
+    stroke:#000; 
+    stroke-width: '1px';
+    pointer-events: none;
+}
