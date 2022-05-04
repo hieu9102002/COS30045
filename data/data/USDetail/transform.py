@@ -7,7 +7,17 @@ FILE_DATASET = "complete_seds.csv"
 FILE_MSN = "msn.csv"
 FILE_STATECODE = "statecode.csv"
 
-#  get needed msn
+
+
+# select needed msn
+RENEWABLE_MSN = {
+    'GETCB': "Geothermal",
+    'BMTCB': "Biomass",
+    'HYTCB': "Hydropower",
+    'SOTCB': "Solar",
+    'WYTCB': "Wind",
+}
+
 NEEDED_MSN = {
     'GETCB': "Geothermal",
     'BMTCB': "Biomass",
@@ -16,13 +26,6 @@ NEEDED_MSN = {
     'WYTCB': "Wind",
     'RETCB': "TotalRenewable",
     'TETCB': "TotalPrimary"
-}
-RENEWABLE_MSN = {
-    'GETCB': "Geothermal",
-    'BMTCB': "Biomass",
-    'HYTCB': "Hydropower",
-    'SOTCB': "Solar",
-    'WYTCB': "Wind",
 }
 
 # select needed years
@@ -47,10 +50,15 @@ DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 
 # add other renewables data
 DF_DATASET['OtherRenewables'] = DF_DATASET['TotalRenewable'] - DF_DATASET[list(RENEWABLE_MSN.values())].sum(axis=1)
-DF_DATASET['OtherRenewables'] = DF_DATASET['OtherRenewables'].transform(lambda x: 0 if x < 0 else x)
+
+# add non renewable data
+DF_DATASET['NonRenewables'] = DF_DATASET['TotalPrimary'] - DF_DATASET['TotalRenewable']
 
 # unpivot data
 DF_DATASET= pd.melt(frame=DF_DATASET, id_vars=["StateCode", "Year"], var_name="MSN", value_name="Data")
+
+# clear negative values
+DF_DATASET["Data"] = DF_DATASET["Data"].transform(lambda x: 0 if x < 0 else x)
 
 
 # reformat data
