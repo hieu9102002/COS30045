@@ -17,7 +17,21 @@
 
 <body>
     <h1>Renewable energy usage by state in the US</h1>
-
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <select id="state-filter" class="form-select form-control">
+                    <option value="all">All states</option>
+                    <option value="over-mean">Higher than US mean</option>
+                    <option value="under-mean">Lower than US mean</option>
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="State name" aria-label="Last name">
+            </div>
+        </div>
+    </div>
+    
 	<div id="svg-div"></div>
     <p id="tooltip"></p>
 

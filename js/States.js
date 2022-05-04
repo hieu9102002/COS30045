@@ -10,7 +10,8 @@ window.onload = () => {
             code: d.code,
             row: +d.row - 1,
             col: +d.col - 1,
-            years: []
+            years: [],
+            renewable_percentage_2019: 0
         }
     }).then(statesCell => {
         d3.json("./data/transformed2new.json").then(stateData => {
@@ -29,10 +30,17 @@ window.onload = () => {
                         Other: year.OtherRenewables / year.TotalPrimary
                     }
                 })
+                stateCell.renewable_percentage_2019 = data.years.at(-1).TotalRenewable / data.years.at(-1).TotalPrimary;
             });
 
             var maxRow = d3.max(statesCell, d => parseInt(d.row)) + 1;
             var maxCol = d3.max(statesCell, d => parseInt(d.col)) + 1;
+
+            const USdata2019 = stateData.data.find(state=>state.code=="US").years.at(-1);
+            const USRenewablePercentage2019 = USdata2019.TotalRenewable/USdata2019.TotalPrimary;
+
+            console.log(statesCell)
+            console.log(USRenewablePercentage2019);
 
             let rowScale = d3.scaleBand()
                 .domain(d3.range(maxRow))
@@ -71,9 +79,15 @@ window.onload = () => {
                 .data(statesCell)
                 .enter()
                 .append("g")
-                .attr("class", "state")
+                .attr("class", d=> {
+                    let result = "state ";
+                    if (d.renewable_percentage_2019 >= USRenewablePercentage2019) result+="over-mean";
+                    else result +="under-mean";
+                    return result;    
+                })
                 .attr("id", d => d.code)
                 .attr("transform", d => "translate(" + colScale(d.col) + "," + rowScale(d.row) + ")")
+                .attr("visibility", "visible")
                 .on("mouseenter", onSmallMultiplesMouseEnter)
                 .on("mouseleave", onSmallMultiplesMouseLeave)
                 .on("mousemove", onSmallMultiplesMouseMove);
@@ -113,6 +127,29 @@ window.onload = () => {
                 .attr("visibility", "hidden")
                 .attr("y1", 0)
                 .attr("y2", rowBandwidth);
+
+            let stateFilter = document.getElementById("state-filter")
+            stateFilter.onchange = () => {
+                let selected = stateFilter.value;
+                console.log(selected);
+                switch(selected){
+                    case "all":
+                        state.attr("visibility", "visible");
+                        break;
+                    case "over-mean":
+                        svg.selectAll(".state.over-mean")
+                            .attr("visibility", "visible");
+                        svg.selectAll(".state.under-mean")
+                            .attr("visibility", "collapse");
+                        break;
+                    case "under-mean":
+                        svg.selectAll(".state.under-mean")
+                            .attr("visibility", "visible");
+                        svg.selectAll(".state.over-mean")
+                            .attr("visibility", "collapse");
+                        break;
+                }
+            }
 
             function onDataMouseOver(e, d) {
 
