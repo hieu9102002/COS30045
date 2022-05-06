@@ -105,7 +105,8 @@ A breakdown of MSN:
 - Hydropower
 - Biodiesel
 - Fuel ethanol
-    - losses and coproducts
+- Biodiesel losses and coproducts
+- Fuel ethanol losses and coproducts
 - Wood
 - Waste
 - Coal
