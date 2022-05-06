@@ -47,7 +47,11 @@ FOSSIL_FUEL_MSN = {
 }
 
 # select needed msn
-NEEDED_MSN = {
+NEEDED_MSN = {}
+
+NEEDED_MSN.update(RENEWABLE_MSN)
+NEEDED_MSN.update(FOSSIL_FUEL_MSN)
+NEEDED_MSN.update({
 
     "RETCB": "TotalRenewable",
 
@@ -61,11 +65,8 @@ NEEDED_MSN = {
     
     "TETCB": "TotalConsumption",
 
-}
-NEEDED_MSN.update(RENEWABLE_MSN)
-NEEDED_MSN.update(FOSSIL_FUEL_MSN)
+})
 
-print(NEEDED_MSN.keys())
 
 # select needed years
 NEEDED_YEARS = range(2000, 2020)
@@ -78,59 +79,72 @@ NEEDED_YEARS = range(2000, 2020)
 DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
 # filter dataset
-DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN.keys())]
-DF_DATASET["MSN"] = DF_DATASET["MSN"].transform(lambda x: NEEDED_MSN[x])
-DF_DATASET["Data"] = DF_DATASET["Data"].transform(lambda x: float(x))
-
-# ----------------------------------------------------------------------------------------------------------------
-# ADD DATA
-# ----------------------------------------------------------------------------------------------------------------
-
-# pivot dataframe
-DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], values=["Data"])["Data"]
-
-# change to normal dataframe
-# https://stackoverflow.com/questions/43756052/transform-pandas-pivot-table-to-regular-dataframe
+states = list(DF_DATASET["StateCode"].drop_duplicates().to_dict().values())
+states.remove("US")
+print(len(states))
+DF_DATASET = DF_DATASET.pivot(index=["Year", "MSN"], columns=["StateCode"], values=["Data"])["Data"]
 DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 
-# we add net coal coke import to total coal consumption
-DF_DATASET["Coal"] = DF_DATASET["Coal"] + DF_DATASET["CoalCokeNetImport"]
+DF_DATASET["USA"] = DF_DATASET[states].sum(axis=1)
+DF_DATASET["d_USA"] = DF_DATASET["USA"] - DF_DATASET["US"]
+
+DF_DATASET = DF_DATASET[["Year", "MSN", "USA", "US", "d_USA"]].drop_duplicates(subset=["MSN", "d_USA"])
+
+DF_DATASET.to_csv("log.csv")
+
+# DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN.keys())]
+# DF_DATASET["MSN"] = DF_DATASET["MSN"].transform(lambda x: NEEDED_MSN[x])
+# DF_DATASET["Data"] = DF_DATASET["Data"].transform(lambda x: float(x))
+
+# # ----------------------------------------------------------------------------------------------------------------
+# # ADD DATA
+# # ----------------------------------------------------------------------------------------------------------------
+
+# # pivot dataframe
+# DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], values=["Data"])["Data"]
+
+# # change to normal dataframe
+# # https://stackoverflow.com/questions/43756052/transform-pandas-pivot-table-to-regular-dataframe
+# DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
+
+# # we add net coal coke import to total coal consumption
+# DF_DATASET["Coal"] = DF_DATASET["Coal"] + DF_DATASET["CoalCokeNetImport"]
 
 
-DF_DATASET["TotalRenewable"] = DF_DATASET[ list(RENEWABLE_MSN.values()) ].sum(axis=1)
+# DF_DATASET["TotalRenewable"] = DF_DATASET[ list(RENEWABLE_MSN.values()) ].sum(axis=1)
 
-DF_DATASET["TotalFossilFuel"] = DF_DATASET[ list(FOSSIL_FUEL_MSN.values()) ].sum(axis=1)
+# DF_DATASET["TotalFossilFuel"] = DF_DATASET[ list(FOSSIL_FUEL_MSN.values()) ].sum(axis=1)
 
-DF_DATASET["TotalConsumption"] = DF_DATASET["TotalRenewable"] + DF_DATASET["TotalFossilFuel"] + DF_DATASET["Nuclear"]
+# DF_DATASET["TotalConsumption"] = DF_DATASET["TotalRenewable"] + DF_DATASET["TotalFossilFuel"] + DF_DATASET["Nuclear"]
 
 
-# unpivot data
-DF_DATASET= pd.melt(frame=DF_DATASET, id_vars=["StateCode", "Year"], var_name="MSN", value_name="Data")
+# # unpivot data
+# DF_DATASET= pd.melt(frame=DF_DATASET, id_vars=["StateCode", "Year"], var_name="MSN", value_name="Data")
 
-# ----------------------------------------------------------------------------------------------------------------
-# REFORMAT DATA
-# ----------------------------------------------------------------------------------------------------------------
+# # ----------------------------------------------------------------------------------------------------------------
+# # REFORMAT DATA
+# # ----------------------------------------------------------------------------------------------------------------
 
-# transform to dict
-data = DF_DATASET.groupby(["StateCode", "Year", "MSN"])["Data"].sum().to_dict()
+# # transform to dict
+# data = DF_DATASET.groupby(["StateCode", "Year", "MSN"])["Data"].sum().to_dict()
 
-# transform tuple key to nested dict
-DATA = defaultdict(lambda: defaultdict(dict))
-for key, value in data.items():
-    state, year, msn = key
-    DATA[state][year]["year"] = year
-    DATA[state][year][msn] = value
+# # transform tuple key to nested dict
+# DATA = defaultdict(lambda: defaultdict(dict))
+# for key, value in data.items():
+#     state, year, msn = key
+#     DATA[state][year]["year"] = year
+#     DATA[state][year][msn] = value
 
-# reformat data
-FORMATTED_DATA = { 
-    "data" : [
-        { 
-            "code": state,
-            "years": [DATA[state][year] for year in DATA[state].keys()]
-        } 
-        for state in DATA.keys()
-    ] 
-}
+# # reformat data
+# FORMATTED_DATA = { 
+#     "data" : [
+#         { 
+#             "code": state,
+#             "years": [DATA[state][year] for year in DATA[state].keys()]
+#         } 
+#         for state in DATA.keys()
+#     ] 
+# }
 
-# write data to file
-open("transformed.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
+# # write data to file
+# open("transformed.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
