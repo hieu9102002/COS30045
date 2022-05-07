@@ -1,3 +1,4 @@
+from distutils.errors import LinkError
 import json
 import pandas as pd
 from collections import defaultdict
@@ -7,65 +8,89 @@ FILE_DATASET = "complete_seds.csv"
 FILE_MSN = "msn.csv"
 FILE_STATECODE = "statecode.csv"
 
-# selected msn
-SELECTED_MSN = {
-    "WDTCB": "Wood",
-    "WSTCB": "Waste",
-    "WWTCB": "WoodAndWaste",
-    "BFTCB": "Biofuels",
-    "BMTCB": "Biomass",
-    "SOTCB": "Solar",
-    "WYTCB": "Wind",
-    "GETCB": "Geothermal",
-    "HYTCB": "Hydropower",
-    "RETCB": "TotalRenewable",
-    "PMTCB": "Petroleum",
-    "NNTCB": "NaturalGas",
-    "CLTCB": "Coal",
-    "CCNIB": "CoalCokeNetImport",
-    "FFTCB": "TotalFossilFuel",
-    "NUETB": "Nuclear",
-    "ELEXB": "ElectricityExport",
-    "ELIMB": "ElectricityImport",
-    "TETCB": "TotalConsumption"
-}
-
 # select needed msn
-RENEWABLE_MSN = {
-    'GETCB': "Geothermal",
-    'BMTCB': "Biomass",
-    'HYTCB': "Hydropower",
-    'SOTCB': "Solar",
-    'WYTCB': "Wind",
-}
-
-FOSSIL_FUEL_MSN = {
-    
-    "PMTCB": "Petroleum",
-    "NNTCB": "NaturalGas",
-    "CLTCB": "Coal"
-}
-
-# select needed msn
-NEEDED_MSN = {}
-
-NEEDED_MSN.update(RENEWABLE_MSN)
-NEEDED_MSN.update(FOSSIL_FUEL_MSN)
-NEEDED_MSN.update({
-
-    "RETCB": "TotalRenewable",
-
-    "FFTCB": "TotalFossilFuel",
-    "CCNIB": "CoalCokeNetImport",
-
-    "NUETB": "Nuclear",
-    
-    "ELEXB": "ElectricityExport",
-    "ELIMB": "ElectricityImport",
-    
-    "TETCB": "TotalConsumption",
-
-})
+NEEDED_MSN = [
+    "BDACB",
+    "BDLCB",
+    "BDFDB",
+    "CLACB",
+    "CLRCB",
+    "CLICB",
+    "CLEIB",
+    "CLCCB",
+    "CCIMB",
+    "ELIMB",
+    "ESACB",
+    "ESRCB",
+    "ESICB",
+    "LOTCB",
+    "ELEXB",
+    "ESCCB",
+    "EMACB",
+    "EMICB",
+    "EMCCB",
+    "EMLCB",
+    "EMFDB",
+    "GERCB",
+    "GEICB",
+    "GEEGB",
+    "GECCB",
+    "HYICB",
+    "HYEGB",
+    "HYCCB",
+    "CCEXB",
+    "NGACB",
+    "NGRCB",
+    "NGICB",
+    "NGEIB",
+    "NGCCB",
+    "NUEGB",
+    "PAACB",
+    "PARCB",
+    "PAICB",
+    "PAEIB",
+    "PACCB",
+    "SORCB",
+    "SOICB",
+    "SOEGB",
+    "SOCCB",
+    "WSICB",
+    "WSEIB",
+    "WSCCB",
+    "WYICB",
+    "WYEGB",
+    "WYCCB",
+    "WDRCB",
+    "WDICB",
+    "WDEIB",
+    "WDCCB",
+    "WDPRB",
+    "WDEXB",
+    "SOTCB",
+    "WYTCB",
+    "GETCB",
+    "HYTCB",
+    "WDTCB",
+    "WSTCB",
+    "BDTCB",
+    "EMTCB",
+    "NUETB",
+    "CLTCB",
+    "NGTCB",
+    "PATCB",
+    "TEEIB",
+    "TNACB",
+    "TNICB",
+    "TNCCB",
+    "TNRCB",
+    "SFTCB",
+    "ELISB",
+    "ELNIB",
+    "SFRCB",
+    "SFINB",
+    "SFEIB",
+    "SFCCB"
+]
 
 
 # select needed years
@@ -79,63 +104,94 @@ NEEDED_YEARS = range(2000, 2020)
 DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
 # filter dataset
-states = list(DF_DATASET["StateCode"].drop_duplicates().to_dict().values())
-states.remove("US")
-print(len(states))
-DF_DATASET = DF_DATASET.pivot(index=["Year", "MSN"], columns=["StateCode"], values=["Data"])["Data"]
+
+DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN)]
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# ADD DATA
+# ----------------------------------------------------------------------------------------------------------------
+
+# pivot dataframe
+DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], values=["Data"])["Data"]
+# change to normal dataframe
+# https://stackoverflow.com/questions/43756052/transform-pandas-pivot-table-to-regular-dataframe
 DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 
-DF_DATASET["USA"] = DF_DATASET[states].sum(axis=1)
-DF_DATASET["d_USA"] = DF_DATASET["USA"] - DF_DATASET["US"]
 
-DF_DATASET = DF_DATASET[["Year", "MSN", "USA", "US", "d_USA"]].drop_duplicates(subset=["MSN", "d_USA"])
+# add nodes
+DF_NODES = DF_DATASET[["StateCode", "Year"]]
 
-DF_DATASET.to_csv("log.csv")
+DF_NODES_CSV = pd.read_csv("sankey_nodes.csv")
 
-# DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN.keys())]
-# DF_DATASET["MSN"] = DF_DATASET["MSN"].transform(lambda x: NEEDED_MSN[x])
-# DF_DATASET["Data"] = DF_DATASET["Data"].transform(lambda x: float(x))
+NODES = DF_NODES_CSV["node"].drop_duplicates().values
 
-# # ----------------------------------------------------------------------------------------------------------------
-# # ADD DATA
-# # ----------------------------------------------------------------------------------------------------------------
+DF_NODES = DF_NODES.assign(**{ node: 0 for node in NODES})
 
-# # pivot dataframe
-# DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], values=["Data"])["Data"]
-
-# # change to normal dataframe
-# # https://stackoverflow.com/questions/43756052/transform-pandas-pivot-table-to-regular-dataframe
-# DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
-
-# # we add net coal coke import to total coal consumption
-# DF_DATASET["Coal"] = DF_DATASET["Coal"] + DF_DATASET["CoalCokeNetImport"]
+for index, value in DF_NODES_CSV.iterrows():
+    DF_NODES[value["node"]] += DF_DATASET[value["calculate"]] * value["times"]
 
 
-# DF_DATASET["TotalRenewable"] = DF_DATASET[ list(RENEWABLE_MSN.values()) ].sum(axis=1)
+# add links
+DF_LINKS = DF_DATASET[["StateCode", "Year"]]
 
-# DF_DATASET["TotalFossilFuel"] = DF_DATASET[ list(FOSSIL_FUEL_MSN.values()) ].sum(axis=1)
+DF_LINKS_CSV = pd.read_csv("sankey_links.csv")
 
-# DF_DATASET["TotalConsumption"] = DF_DATASET["TotalRenewable"] + DF_DATASET["TotalFossilFuel"] + DF_DATASET["Nuclear"]
+LINKS = DF_LINKS_CSV[["source", "target"]].drop_duplicates().values
+
+Hash_function = lambda source, target: source + "->" + target
+Reverse_hash = lambda link: link.split("->")
+
+HASHED_LINKS = [Hash_function(link[0], link[1]) for link in LINKS]
+
+DF_LINKS = DF_LINKS.assign(**{ link: 0 for link in HASHED_LINKS})
+
+for index, value in DF_LINKS_CSV.iterrows():
+    DF_LINKS[Hash_function(value["source"], value["target"])] += DF_DATASET[value["calculate"]] * value["times"]
 
 
-# # unpivot data
-# DF_DATASET= pd.melt(frame=DF_DATASET, id_vars=["StateCode", "Year"], var_name="MSN", value_name="Data")
 
-# # ----------------------------------------------------------------------------------------------------------------
-# # REFORMAT DATA
-# # ----------------------------------------------------------------------------------------------------------------
+# unpivot data
+DF_NODES = pd.melt(frame=DF_NODES, id_vars=["StateCode", "Year"], var_name="node", value_name="Data")
+DF_LINKS = pd.melt(frame=DF_LINKS, id_vars=["StateCode", "Year"], var_name="link", value_name="Data")
 
-# # transform to dict
-# data = DF_DATASET.groupby(["StateCode", "Year", "MSN"])["Data"].sum().to_dict()
+# ----------------------------------------------------------------------------------------------------------------
+# REFORMAT DATA
+# ----------------------------------------------------------------------------------------------------------------
 
-# # transform tuple key to nested dict
-# DATA = defaultdict(lambda: defaultdict(dict))
-# for key, value in data.items():
-#     state, year, msn = key
-#     DATA[state][year]["year"] = year
-#     DATA[state][year][msn] = value
+# transform to dict
+data_nodes = DF_NODES.groupby(["StateCode", "Year", "node"])["Data"].sum().to_dict()
 
-# # reformat data
+data_links = DF_LINKS.groupby(["StateCode", "Year", "link"])["Data"].sum().to_dict()
+
+# transform tuple key to nested dict
+
+Hash_id = {}
+
+DATA = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+for key, value in data_nodes.items():
+    state, year, node = key
+    Hash_id[node] = len(DATA[state][year]["nodes"])
+    DATA[state][year]["nodes"].append(
+        {
+            "node": Hash_id[node],
+            "name": node,
+            "value": value/10000.0,
+        }
+    )
+
+for key, value in data_links.items():
+    state, year, link = key
+    DATA[state][year]["links"].append(
+        {
+            "source": Hash_id[Reverse_hash(link)[0]],
+            "target": Hash_id[Reverse_hash(link)[1]],
+            "value": value/10000.0,
+            "width": value/10000.0
+        }
+    )
+
+# reformat data
 # FORMATTED_DATA = { 
 #     "data" : [
 #         { 
@@ -146,5 +202,5 @@ DF_DATASET.to_csv("log.csv")
 #     ] 
 # }
 
-# # write data to file
-# open("transformed.json", "w").write(json.dumps(FORMATTED_DATA, sort_keys=False, indent='\t'))
+# write data to file
+open("transformed.json", "w").write(json.dumps(DATA["CA"][2017], sort_keys=False, indent='\t'))
