@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>SANKEY Experiment</title>
+    
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+    
+    
+</head>
+
+
+<body>
+    <div id="chart">
+        <script src="sankey.js"></script>
+        <style>
+            
+            #chart {
+                border: 1px solid red;
+                width: 1000px;
+            }
+
+            #chart .node {
+                cursor: move;
+            }
+
+            #chart .node rect {
+                /* fill-opacity: 0.9; */
+                shape-rendering: crispEdges;
+            }
+    
+            #chart .node text {
+                /* pointer-events: none; */
+                text-shadow: 0 1px 0 #fff;
+            }
+    
+            #chart .link {
+                fill: none;
+                /* stroke: #000; */
+                stroke-opacity: 0.5;
+            }
+    
+            #chart .link:hover {
+                stroke-opacity: 0.8;
+            }
+    
+        </style>
+        <p id="debug"></p>
+    </div>
+</body>
+
+</html>
