@@ -77,6 +77,7 @@ for index, value in DF_SANKEY["LinksMSN"].iterrows():
 GROUPMAP = defaultdict(dict)
 CHILDS = {}
 
+# traverse the tree to find the needed leaf nodes to sum in the group
 for index, value in DF_SANKEY["GroupSum"].iterrows():
     parent = value["Parent"]
     child = value["Child"]
@@ -102,7 +103,6 @@ for parent in CHILDS.keys():
         elif(LINKS[link]["Source"] in leafs):
             GROUPMAP[parent]["targetLinks"][LINKS[link]["Target"]].append(link)
 
-print(GROUPMAP)
 
 NODESGROUPS = pd.concat( [ DF_SANKEY["Nodes"], DF_SANKEY["Group"] ] )
 NODESGROUPS = NODESGROUPS.set_index("Node").to_dict(orient="index")
@@ -117,6 +117,7 @@ def DECODE_LINK_ID(link):
         "target": link[1]
     }
 
+# add data for group. remove leaf node in the process
 NEEDED_GROUP = ["Renewable"]
 
 for group in GROUPMAP.keys():
@@ -140,13 +141,11 @@ for group in GROUPMAP.keys():
         }
         DF_LINKS = DF_LINKS.drop(columns=GROUPMAP[group]["targetLinks"][target])
 
-print(DF_NODES)
-print(DF_LINKS)
-
 
 # ----------------------------------------------------------------------------------------------------------------
 # UNPIVOT DATA
 # ----------------------------------------------------------------------------------------------------------------
+
 
 DF_NODES = pd.melt(frame=DF_NODES, id_vars=["StateCode", "Year"], var_name="Node", value_name="Data")
 DF_LINKS = pd.melt(frame=DF_LINKS, id_vars=["StateCode", "Year"], var_name="Link", value_name="Data")
@@ -154,6 +153,10 @@ DF_LINKS = pd.melt(frame=DF_LINKS, id_vars=["StateCode", "Year"], var_name="Link
 # ----------------------------------------------------------------------------------------------------------------
 # REFORMAT DATA
 # ----------------------------------------------------------------------------------------------------------------
+
+# removing nodes
+REMOVE_NODES = ["WoodProduction"]
+#  , "Nuclear", "FossilFuel", "ElectricLoss", "ElectricImport", "ElectricExport", "NetInterstateImport", "NetInterstateExport"]
 
 # transform to dict
 DATA_NODES = DF_NODES.set_index(keys=["StateCode", "Year", "Node"]).to_dict(orient="index")
@@ -175,33 +178,61 @@ DATA = defaultdict(
     )
 )
 
+STATE_YEARS = []
+
 # add nodes
 for key, value in DATA_NODES.items():
     state, year, node = key
     value = value["Data"]
 
     # remove NaN values
-    if(np.isnan(value) or value <= 0):
+    if(np.isnan(value) or value <= 0 or node in REMOVE_NODES):
         continue
+
+    if((state, year) not in STATE_YEARS):
+        STATE_YEARS.append((state, year))
 
     nodelist = DATA[state][year]["nodelist"]
     nodeid = DATA[state][year]["nodeid"]
 
     if(node not in nodelist):
-        nodeid[node] = len(nodelist)
+        # nodeid[node] = len(nodelist)
+        nodeid[node] = NODES[node]["Id"]
         nodelist.append(node)
+
+
+# sort nodes
+for state, year in STATE_YEARS:
+    nodeid = DATA[state][year]["nodeid"]
+    DATA[state][year]["nodelist"].sort(key=lambda node: NODES[node]["Id"])
+    nodelist = DATA[state][year]["nodelist"]
+    for i in range(0, len(nodelist)):
+        node = nodelist[i]
+        nodeid[node] = i
     
-    DATA[state][year]["nodes"].append(
-        {
-            "node": nodeid[node],
-            "name": NODES[node]["Name"],
-            "data": {
-                "id": node,
+    
+
+# format nodes
+for state, year in STATE_YEARS:
+
+    nodeid = DATA[state][year]["nodeid"]
+    nodelist = DATA[state][year]["nodelist"]
+
+    for node in nodelist:
+
+        value = DATA_NODES[(state, year, node)]["Data"]
+    
+        DATA[state][year]["nodes"].append(
+            {
+                "node": nodeid[node],
                 "name": NODES[node]["Name"],
-                "value": value,
+                "data": {
+                    "id": node,
+                    "name": NODES[node]["Name"],
+                    "value": value,
+                }
             }
-        }
-    )
+        )
 
 # add links
 for key, value in DATA_LINKS.items():
@@ -209,7 +240,7 @@ for key, value in DATA_LINKS.items():
     value = value["Data"]
 
     # remove NaN values
-    if(np.isnan(value) or value <= 0):
+    if(np.isnan(value) or value <= 0 or node in REMOVE_NODES):
         continue
 
     source = LINKS[link]["Source"]
@@ -249,10 +280,13 @@ open("sankey.json", "w").write(json.dumps(DATA["CA"][2018], sort_keys=False, ind
 
 DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
-DF_DATASET = DF_DATASET[(DF_DATASET["StateCode"] == "CA") & (DF_DATASET["Year"] == 2018) * (DF_DATASET["MSN"].isin(NEEDED_MSN))]
+DF_DATASET = DF_DATASET[(DF_DATASET["StateCode"] == "CA") & (DF_DATASET["Year"] == 2018)]
+#  & (DF_DATASET["MSN"].isin(NEEDED_MSN))]
 
 DF_MSN = pd.read_csv(FILE_MSN)
 
 DF_DATASET = pd.merge(DF_DATASET, DF_MSN, on="MSN")
 
 DF_DATASET.to_csv("log.csv")
+
+# 
