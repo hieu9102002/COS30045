@@ -296,6 +296,16 @@ window.onload = () => {
 
             }
 
+            function onDataMouseClick(e, d) {
+
+                const state = d3.select(this.parentNode.parentNode).datum().code;
+
+                const year = d.data.year;
+
+
+
+            }
+
             function onSmallMultiplesMouseEnter(e, data) {
                 svg.selectAll(".vertical-line")
                     .attr("visibility", "visible");
@@ -661,5 +671,7 @@ function drawTreeMap(source, state, year, color) {
         .attr("y", 14)    // +20 to adjust position (lower)
         .text("Three group leaders and 14 employees")
         .attr("font-size", "19px")
-        .attr("fill", "grey")
+        .attr("fill", "grey");
+
+    return svg;
 }
