@@ -93,7 +93,7 @@ window.onload = () => {
 
             //calculate constants
             var USdata = stateData.data.find(state => state.code == "US");
-            USdata.years = USdata.years.map(year=>{
+            USdata.years = USdata.years.map(year => {
                 return {
                     year: year.year,
                     Biomass: year.Biomass / year.TotalPrimary,
@@ -123,7 +123,16 @@ window.onload = () => {
             let stack = d3.stack()
                 .keys(keys);
 
-            let color = d3.scaleOrdinal(['#f7f7f7', '#e6f5d0', '#b8e186', '#7fbc41', '#4d9221', '#276419'].reverse());
+            let color = {
+                Hydropower: "#1aff1a",
+                Solar: "#71ff5b",
+                Wind: "#9cfe85",
+                Geothermal: "#befcac",
+                Biomass: "#dcfad1",
+                Other: "#f6f6f6"
+            }
+
+            let colorOld = d3.scaleOrdinal(['#f7f7f7', '#e6f5d0', '#b8e186', '#7fbc41', '#4d9221', '#276419'].reverse());
 
             var colBandwidth = colScale.bandwidth();
             var rowBandwidth = rowScale.bandwidth();
@@ -186,7 +195,7 @@ window.onload = () => {
                 .enter()
                 .append("g")
                 .attr("class", "stacked-group")
-                .style("fill", (d) => color(d.key));
+                .style("fill", (d) => color[d.key]);
 
             groups.selectAll("rect.state-data")
                 .data(d => d)
@@ -437,6 +446,10 @@ function autocomplete(inp, input_arr) {
     });
 }
 
+function drawLabel(color){
+    
+}
+
 function createHighlightChart(data, color) {
     var textMargin = 14;
     var innerPadding = 0.05;
@@ -444,7 +457,7 @@ function createHighlightChart(data, color) {
     let stack = d3.stack()
         .keys(["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Other"]);
     //setup margin
-    var margin = { top: 10, right: 10, bottom: 20, left: 100 },
+    var margin = { top: 10, right: 50, bottom: 20, left: 100 },
         width = 300 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
     var svg = d3.select("#svg-overall")
@@ -475,14 +488,18 @@ function createHighlightChart(data, color) {
 
     let yAxis = (g) =>
         g
-            .call(d3.axisLeft(yScale).ticks(2, ".0%").tickValues([0, 1]));
+            .attr(
+                "transform",
+                "translate(" + width + ",0)"
+            )
+            .call(d3.axisRight(yScale).ticks(2, ".0%").tickValues([0, 1]));
 
     var groups = svg.selectAll("g.stacked-group")
         .data(stack(data.years))
         .enter()
         .append("g")
         .attr("class", "stacked-group")
-        .style("fill", (d) => color(d.key));
+        .style("fill", (d) => color[d.key]);
 
     groups.selectAll("rect.state-data")
         .data(d => d)
