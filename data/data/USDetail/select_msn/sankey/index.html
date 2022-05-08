@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <title>SANKEY Experiment</title>
-    
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
-    
-    
+
+
 </head>
 
 
@@ -16,7 +16,6 @@
     <div id="chart">
         <script src="sankey.js"></script>
         <style>
-            
             #chart {
                 border: 1px solid red;
                 width: 1000px;
@@ -30,24 +29,85 @@
                 /* fill-opacity: 0.9; */
                 shape-rendering: crispEdges;
             }
-    
+
             #chart .node text {
                 /* pointer-events: none; */
                 text-shadow: 0 1px 0 #fff;
             }
-    
+
             #chart .link {
                 fill: none;
                 /* stroke: #000; */
                 stroke-opacity: 0.5;
             }
-    
+
             #chart .link:hover {
                 stroke-opacity: 0.8;
             }
-    
         </style>
         <p id="debug"></p>
+    </div>
+
+    <div id="treemap">
+
+        <form>
+            <label><input type="radio" name="mode" value="size" checked> Size</label>
+            <label><input type="radio" name="mode" value="count"> Count</label>
+        </form>
+        <script>
+            'use strict';
+
+            const margin = { top: 40, right: 10, bottom: 10, left: 10 },
+                width = 960 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom,
+                color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            const treemap = d3.treemap().size([width, height]);
+
+            const div = d3.select("#treemap").append("div")
+                .style("position", "relative")
+                .style("width", (width + margin.left + margin.right) + "px")
+                .style("height", (height + margin.top + margin.bottom) + "px")
+                .style("left", margin.left + "px")
+                .style("top", margin.top + "px");
+
+            d3.json("treemap.json").then(function (data) {
+
+                const root = d3.hierarchy(data, (d) => d.children)
+                    .sum((d) => d.size);
+
+                const tree = treemap(root);
+
+                const node = div.datum(root).selectAll(".node")
+                    .data(tree.leaves())
+                    .enter().append("div")
+                    .attr("class", "node")
+                    .style("left", (d) => d.x0 + "px")
+                    .style("top", (d) => d.y0 + "px")
+                    .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
+                    .style("height", (d) => Math.max(0, d.y1 - d.y0 - 1) + "px")
+                    .style("background", (d) => color(d.parent.data.name))
+                    .text((d) => d.data.name);
+
+                d3.selectAll("input").on("change", function change() {
+                    const value = this.value === "count"
+                        ? (d) => { return d.size ? 1 : 0; }
+                        : (d) => { return d.size; };
+
+                    const newRoot = d3.hierarchy(data, (d) => d.children)
+                        .sum(value);
+
+                    node.data(treemap(newRoot).leaves())
+                        .transition()
+                        .duration(1500)
+                        .style("left", (d) => d.x0 + "px")
+                        .style("top", (d) => d.y0 + "px")
+                        .style("width", (d) => Math.max(0, d.x1 - d.x0 - 1) + "px")
+                        .style("height", (d) => Math.max(0, d.y1 - d.y0 - 1) + "px")
+                });
+            });
+
+        </script>
     </div>
 </body>
 

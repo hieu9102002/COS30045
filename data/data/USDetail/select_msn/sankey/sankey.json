@@ -101,24 +101,6 @@
 		},
 		{
 			"node": 11,
-			"name": "Electricity Export",
-			"data": {
-				"id": "ElectricExport",
-				"name": "Electricity Export",
-				"value": 19131.0
-			}
-		},
-		{
-			"node": 12,
-			"name": "Wood Production",
-			"data": {
-				"id": "WoodProduction",
-				"name": "Wood Production",
-				"value": 90622.0
-			}
-		},
-		{
-			"node": 13,
 			"name": "Net Interstate Electricity Import",
 			"data": {
 				"id": "NetInterstateImport",
@@ -127,7 +109,16 @@
 			}
 		},
 		{
-			"node": 14,
+			"node": 12,
+			"name": "Electricity Export",
+			"data": {
+				"id": "ElectricExport",
+				"name": "Electricity Export",
+				"value": 19131.0
+			}
+		},
+		{
+			"node": 13,
 			"name": "Renewable energy",
 			"data": {
 				"id": "Renewable",
@@ -205,7 +196,7 @@
 		},
 		{
 			"source": 4,
-			"target": 11,
+			"target": 12,
 			"value": 19131.0,
 			"data": {
 				"id": "ElectricPower->ElectricExport",
@@ -347,7 +338,7 @@
 			}
 		},
 		{
-			"source": 13,
+			"source": 11,
 			"target": 4,
 			"value": 865712.0,
 			"data": {
@@ -358,18 +349,7 @@
 			}
 		},
 		{
-			"source": 12,
-			"target": 14,
-			"value": 90622.0,
-			"data": {
-				"id": "WoodProduction->Renewable",
-				"source": "WoodProduction",
-				"target": "Renewable",
-				"value": 90622.0
-			}
-		},
-		{
-			"source": 14,
+			"source": 13,
 			"target": 5,
 			"value": 149121.0,
 			"data": {
@@ -380,7 +360,7 @@
 			}
 		},
 		{
-			"source": 14,
+			"source": 13,
 			"target": 6,
 			"value": 64329.0,
 			"data": {
@@ -391,7 +371,7 @@
 			}
 		},
 		{
-			"source": 14,
+			"source": 13,
 			"target": 7,
 			"value": 47951.0,
 			"data": {
@@ -402,7 +382,7 @@
 			}
 		},
 		{
-			"source": 14,
+			"source": 13,
 			"target": 8,
 			"value": 112276.0,
 			"data": {
@@ -413,7 +393,7 @@
 			}
 		},
 		{
-			"source": 14,
+			"source": 13,
 			"target": 4,
 			"value": 783325.0,
 			"data": {
@@ -436,9 +416,8 @@
 		"Residential",
 		"ElectricLoss",
 		"ElectricImport",
-		"ElectricExport",
-		"WoodProduction",
 		"NetInterstateImport",
+		"ElectricExport",
 		"Renewable"
 	],
 	"nodeid": {
@@ -453,9 +432,8 @@
 		"Residential": 8,
 		"ElectricLoss": 9,
 		"ElectricImport": 10,
-		"ElectricExport": 11,
-		"WoodProduction": 12,
-		"NetInterstateImport": 13,
-		"Renewable": 14
+		"ElectricExport": 12,
+		"NetInterstateImport": 11,
+		"Renewable": 13
 	}
 }
