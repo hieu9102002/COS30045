@@ -118,7 +118,25 @@ DF_NODES = pd.melt(frame=DF_NODES, id_vars=["StateCode", "Year"], var_name="Node
 # ----------------------------------------------------------------------------------------------------------------
 
 # remove uneccesary nodes
-REMOVE_NODES = []
+REMOVE_NODES = [
+    "ElectricPower",
+    "Transportation",
+    "Industrial",
+    "Commercial",
+    "Residential",
+    "ElectricLoss",
+    "ElectricImport",
+    "WoodProduction",
+    "BiodieselSum",
+    "Biofuel",
+    "WoodWaste",
+    "ElectricExport",
+    "CoalCokeImport",
+    "CoalCokeExport",
+    "DensifiedBiomassExport",
+    "NetInterstateExport",
+    "NetInterstateImport",
+]
 
 # transform to dict
 DATA_NODES = DF_NODES.set_index(keys=["StateCode", "Year", "Node"]).to_dict(orient="index")
@@ -129,8 +147,11 @@ for key, value in DATA_NODES.items():
     state, year, node = key
     value = value["Data"]
 
-    if(np.isnan(value) or value <= 0 or node in REMOVE_NODES):
+    if(node in REMOVE_NODES):
         continue
+
+    if(np.isnan(value) or value <= 0):
+        value = 0
     
     DATA[state][year]["year"] = year
     DATA[state][year][node] = value
