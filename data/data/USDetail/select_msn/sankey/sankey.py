@@ -18,10 +18,10 @@ NEEDED_YEARS = range(2000, 2020)
 # ----------------------------------------------------------------------------------------------------------------
 
 # read sankey and select needed attributes
-DF_SANKEY_MSN = pd.read_excel(FILE_SANKEY, sheet_name=['Nodes', 'Links', 'NodesMSN', 'LinksMSN'])
+DF_SANKEY = pd.read_excel(FILE_SANKEY, sheet_name=['Nodes', 'Links', 'NodesMSN', 'LinksMSN', 'Group', 'GroupSum'])
 
 # select needed msn
-NEEDED_MSN = DF_SANKEY_MSN["NodesMSN"]["MSN"].drop_duplicates().values.tolist() + DF_SANKEY_MSN["LinksMSN"]["MSN"].drop_duplicates().values.tolist()
+NEEDED_MSN = DF_SANKEY["NodesMSN"]["MSN"].drop_duplicates().values.tolist() + DF_SANKEY["LinksMSN"]["MSN"].drop_duplicates().values.tolist()
 
 
 # read data
@@ -32,7 +32,7 @@ DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"
 
 
 # ----------------------------------------------------------------------------------------------------------------
-# ADD DATA
+# PIVOT AND ADD DATA
 # ----------------------------------------------------------------------------------------------------------------
 
 # pivot dataframe
@@ -45,18 +45,18 @@ DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 # add nodes
 DF_NODES = DF_DATASET[["StateCode", "Year"]]
 
-NODES = DF_SANKEY_MSN["Nodes"].set_index("Node").to_dict(orient="index")
+NODES = DF_SANKEY["Nodes"].set_index("Node").to_dict(orient="index")
 
 DF_NODES = DF_NODES.assign(**{ node: 0 for node in NODES.keys()})
 
-for index, value in DF_SANKEY_MSN["NodesMSN"].iterrows():
+for index, value in DF_SANKEY["NodesMSN"].iterrows():
     DF_NODES[value["Node"]] += DF_DATASET[value["MSN"]] * value["Coefficient"]
 
 
 # add links
 DF_LINKS = DF_DATASET[["StateCode", "Year"]]
 
-LINKS = DF_SANKEY_MSN["Links"].set_index("Link").to_dict(orient="index")
+LINKS = DF_SANKEY["Links"].set_index("Link").to_dict(orient="index")
 
 DF_LINKS = DF_LINKS.assign(**{ link: 0 for link in LINKS.keys()})
 
@@ -65,14 +65,91 @@ def _temp(x, coefficient):
         return 0
     return x*coefficient
 
-for index, value in DF_SANKEY_MSN["LinksMSN"].iterrows():
+for index, value in DF_SANKEY["LinksMSN"].iterrows():
     DF_LINKS[value["Link"]] += DF_DATASET[value["MSN"]].transform(lambda x: _temp(x, value["Coefficient"]))
 
 
-# unpivot data
+
+# ----------------------------------------------------------------------------------------------------------------
+# GROUP DATA
+# ----------------------------------------------------------------------------------------------------------------
+
+GROUPMAP = defaultdict(dict)
+CHILDS = {}
+
+for index, value in DF_SANKEY["GroupSum"].iterrows():
+    parent = value["Parent"]
+    child = value["Child"]
+    CHILDS[parent] = [_value["Child"] for index, _value in DF_SANKEY["GroupSum"].iterrows() if (_value["Parent"] == parent)]
+    if(not CHILDS.get(child)):
+        CHILDS[child] = []
+
+for parent in CHILDS.keys():
+    leafs = []
+    def trackEnd(_parent):
+        for _child in CHILDS[_parent]:
+            if(len(CHILDS[_child]) == 0):
+                leafs.append(_child)
+            else:
+                trackEnd(_child)
+    trackEnd(parent)
+    GROUPMAP[parent]["nodes"] = leafs
+    GROUPMAP[parent]["sourceLinks"] = defaultdict(list)
+    GROUPMAP[parent]["targetLinks"] = defaultdict(list)
+    for link in LINKS.keys():
+        if(LINKS[link]["Target"] in leafs):
+            GROUPMAP[parent]["sourceLinks"][LINKS[link]["Source"]].append(link)
+        elif(LINKS[link]["Source"] in leafs):
+            GROUPMAP[parent]["targetLinks"][LINKS[link]["Target"]].append(link)
+
+print(GROUPMAP)
+
+NODESGROUPS = pd.concat( [ DF_SANKEY["Nodes"], DF_SANKEY["Group"] ] )
+NODESGROUPS = NODESGROUPS.set_index("Node").to_dict(orient="index")
+
+
+def ENCODE_LINK_ID(source, target):
+    return f"{source}->{target}"
+def DECODE_LINK_ID(link):
+    link = link.split("->")
+    return {
+        "source": link[0],
+        "target": link[1]
+    }
+
+NEEDED_GROUP = ["Renewable"]
+
+for group in GROUPMAP.keys():
+    if(group not in NEEDED_GROUP):
+        continue
+    DF_NODES[group] = DF_NODES[GROUPMAP[group]["nodes"]].sum(axis=1)
+    DF_NODES = DF_NODES.drop(columns=GROUPMAP[group]["nodes"])
+    NODES[group] = NODESGROUPS[group]
+    for source in GROUPMAP[group]["sourceLinks"].keys():
+        DF_LINKS[ENCODE_LINK_ID(source, group)] = DF_LINKS[GROUPMAP[group]["sourceLinks"][source]].sum(axis=1)
+        LINKS[ENCODE_LINK_ID(source, group)] = {
+            "Source": source,
+            "Target": group
+        }
+        DF_LINKS = DF_LINKS.drop(columns=GROUPMAP[group]["sourceLinks"][source])
+    for target in GROUPMAP[group]["targetLinks"].keys():
+        DF_LINKS[ENCODE_LINK_ID(group, target)] = DF_LINKS[GROUPMAP[group]["targetLinks"][target]].sum(axis=1)
+        LINKS[ENCODE_LINK_ID(group, target)] = {
+            "Source": group,
+            "Target": target
+        }
+        DF_LINKS = DF_LINKS.drop(columns=GROUPMAP[group]["targetLinks"][target])
+
+print(DF_NODES)
+print(DF_LINKS)
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# UNPIVOT DATA
+# ----------------------------------------------------------------------------------------------------------------
+
 DF_NODES = pd.melt(frame=DF_NODES, id_vars=["StateCode", "Year"], var_name="Node", value_name="Data")
 DF_LINKS = pd.melt(frame=DF_LINKS, id_vars=["StateCode", "Year"], var_name="Link", value_name="Data")
-
 
 # ----------------------------------------------------------------------------------------------------------------
 # REFORMAT DATA
@@ -162,39 +239,6 @@ for key, value in DATA_LINKS.items():
             }
         }
     )
-
-def groupnodes(sankeydata, nodes : list, kwargs : dict):
-
-    nodelist : list = sankeydata["nodelist"]
-    nodeid : dict = sankeydata["nodeid"]
-    nodeid[kwargs["node"]] = len(nodelist)
-    nodelist.append(node)
-    new_node = {
-            "node": nodeid[kwargs["node"]],
-            "name": kwargs["name"],
-            "data": {
-                "id": kwargs["node"],
-                "value": 0,
-            }
-        }
-
-    for key in kwargs.keys():
-        if(key != "node" and key != "name"):
-            new_node["data"][key] = kwargs[key]
-
-    new_nodes = []
-    for node in sankeydata["nodes"]:
-        if(node["data"]["id"] in nodes):
-            new_node["data"]["value"] += node["data"]["value"]
-            nodelist.pop(node["data"]["id"])
-            nodeid.pop(node["data"]["id"])
-        else:
-            new_nodes.append(node)
-    
-    new_links = []
-    for link in sankeydata["links"]:
-        if(link["data"]["source"] in nodes):
-            new_node["data"]["value"] += node["data"]["value"]
 
 
 # write data to file

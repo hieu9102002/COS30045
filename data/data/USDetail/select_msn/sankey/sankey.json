@@ -2,96 +2,6 @@
 	"nodes": [
 		{
 			"node": 0,
-			"name": "Solar",
-			"data": {
-				"id": "Solar",
-				"name": "Solar",
-				"value": 381618.0
-			}
-		},
-		{
-			"node": 1,
-			"name": "Wind",
-			"data": {
-				"id": "Wind",
-				"name": "Wind",
-				"value": 127674.0
-			}
-		},
-		{
-			"node": 2,
-			"name": "Geothermal",
-			"data": {
-				"id": "Geothermal",
-				"name": "Geothermal",
-				"value": 108445.0
-			}
-		},
-		{
-			"node": 3,
-			"name": "Hydropower",
-			"data": {
-				"id": "Hydropower",
-				"name": "Hydropower",
-				"value": 239714.0
-			}
-		},
-		{
-			"node": 4,
-			"name": "Wood",
-			"data": {
-				"id": "Wood",
-				"name": "Wood",
-				"value": 90622.0
-			}
-		},
-		{
-			"node": 5,
-			"name": "Waste",
-			"data": {
-				"id": "Waste",
-				"name": "Waste",
-				"value": 42714.0
-			}
-		},
-		{
-			"node": 6,
-			"name": "Biodiesel",
-			"data": {
-				"id": "Biodiesel",
-				"name": "Biodiesel",
-				"value": 23539.0
-			}
-		},
-		{
-			"node": 7,
-			"name": "Biodiesel loss and coproducts",
-			"data": {
-				"id": "BiodieselLoss",
-				"name": "Biodiesel loss and coproducts",
-				"value": 81.0
-			}
-		},
-		{
-			"node": 8,
-			"name": "Fuel ethanol",
-			"data": {
-				"id": "FuelEthanol",
-				"name": "Fuel ethanol",
-				"value": 131519.0
-			}
-		},
-		{
-			"node": 9,
-			"name": "Fuel ethanol loss and coproducts",
-			"data": {
-				"id": "FuelEthanolLoss",
-				"name": "Fuel ethanol loss and coproducts",
-				"value": 11079.0
-			}
-		},
-		{
-			"node": 10,
 			"name": "Nuclear",
 			"data": {
 				"id": "Nuclear",
@@ -100,7 +10,7 @@
 			}
 		},
 		{
-			"node": 11,
+			"node": 1,
 			"name": "Coal",
 			"data": {
 				"id": "Coal",
@@ -109,7 +19,7 @@
 			}
 		},
 		{
-			"node": 12,
+			"node": 2,
 			"name": "Natural gas",
 			"data": {
 				"id": "NaturalGas",
@@ -118,7 +28,7 @@
 			}
 		},
 		{
-			"node": 13,
+			"node": 3,
 			"name": "Petroleum",
 			"data": {
 				"id": "Petroleum",
@@ -127,7 +37,7 @@
 			}
 		},
 		{
-			"node": 14,
+			"node": 4,
 			"name": "Electric Power Sector",
 			"data": {
 				"id": "ElectricPower",
@@ -136,7 +46,7 @@
 			}
 		},
 		{
-			"node": 15,
+			"node": 5,
 			"name": "Transportation Sector",
 			"data": {
 				"id": "Transportation",
@@ -145,7 +55,7 @@
 			}
 		},
 		{
-			"node": 16,
+			"node": 6,
 			"name": "Industrial Sector",
 			"data": {
 				"id": "Industrial",
@@ -154,7 +64,7 @@
 			}
 		},
 		{
-			"node": 17,
+			"node": 7,
 			"name": "Commercial Sector",
 			"data": {
 				"id": "Commercial",
@@ -163,7 +73,7 @@
 			}
 		},
 		{
-			"node": 18,
+			"node": 8,
 			"name": "Residential Sector",
 			"data": {
 				"id": "Residential",
@@ -172,7 +82,7 @@
 			}
 		},
 		{
-			"node": 19,
+			"node": 9,
 			"name": "Electricity Loss",
 			"data": {
 				"id": "ElectricLoss",
@@ -181,7 +91,7 @@
 			}
 		},
 		{
-			"node": 20,
+			"node": 10,
 			"name": "Electricity Import",
 			"data": {
 				"id": "ElectricImport",
@@ -190,7 +100,7 @@
 			}
 		},
 		{
-			"node": 21,
+			"node": 11,
 			"name": "Electricity Export",
 			"data": {
 				"id": "ElectricExport",
@@ -199,7 +109,7 @@
 			}
 		},
 		{
-			"node": 22,
+			"node": 12,
 			"name": "Wood Production",
 			"data": {
 				"id": "WoodProduction",
@@ -208,41 +118,28 @@
 			}
 		},
 		{
-			"node": 23,
+			"node": 13,
 			"name": "Net Interstate Electricity Import",
 			"data": {
 				"id": "NetInterstateImport",
 				"name": "Net Interstate Electricity Import",
 				"value": 865712.0
 			}
+		},
+		{
+			"node": 14,
+			"name": "Renewable energy",
+			"data": {
+				"id": "Renewable",
+				"name": "Renewable energy",
+				"value": 1157005.0
+			}
 		}
 	],
 	"links": [
 		{
-			"source": 6,
-			"target": 15,
-			"value": 23539.0,
-			"data": {
-				"id": "Biodiesel->Transportation",
-				"source": "Biodiesel",
-				"target": "Transportation",
-				"value": 23539.0
-			}
-		},
-		{
-			"source": 7,
-			"target": 16,
-			"value": 81.0,
-			"data": {
-				"id": "BiodieselLoss->Industrial",
-				"source": "BiodieselLoss",
-				"target": "Industrial",
-				"value": 81.0
-			}
-		},
-		{
-			"source": 11,
-			"target": 16,
+			"source": 1,
+			"target": 6,
 			"value": 33256.0,
 			"data": {
 				"id": "Coal->Industrial",
@@ -252,8 +149,8 @@
 			}
 		},
 		{
-			"source": 20,
-			"target": 14,
+			"source": 10,
+			"target": 4,
 			"value": 21603.0,
 			"data": {
 				"id": "ElectricImport->ElectricPower",
@@ -263,8 +160,8 @@
 			}
 		},
 		{
-			"source": 14,
-			"target": 15,
+			"source": 4,
+			"target": 5,
 			"value": 2559.0,
 			"data": {
 				"id": "ElectricPower->Transportation",
@@ -274,8 +171,8 @@
 			}
 		},
 		{
-			"source": 14,
-			"target": 18,
+			"source": 4,
+			"target": 8,
 			"value": 304009.0,
 			"data": {
 				"id": "ElectricPower->Residential",
@@ -285,8 +182,8 @@
 			}
 		},
 		{
-			"source": 14,
-			"target": 16,
+			"source": 4,
+			"target": 6,
 			"value": 169194.0,
 			"data": {
 				"id": "ElectricPower->Industrial",
@@ -296,8 +193,8 @@
 			}
 		},
 		{
-			"source": 14,
-			"target": 19,
+			"source": 4,
+			"target": 9,
 			"value": 1606903.0,
 			"data": {
 				"id": "ElectricPower->ElectricLoss",
@@ -307,8 +204,8 @@
 			}
 		},
 		{
-			"source": 14,
-			"target": 21,
+			"source": 4,
+			"target": 11,
 			"value": 19131.0,
 			"data": {
 				"id": "ElectricPower->ElectricExport",
@@ -318,8 +215,8 @@
 			}
 		},
 		{
-			"source": 14,
-			"target": 17,
+			"source": 4,
+			"target": 7,
 			"value": 395064.0,
 			"data": {
 				"id": "ElectricPower->Commercial",
@@ -329,118 +226,8 @@
 			}
 		},
 		{
-			"source": 8,
-			"target": 15,
-			"value": 125582.0,
-			"data": {
-				"id": "FuelEthanol->Transportation",
-				"source": "FuelEthanol",
-				"target": "Transportation",
-				"value": 125582.0
-			}
-		},
-		{
-			"source": 8,
-			"target": 16,
-			"value": 2203.0,
-			"data": {
-				"id": "FuelEthanol->Industrial",
-				"source": "FuelEthanol",
-				"target": "Industrial",
-				"value": 2203.0
-			}
-		},
-		{
-			"source": 8,
-			"target": 17,
-			"value": 3733.0,
-			"data": {
-				"id": "FuelEthanol->Commercial",
-				"source": "FuelEthanol",
-				"target": "Commercial",
-				"value": 3733.0
-			}
-		},
-		{
-			"source": 9,
-			"target": 16,
-			"value": 11079.0,
-			"data": {
-				"id": "FuelEthanolLoss->Industrial",
-				"source": "FuelEthanolLoss",
-				"target": "Industrial",
-				"value": 11079.0
-			}
-		},
-		{
 			"source": 2,
-			"target": 18,
-			"value": 287.0,
-			"data": {
-				"id": "Geothermal->Residential",
-				"source": "Geothermal",
-				"target": "Residential",
-				"value": 287.0
-			}
-		},
-		{
-			"source": 2,
-			"target": 16,
-			"value": 1217.0,
-			"data": {
-				"id": "Geothermal->Industrial",
-				"source": "Geothermal",
-				"target": "Industrial",
-				"value": 1217.0
-			}
-		},
-		{
-			"source": 2,
-			"target": 14,
-			"value": 106306.0,
-			"data": {
-				"id": "Geothermal->ElectricPower",
-				"source": "Geothermal",
-				"target": "ElectricPower",
-				"value": 106306.0
-			}
-		},
-		{
-			"source": 2,
-			"target": 17,
-			"value": 634.0,
-			"data": {
-				"id": "Geothermal->Commercial",
-				"source": "Geothermal",
-				"target": "Commercial",
-				"value": 634.0
-			}
-		},
-		{
-			"source": 3,
-			"target": 14,
-			"value": 239615.0,
-			"data": {
-				"id": "Hydropower->ElectricPower",
-				"source": "Hydropower",
-				"target": "ElectricPower",
-				"value": 239615.0
-			}
-		},
-		{
-			"source": 3,
-			"target": 17,
-			"value": 99.0,
-			"data": {
-				"id": "Hydropower->Commercial",
-				"source": "Hydropower",
-				"target": "Commercial",
-				"value": 99.0
-			}
-		},
-		{
-			"source": 12,
-			"target": 15,
+			"target": 5,
 			"value": 45395.0,
 			"data": {
 				"id": "NaturalGas->Transportation",
@@ -450,8 +237,8 @@
 			}
 		},
 		{
-			"source": 12,
-			"target": 18,
+			"source": 2,
+			"target": 8,
 			"value": 438159.0,
 			"data": {
 				"id": "NaturalGas->Residential",
@@ -461,8 +248,8 @@
 			}
 		},
 		{
-			"source": 12,
-			"target": 16,
+			"source": 2,
+			"target": 6,
 			"value": 834480.0,
 			"data": {
 				"id": "NaturalGas->Industrial",
@@ -472,8 +259,8 @@
 			}
 		},
 		{
-			"source": 12,
-			"target": 14,
+			"source": 2,
+			"target": 4,
 			"value": 635418.0,
 			"data": {
 				"id": "NaturalGas->ElectricPower",
@@ -483,8 +270,8 @@
 			}
 		},
 		{
-			"source": 12,
-			"target": 17,
+			"source": 2,
+			"target": 7,
 			"value": 256345.0,
 			"data": {
 				"id": "NaturalGas->Commercial",
@@ -494,8 +281,8 @@
 			}
 		},
 		{
-			"source": 10,
-			"target": 14,
+			"source": 0,
+			"target": 4,
 			"value": 190422.0,
 			"data": {
 				"id": "Nuclear->ElectricPower",
@@ -505,8 +292,8 @@
 			}
 		},
 		{
-			"source": 13,
-			"target": 15,
+			"source": 3,
+			"target": 5,
 			"value": 2876514.0,
 			"data": {
 				"id": "Petroleum->Transportation",
@@ -516,8 +303,8 @@
 			}
 		},
 		{
-			"source": 13,
-			"target": 18,
+			"source": 3,
+			"target": 8,
 			"value": 24830.0,
 			"data": {
 				"id": "Petroleum->Residential",
@@ -527,8 +314,8 @@
 			}
 		},
 		{
-			"source": 13,
-			"target": 16,
+			"source": 3,
+			"target": 6,
 			"value": 437737.0,
 			"data": {
 				"id": "Petroleum->Industrial",
@@ -538,8 +325,8 @@
 			}
 		},
 		{
-			"source": 13,
-			"target": 14,
+			"source": 3,
+			"target": 4,
 			"value": 378.0,
 			"data": {
 				"id": "Petroleum->ElectricPower",
@@ -549,8 +336,8 @@
 			}
 		},
 		{
-			"source": 13,
-			"target": 17,
+			"source": 3,
+			"target": 7,
 			"value": 82060.0,
 			"data": {
 				"id": "Petroleum->Commercial",
@@ -560,173 +347,8 @@
 			}
 		},
 		{
-			"source": 0,
-			"target": 18,
-			"value": 89813.0,
-			"data": {
-				"id": "Solar->Residential",
-				"source": "Solar",
-				"target": "Residential",
-				"value": 89813.0
-			}
-		},
-		{
-			"source": 0,
-			"target": 16,
-			"value": 17288.0,
-			"data": {
-				"id": "Solar->Industrial",
-				"source": "Solar",
-				"target": "Industrial",
-				"value": 17288.0
-			}
-		},
-		{
-			"source": 0,
-			"target": 14,
-			"value": 244148.0,
-			"data": {
-				"id": "Solar->ElectricPower",
-				"source": "Solar",
-				"target": "ElectricPower",
-				"value": 244148.0
-			}
-		},
-		{
-			"source": 0,
-			"target": 17,
-			"value": 30370.0,
-			"data": {
-				"id": "Solar->Commercial",
-				"source": "Solar",
-				"target": "Commercial",
-				"value": 30370.0
-			}
-		},
-		{
-			"source": 5,
-			"target": 16,
-			"value": 8571.0,
-			"data": {
-				"id": "Waste->Industrial",
-				"source": "Waste",
-				"target": "Industrial",
-				"value": 8571.0
-			}
-		},
-		{
-			"source": 5,
-			"target": 14,
-			"value": 24410.0,
-			"data": {
-				"id": "Waste->ElectricPower",
-				"source": "Waste",
-				"target": "ElectricPower",
-				"value": 24410.0
-			}
-		},
-		{
-			"source": 5,
-			"target": 17,
-			"value": 9733.0,
-			"data": {
-				"id": "Waste->Commercial",
-				"source": "Waste",
-				"target": "Commercial",
-				"value": 9733.0
-			}
-		},
-		{
-			"source": 1,
-			"target": 16,
-			"value": 46.0,
-			"data": {
-				"id": "Wind->Industrial",
-				"source": "Wind",
-				"target": "Industrial",
-				"value": 46.0
-			}
-		},
-		{
-			"source": 1,
-			"target": 14,
-			"value": 127575.0,
-			"data": {
-				"id": "Wind->ElectricPower",
-				"source": "Wind",
-				"target": "ElectricPower",
-				"value": 127575.0
-			}
-		},
-		{
-			"source": 1,
-			"target": 17,
-			"value": 52.0,
-			"data": {
-				"id": "Wind->Commercial",
-				"source": "Wind",
-				"target": "Commercial",
-				"value": 52.0
-			}
-		},
-		{
-			"source": 4,
-			"target": 18,
-			"value": 22176.0,
-			"data": {
-				"id": "Wood->Residential",
-				"source": "Wood",
-				"target": "Residential",
-				"value": 22176.0
-			}
-		},
-		{
-			"source": 4,
-			"target": 16,
-			"value": 23844.0,
-			"data": {
-				"id": "Wood->Industrial",
-				"source": "Wood",
-				"target": "Industrial",
-				"value": 23844.0
-			}
-		},
-		{
-			"source": 4,
-			"target": 14,
-			"value": 41271.0,
-			"data": {
-				"id": "Wood->ElectricPower",
-				"source": "Wood",
-				"target": "ElectricPower",
-				"value": 41271.0
-			}
-		},
-		{
-			"source": 4,
-			"target": 17,
-			"value": 3330.0,
-			"data": {
-				"id": "Wood->Commercial",
-				"source": "Wood",
-				"target": "Commercial",
-				"value": 3330.0
-			}
-		},
-		{
-			"source": 22,
+			"source": 13,
 			"target": 4,
-			"value": 90622.0,
-			"data": {
-				"id": "WoodProduction->Wood",
-				"source": "WoodProduction",
-				"target": "Wood",
-				"value": 90622.0
-			}
-		},
-		{
-			"source": 23,
-			"target": 14,
 			"value": 865712.0,
 			"data": {
 				"id": "NetInterstateImport->ElectricPower",
@@ -734,19 +356,75 @@
 				"target": "ElectricPower",
 				"value": 865712.0
 			}
+		},
+		{
+			"source": 12,
+			"target": 14,
+			"value": 90622.0,
+			"data": {
+				"id": "WoodProduction->Renewable",
+				"source": "WoodProduction",
+				"target": "Renewable",
+				"value": 90622.0
+			}
+		},
+		{
+			"source": 14,
+			"target": 5,
+			"value": 149121.0,
+			"data": {
+				"id": "Renewable->Transportation",
+				"source": "Renewable",
+				"target": "Transportation",
+				"value": 149121.0
+			}
+		},
+		{
+			"source": 14,
+			"target": 6,
+			"value": 64329.0,
+			"data": {
+				"id": "Renewable->Industrial",
+				"source": "Renewable",
+				"target": "Industrial",
+				"value": 64329.0
+			}
+		},
+		{
+			"source": 14,
+			"target": 7,
+			"value": 47951.0,
+			"data": {
+				"id": "Renewable->Commercial",
+				"source": "Renewable",
+				"target": "Commercial",
+				"value": 47951.0
+			}
+		},
+		{
+			"source": 14,
+			"target": 8,
+			"value": 112276.0,
+			"data": {
+				"id": "Renewable->Residential",
+				"source": "Renewable",
+				"target": "Residential",
+				"value": 112276.0
+			}
+		},
+		{
+			"source": 14,
+			"target": 4,
+			"value": 783325.0,
+			"data": {
+				"id": "Renewable->ElectricPower",
+				"source": "Renewable",
+				"target": "ElectricPower",
+				"value": 783325.0
+			}
 		}
 	],
 	"nodelist": [
-		"Solar",
-		"Wind",
-		"Geothermal",
-		"Hydropower",
-		"Wood",
-		"Waste",
-		"Biodiesel",
-		"BiodieselLoss",
-		"FuelEthanol",
-		"FuelEthanolLoss",
 		"Nuclear",
 		"Coal",
 		"NaturalGas",
@@ -760,32 +438,24 @@
 		"ElectricImport",
 		"ElectricExport",
 		"WoodProduction",
-		"NetInterstateImport"
+		"NetInterstateImport",
+		"Renewable"
 	],
 	"nodeid": {
-		"Solar": 0,
-		"Wind": 1,
-		"Geothermal": 2,
-		"Hydropower": 3,
-		"Wood": 4,
-		"Waste": 5,
-		"Biodiesel": 6,
-		"BiodieselLoss": 7,
-		"FuelEthanol": 8,
-		"FuelEthanolLoss": 9,
-		"Nuclear": 10,
-		"Coal": 11,
-		"NaturalGas": 12,
-		"Petroleum": 13,
-		"ElectricPower": 14,
-		"Transportation": 15,
-		"Industrial": 16,
-		"Commercial": 17,
-		"Residential": 18,
-		"ElectricLoss": 19,
-		"ElectricImport": 20,
-		"ElectricExport": 21,
-		"WoodProduction": 22,
-		"NetInterstateImport": 23
+		"Nuclear": 0,
+		"Coal": 1,
+		"NaturalGas": 2,
+		"Petroleum": 3,
+		"ElectricPower": 4,
+		"Transportation": 5,
+		"Industrial": 6,
+		"Commercial": 7,
+		"Residential": 8,
+		"ElectricLoss": 9,
+		"ElectricImport": 10,
+		"ElectricExport": 11,
+		"WoodProduction": 12,
+		"NetInterstateImport": 13,
+		"Renewable": 14
 	}
 }
