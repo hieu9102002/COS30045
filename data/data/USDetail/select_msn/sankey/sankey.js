@@ -30,7 +30,7 @@ const sankeyMargin = { top: 10, right: 10, bottom: 10, left: 10 },
     sankeyareaWidth = svgWidth - sankeyMargin.left - sankeyMargin.right,
     sankeyareaHeight = svgHeight - sankeyMargin.top - sankeyMargin.bottom,
     sankeyNodeWidth = 60,
-    sankeyNodePadding = 30,
+    // sankeyNodePadding = 10,
     nodeTextPadding = 6;
 
 // format variables
@@ -46,7 +46,7 @@ const sankeyarea = svg.append("g")
 // Set the sankey diagram properties
 const Sankey = d3.sankey()
     .nodeWidth(sankeyNodeWidth)
-    .nodePadding(sankeyNodePadding)
+    // .nodePadding(sankeyNodePadding)
     .size([sankeyareaWidth, sankeyareaHeight]);
 
 // load data and draw sankey
@@ -71,6 +71,11 @@ d3.json("sankey.json")
 
         // add link titles (tooltips)
         links.append("title")
+            .text(function (d) {
+                return d.source.name + " → " + d.target.name + "\n" + d.data.value;
+            });
+
+        links.append("text")
             .text(function (d) {
                 return d.source.name + " → " + d.target.name + "\n" + d.data.value;
             });
@@ -131,7 +136,7 @@ d3.json("sankey.json")
             .attr("y", function (d) {
                 return (d.y1 + d.y0) / 2;
             })
-            .attr("dy", "0.35em")
+            // .attr("dy", "0.35em")
             .attr("x", function (d) {
                 return d.x0 - nodeTextPadding;
             })
@@ -156,11 +161,11 @@ d3.json("sankey.json")
             .attr("x2", d => d.target.x0)
             .call(gradient => gradient.append("stop")
                 .attr("offset", "0%")
-                .attr("stop-color", d => d.target.color)
+                .attr("stop-color", d => d.source.color)
             )
             .call(gradient => gradient.append("stop")
                 .attr("offset", "100%")
-                .attr("stop-color", d => d.source.color)
+                .attr("stop-color", d => d.target.color)
             );
 
         links.attr("stroke", (d) => {
@@ -230,7 +235,7 @@ d3.json("sankey.json")
             Sankey.update(graph);
 
             // redraw links
-            
+
             links.selectAll("path")
                 .attr("d", d3.sankeyLinkHorizontal());
 
