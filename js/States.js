@@ -68,7 +68,7 @@ window.onload = () => {
             renewable_percentage_2019: 0
         }
     }).then(statesCell => {
-        d3.json("./data/transformed2new.json").then(stateData => { //Read in data file
+        d3.json("./data/data/USDetail/transformed.json").then(stateData => { //Read in data file
             //combine two files
 
             statesCell.forEach(stateCell => {
@@ -76,15 +76,15 @@ window.onload = () => {
                 stateCell.years = data.years.map(year => {
                     return {
                         year: year.year,
-                        Biomass: year.Biomass / year.TotalPrimary,
-                        Geothermal: year.Geothermal / year.TotalPrimary,
-                        Hydropower: year.Hydropower / year.TotalPrimary,
-                        Solar: year.Solar / year.TotalPrimary,
-                        Wind: year.Wind / year.TotalPrimary,
-                        Other: year.OtherRenewables / year.TotalPrimary
+                        Biomass: year.Biomass / year.Total,
+                        Geothermal: year.Geothermal / year.Total,
+                        Hydropower: year.Hydropower / year.Total,
+                        Solar: year.Solar / year.Total,
+                        Wind: year.Wind / year.Total,
+                        
                     }
                 })
-                stateCell.renewable_percentage_2019 = data.years.at(-1).TotalRenewable / data.years.at(-1).TotalPrimary;
+                stateCell.renewable_percentage_2019 = data.years.at(-1).Renewable / data.years.at(-1).Total;
             });
 
             //calculate rows and columns of small multiples
@@ -96,13 +96,12 @@ window.onload = () => {
             USdata.years = USdata.years.map(year => {
                 return {
                     year: year.year,
-                    Biomass: year.Biomass / year.TotalPrimary,
-                    Geothermal: year.Geothermal / year.TotalPrimary,
-                    Hydropower: year.Hydropower / year.TotalPrimary,
-                    Solar: year.Solar / year.TotalPrimary,
-                    Wind: year.Wind / year.TotalPrimary,
-                    TotalRenewable: year.TotalRenewable / year.TotalPrimary,
-                    Other: year.OtherRenewables / year.TotalPrimary
+                    Biomass: year.Biomass / year.Total,
+                    Geothermal: year.Geothermal / year.Total,
+                    Hydropower: year.Hydropower / year.Total,
+                    Solar: year.Solar / year.Total,
+                    Wind: year.Wind / year.Total,
+                    TotalRenewable: year.Renewable / year.Total,
                 }
             })
             const USdata2019 = USdata.years.at(-1);
@@ -119,7 +118,7 @@ window.onload = () => {
                 .range([0, width])
                 .paddingInner(innerPadding);
 
-            let keys = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Other"]
+            let keys = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass"]
             let stack = d3.stack()
                 .keys(keys);
 
@@ -159,6 +158,7 @@ window.onload = () => {
                 .enter()
                 .append("g")
                 .attr("class", d => {
+                    console.log(d);
                     let result = "state ";
                     if (d.renewable_percentage_2019 >= USRenewablePercentage2019) result += "over-mean";
                     else result += "under-mean";
@@ -447,7 +447,7 @@ function autocomplete(inp, input_arr) {
 }
 
 function drawLabel(color){
-    
+
 }
 
 function createHighlightChart(data, color) {
