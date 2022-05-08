@@ -75,12 +75,6 @@ d3.json("sankey.json")
                 return d.source.name + " → " + d.target.name + "\n" + d.data.value;
             });
 
-        links.append("text")
-            .text(function (d) {
-                return d.source.name + " → " + d.target.name + "\n" + d.data.value;
-            });
-
-
         // add nodes
         const nodes = sankeyarea
             .append("g")

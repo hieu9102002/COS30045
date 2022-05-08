@@ -10,8 +10,8 @@ FILE_MSN = "msn.csv"
 FILE_STATECODE = "statecode.csv"
 FILE_SANKEY = "sankey.xlsx"
 
-# select needed years
-NEEDED_YEARS = range(2000, 2020)
+# # select needed years
+# NEEDED_YEARS = range(2000, 2020)
 
 # ----------------------------------------------------------------------------------------------------------------
 # READ AND FILTER DATA
@@ -28,7 +28,11 @@ NEEDED_MSN = DF_SANKEY["NodesMSN"]["MSN"].drop_duplicates().values.tolist() + DF
 DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
 # filter dataset
-DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN)]
+DF_DATASET = DF_DATASET[
+    # DF_DATASET["Year"].isin(NEEDED_YEARS) 
+    # & 
+    DF_DATASET["MSN"].isin(NEEDED_MSN)
+]
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -127,9 +131,6 @@ REMOVE_NODES = [
     "ElectricLoss",
     "ElectricImport",
     "WoodProduction",
-    "BiodieselSum",
-    "Biofuel",
-    "WoodWaste",
     "ElectricExport",
     "CoalCokeImport",
     "CoalCokeExport",
