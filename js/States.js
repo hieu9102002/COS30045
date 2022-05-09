@@ -68,7 +68,7 @@ window.onload = () => {
             renewable_percentage_2019: 0
         }
     }).then(statesCell => {
-        d3.json("./data/transformed2new.json").then(stateData => { //Read in data file
+        d3.json("./data/data/USDetail/transformed.json").then(stateData => { //Read in data file
             //combine two files
 
             statesCell.forEach(stateCell => {
@@ -76,15 +76,18 @@ window.onload = () => {
                 stateCell.years = data.years.map(year => {
                     return {
                         year: year.year,
-                        Biomass: year.Biomass / year.TotalPrimary,
-                        Geothermal: year.Geothermal / year.TotalPrimary,
-                        Hydropower: year.Hydropower / year.TotalPrimary,
-                        Solar: year.Solar / year.TotalPrimary,
-                        Wind: year.Wind / year.TotalPrimary,
-                        Other: year.OtherRenewables / year.TotalPrimary
+                        Biomass: year.Biomass / year.Total,
+                        Geothermal: year.Geothermal / year.Total,
+                        Hydropower: year.Hydropower / year.Total,
+                        Solar: year.Solar / year.Total,
+                        Wind: year.Wind / year.Total,
+                        Coal: year.Coal / year.Total,
+                        Petroleum: year.Petroleum / year.Total,
+                        NaturalGas: year.NaturalGas / year.Total,
+                        Nuclear: year.Nuclear / year.Total
                     }
                 })
-                stateCell.renewable_percentage_2019 = data.years.at(-1).TotalRenewable / data.years.at(-1).TotalPrimary;
+                stateCell.renewable_percentage_2019 = data.years.at(-1).Renewable / data.years.at(-1).Total;
             });
 
             //calculate rows and columns of small multiples
@@ -93,19 +96,25 @@ window.onload = () => {
 
             //calculate constants
             var USdata = stateData.data.find(state => state.code == "US");
-            USdata.years = USdata.years.map(year=>{
-                return {
-                    year: year.year,
-                    Biomass: year.Biomass / year.TotalPrimary,
-                    Geothermal: year.Geothermal / year.TotalPrimary,
-                    Hydropower: year.Hydropower / year.TotalPrimary,
-                    Solar: year.Solar / year.TotalPrimary,
-                    Wind: year.Wind / year.TotalPrimary,
-                    TotalRenewable: year.TotalRenewable / year.TotalPrimary,
-                    Other: year.OtherRenewables / year.TotalPrimary
-                }
-            })
-            const USdata2019 = USdata.years.at(-1);
+            var USData = {
+                code: "US",
+                years: USdata.years.map(year => {
+                    return {
+                        year: year.year,
+                        Biomass: year.Biomass / year.Total,
+                        Geothermal: year.Geothermal / year.Total,
+                        Hydropower: year.Hydropower / year.Total,
+                        Solar: year.Solar / year.Total,
+                        Wind: year.Wind / year.Total,
+                        Coal: year.Coal / year.Total,
+                        Petroleum: year.Petroleum / year.Total,
+                        NaturalGas: year.NaturalGas / year.Total,
+                        Nuclear: year.Nuclear / year.Total,
+                        TotalRenewable: year.Renewable / year.Total,
+                    }
+                })
+            }
+            const USdata2019 = USData.years.at(-1);
             const USRenewablePercentage2019 = USdata2019.TotalRenewable;
 
             //create scales
@@ -119,11 +128,21 @@ window.onload = () => {
                 .range([0, width])
                 .paddingInner(innerPadding);
 
-            let keys = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Other"]
+            let keys = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Coal", "Petroleum", "NaturalGas", "Nuclear"]
             let stack = d3.stack()
                 .keys(keys);
 
-            let color = d3.scaleOrdinal(['#f7f7f7', '#e6f5d0', '#b8e186', '#7fbc41', '#4d9221', '#276419'].reverse());
+            let color = {
+                Hydropower: "#1aff1a",
+                Solar: "#71ff5b",
+                Wind: "#9cfe85",
+                Geothermal: "#befcac",
+                Biomass: "#dcfad1",
+                Coal: "#4b0092",
+                Petroleum: "#723ca7",
+                NaturalGas: "#956abb",
+                Nuclear: "#b797cf"
+            }
 
             var colBandwidth = colScale.bandwidth();
             var rowBandwidth = rowScale.bandwidth();
@@ -186,7 +205,7 @@ window.onload = () => {
                 .enter()
                 .append("g")
                 .attr("class", "stacked-group")
-                .style("fill", (d) => color(d.key));
+                .style("fill", (d) => color[d.key]);
 
             groups.selectAll("rect.state-data")
                 .data(d => d)
@@ -243,7 +262,10 @@ window.onload = () => {
                 }
             }
 
-            var highlightSvg = createHighlightChart(USdata, color);
+            var highlightSvg = createHighlightChart(USData, color, keys);
+            var label = drawLabel(color);
+            console.log(stateData);
+            drawTreeMap(stateData,"US",2019,color);
 
             //implement state search function
             let stateSearch = document.getElementById("state-search");
@@ -271,6 +293,16 @@ window.onload = () => {
                 Object.keys(d.data).forEach(k => yearData += k == "year" ? k + ": " + d.data[k] + "<br>" : k + ": " + (d.data[k] * 100).toFixed(2) + "%<br>");
                 d3.select("#tooltip")
                     .html("State: " + state + "<br>" + yearData)
+
+            }
+
+            function onDataMouseClick(e, d) {
+
+                const state = d3.select(this.parentNode.parentNode).datum().code;
+
+                const year = d.data.year;
+
+
 
             }
 
@@ -302,7 +334,7 @@ window.onload = () => {
                 if (stateSearch.value != '')
                     highlightSearchedState()
 
-                redrawHighlight(USdata);
+                redrawHighlight(USData);
             }
 
             function onSmallMultiplesMouseMove(e, d) {
@@ -317,7 +349,7 @@ window.onload = () => {
             function redrawHighlight(data) {
                 var yScaleRedraw = d3.scaleLinear()
                     .domain([0, 1])
-                    .range([170, 0]);
+                    .range([160, 0]);
 
                 var groupsRedraw = highlightSvg.selectAll("g.stacked-group")
                     .data(stack(data.years));
@@ -437,16 +469,48 @@ function autocomplete(inp, input_arr) {
     });
 }
 
-function createHighlightChart(data, color) {
+function drawLabel(color) {
+    var keys = Object.keys(color).reverse()
+    var svg = d3.select("#svg-label")
+        .append("svg")
+        .attr("height", 190)
+        .attr("width", 450);
+
+    var size = 15;
+
+    svg.selectAll("mycolors")
+        .data(keys)
+        .enter()
+        .append("rect")
+        .attr("x", 100)
+        .attr("y", (_, i) => 10 + i * (size + 5))
+        .attr("width", size)
+        .attr("height", size)
+        .style("fill", d => color[d]);
+
+    svg.selectAll("mylabels")
+        .data(keys)
+        .enter()
+        .append("text")
+        .attr("x", 100 + size * 1.2)
+        .attr("y", (_, i) => 10 + i * (size + 5) + (size / 2)) // 100 is where the first dot appears. 25 is the distance between dots
+        .text(d => d)
+        .attr("text-anchor", "left")
+        .style("alignment-baseline", "middle");
+
+    return svg;
+}
+
+function createHighlightChart(data, color, keys) {
     var textMargin = 14;
     var innerPadding = 0.05;
 
     let stack = d3.stack()
-        .keys(["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Other"]);
+        .keys(keys);
     //setup margin
-    var margin = { top: 10, right: 10, bottom: 20, left: 100 },
-        width = 300 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+    var margin = { top: 10, right: 50, bottom: 20, left: 50 },
+        width = 400 - margin.left - margin.right,
+        height = 190 - margin.top - margin.bottom;
     var svg = d3.select("#svg-overall")
         .append("svg")
         .attr("width", width + margin.right + margin.left)
@@ -475,14 +539,18 @@ function createHighlightChart(data, color) {
 
     let yAxis = (g) =>
         g
-            .call(d3.axisLeft(yScale).ticks(2, ".0%").tickValues([0, 1]));
+            .attr(
+                "transform",
+                "translate(" + width + ",0)"
+            )
+            .call(d3.axisRight(yScale).ticks(2, ".0%").tickValues([0, 1]));
 
     var groups = svg.selectAll("g.stacked-group")
         .data(stack(data.years))
         .enter()
         .append("g")
         .attr("class", "stacked-group")
-        .style("fill", (d) => color(d.key));
+        .style("fill", (d) => color[d.key]);
 
     groups.selectAll("rect.state-data")
         .data(d => d)
@@ -504,6 +572,106 @@ function createHighlightChart(data, color) {
 
     svg.append("g").call(xAxis);
     svg.append("g").call(yAxis);
+
+    return svg;
+}
+
+function drawTreeMap(source, state, year, color) {
+    const margin = { top: 10, right: 10, bottom: 10, left: 10 },
+        width = 800 - margin.left - margin.right,
+        height = 445 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    const svg = d3.select("#svg-treemap")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            `translate(${margin.left}, ${margin.top})`);
+
+    var countryData = source.data.find(d=>d.code===state);
+    var data = countryData.years.find(d=>d.year===year);
+    console.log(data);
+    var treeData = {
+        name: "Renewables",
+        children: [
+            {
+                name: "Non-combustible Renewables",
+                children: [
+                    { name: "Hydropower", value: data.Hydropower },
+                    { name: "Solar", value: data.Solar },
+                    { name: "Wind", value: data.Wind },
+                    { name: "Geothermal", value: data.Geothermal }
+                ]
+            },
+            {
+                name: "Biomass",
+                children: [
+                    { name: "Wood and Waste", value: data.Wood + data.Waste },
+                    { name: "Biofuel", value: data.Biodiesel + data.BiodieselLoss + data.FuelEthanol + data.FuelEthanolLoss }
+                ]
+            }
+        ]
+    };
+    console.log(treeData);
+    const root = d3.hierarchy(treeData).sum(d => d.value);
+
+    
+    d3.treemap()
+        .size([width, height])
+        .paddingTop(28)
+        .paddingRight(7)
+        .paddingInner(3)
+        // Padding between each rectangle
+        //.paddingOuter(6)
+        //.padding(20)
+        (root)
+
+    // use this information to add rectangles:
+    svg
+        .selectAll("rect")
+        .data(root.leaves())
+        .join("rect")
+        .attr('x', function (d) { return d.x0; })
+        .attr('y', function (d) { return d.y0; })
+        .attr('width', function (d) { return d.x1 - d.x0; })
+        .attr('height', function (d) { return d.y1 - d.y0; })
+        .style("stroke", "black")
+        .style("fill", function (d) { return "white" })
+
+    // and to add the text labels
+    svg
+        .selectAll("text")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
+        .attr("y", function (d) { return d.y0 + 20 })    // +20 to adjust position (lower)
+        .text(function (d) { return d.data.name })
+        .attr("font-size", "19px")
+        .attr("fill", "black")
+
+    // and to add the text labels
+    svg
+        .selectAll("vals")
+        .data(root.leaves())
+        .enter()
+        .append("text")
+        .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
+        .attr("y", function (d) { return d.y0 + 35 })    // +20 to adjust position (lower)
+        .text(function (d) { return d.data.value })
+        .attr("font-size", "11px")
+        .attr("fill", "black")
+
+    // Add title for the 3 groups
+    svg
+        .append("text")
+        .attr("x", 0)
+        .attr("y", 14)    // +20 to adjust position (lower)
+        .text("Three group leaders and 14 employees")
+        .attr("font-size", "19px")
+        .attr("fill", "grey");
 
     return svg;
 }

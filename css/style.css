@@ -5,6 +5,9 @@
     font-weight: bold;
 }
 
+body {background-color: lightgrey;}
+
+
 .mouseover-label{
     visibility: hidden;
 }
