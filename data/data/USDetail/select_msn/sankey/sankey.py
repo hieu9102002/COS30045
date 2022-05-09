@@ -28,7 +28,11 @@ NEEDED_MSN = DF_SANKEY["NodesMSN"]["MSN"].drop_duplicates().values.tolist() + DF
 DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
 # filter dataset
-DF_DATASET = DF_DATASET[DF_DATASET["Year"].isin(NEEDED_YEARS) & DF_DATASET["MSN"].isin(NEEDED_MSN)]
+DF_DATASET = DF_DATASET[
+    DF_DATASET["Year"].isin(NEEDED_YEARS) 
+    & 
+    DF_DATASET["MSN"].isin(NEEDED_MSN)
+]
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -280,7 +284,7 @@ open("sankey.json", "w").write(json.dumps(DATA["CA"][2018], sort_keys=False, ind
 
 DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
-DF_DATASET = DF_DATASET[(DF_DATASET["StateCode"] == "CA") & (DF_DATASET["Year"] == 2018)]
+DF_DATASET = DF_DATASET[(DF_DATASET["StateCode"] == "US") & (DF_DATASET["Year"] == 2019)]
 #  & (DF_DATASET["MSN"].isin(NEEDED_MSN))]
 
 DF_MSN = pd.read_csv(FILE_MSN)
