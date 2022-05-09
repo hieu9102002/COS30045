@@ -1,3 +1,56 @@
+//US states dictionary
+const USStates = {
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Mississippi": "MS",
+    "Missouri": "MO",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY"
+};
 window.onload = () => {
     //setup margin
     var margin = { top: 10, right: 10, bottom: 20, left: 10 },
@@ -6,59 +59,7 @@ window.onload = () => {
     var textMargin = 14;
     var innerPadding = 0.05;
 
-    //US states dictionary
-    const USStates = {
-        "Alabama": "AL",
-        "Alaska": "AK",
-        "Arizona": "AZ",
-        "Arkansas": "AR",
-        "California": "CA",
-        "Colorado": "CO",
-        "Connecticut": "CT",
-        "Delaware": "DE",
-        "Florida": "FL",
-        "Georgia": "GA",
-        "Hawaii": "HI",
-        "Idaho": "ID",
-        "Illinois": "IL",
-        "Indiana": "IN",
-        "Iowa": "IA",
-        "Kansas": "KS",
-        "Kentucky": "KY",
-        "Louisiana": "LA",
-        "Maine": "ME",
-        "Maryland": "MD",
-        "Massachusetts": "MA",
-        "Michigan": "MI",
-        "Minnesota": "MN",
-        "Mississippi": "MS",
-        "Missouri": "MO",
-        "Montana": "MT",
-        "Nebraska": "NE",
-        "Nevada": "NV",
-        "New Hampshire": "NH",
-        "New Jersey": "NJ",
-        "New Mexico": "NM",
-        "New York": "NY",
-        "North Carolina": "NC",
-        "North Dakota": "ND",
-        "Ohio": "OH",
-        "Oklahoma": "OK",
-        "Oregon": "OR",
-        "Pennsylvania": "PA",
-        "Rhode Island": "RI",
-        "South Carolina": "SC",
-        "South Dakota": "SD",
-        "Tennessee": "TN",
-        "Texas": "TX",
-        "Utah": "UT",
-        "Vermont": "VT",
-        "Virginia": "VA",
-        "Washington": "WA",
-        "West Virginia": "WV",
-        "Wisconsin": "WI",
-        "Wyoming": "WY"
-    };
+
     d3.csv("./data/publication-grids.csv", d => { //Read in US grid file
         return {
             code: d.code,
@@ -142,7 +143,7 @@ window.onload = () => {
                 Petroleum: "#723ca7",
                 NaturalGas: "#956abb",
                 Nuclear: "#b797cf"
-            }
+            };
 
             var colBandwidth = colScale.bandwidth();
             var rowBandwidth = rowScale.bandwidth();
@@ -216,7 +217,9 @@ window.onload = () => {
                 .attr("height", d => yScale(d[0]) - yScale(d[1]))
                 .attr("width", xScale.bandwidth())
                 .attr("class", "state-data")
-                .on("mouseover", onDataMouseOver);
+                .on("mouseover", onDataMouseOver)
+                .on("mousemove", onDataMouseMove)
+                .on("mouseleave", onDataMouseLeave);
 
             //create the state names
             state.append("text")
@@ -262,10 +265,16 @@ window.onload = () => {
                 }
             }
 
-            var highlightSvg = createHighlightChart(USData, color, keys);
+            // ----------------
+            // Create a tooltip
+            // ----------------
+            var tooltip = d3.select("#svg-div")
+                .append("div")
+                .style("opacity", 0)
+                .attr("class", "tooltip");
+
+            var highlightSvg = createHighlightChart(USData, color, keys, tooltip, stateData);
             var label = drawLabel(color);
-            console.log(stateData);
-            drawTreeMap(stateData,"US",2019,color);
 
             //implement state search function
             let stateSearch = document.getElementById("state-search");
@@ -282,28 +291,46 @@ window.onload = () => {
                         let id = d3.select(this.parentNode).attr("id");
                         return +(id === USStates[stateSearch.value]);
                     })
+                let state = statesCell.find(state => state.code === USStates[stateSearch.value])
+                if (state == undefined) state = USData;
+                redrawHighlight(state);
             }
 
             function onDataMouseOver(e, d) {
 
                 const state = d3.select(this.parentNode.parentNode).datum().code;
+                const year = d.data.year;
 
-                let yearData = ""
+                let yearData = "";
+                yearData += "Year: " + year + "<br/>";
 
-                Object.keys(d.data).forEach(k => yearData += k == "year" ? k + ": " + d.data[k] + "<br>" : k + ": " + (d.data[k] * 100).toFixed(2) + "%<br>");
-                d3.select("#tooltip")
-                    .html("State: " + state + "<br>" + yearData)
+                var countryData = stateData.data.find(d => d.code === state);
+                var data = countryData.years.find(d => d.year === year);
+
+                Object.keys(color)
+                    .reverse()
+                    .forEach(
+                        k => yearData += k + ": " + (data[k]) + " BBtu<br>"
+                    )
+
+                tooltip
+                    .html("State: " + Object.keys(USStates).find(key => USStates[key] === state) + "<br>" + yearData)
+                    .style("opacity", 1);
 
             }
 
-            function onDataMouseClick(e, d) {
+            function onDataMouseMove(e, d) {
+                let y = e.pageY > 650 ? 650: e.pageY;
+                tooltip.style("transform", "translateY(-55%)")
+                    .style("left", (e.pageX) + colBandwidth + "px")
+                    .style("top", y + "px")
+            }
 
-                const state = d3.select(this.parentNode.parentNode).datum().code;
-
-                const year = d.data.year;
-
-
-
+            function onDataMouseLeave(e, d) {
+                tooltip
+                    .style("opacity", 0)
+                    .style("left", "-100px")
+                    .style("top", "-100px");
             }
 
             function onSmallMultiplesMouseEnter(e, data) {
@@ -333,8 +360,8 @@ window.onload = () => {
                 //re-highlight search if available
                 if (stateSearch.value != '')
                     highlightSearchedState()
-
-                redrawHighlight(USData);
+                else
+                    redrawHighlight(USData);
             }
 
             function onSmallMultiplesMouseMove(e, d) {
@@ -501,7 +528,7 @@ function drawLabel(color) {
     return svg;
 }
 
-function createHighlightChart(data, color, keys) {
+function createHighlightChart(data, color, keys, tooltip, stateData) {
     var textMargin = 14;
     var innerPadding = 0.05;
 
@@ -560,7 +587,11 @@ function createHighlightChart(data, color, keys) {
         .attr("y", d => yScale(d[1]))
         .attr("height", d => yScale(d[0]) - yScale(d[1]))
         .attr("width", xScale.bandwidth())
-        .attr("class", "state-data");
+        .attr("class", "state-data")
+        .style("stroke-width", 3)
+        .on("mouseover", onDataMouseOver)
+        .on("mousemove", onDataMouseMove)
+        .on("mouseleave", onDataMouseLeave);
 
     //create the state names
     svg.append("text")
@@ -573,105 +604,43 @@ function createHighlightChart(data, color, keys) {
     svg.append("g").call(xAxis);
     svg.append("g").call(yAxis);
 
-    return svg;
-}
+    function onDataMouseOver(e, d) {
+        const state = svg.select(".state-label").text();
+        const year = d.data.year;
 
-function drawTreeMap(source, state, year, color) {
-    const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-        width = 800 - margin.left - margin.right,
-        height = 445 - margin.top - margin.bottom;
+        let yearData = "";
+        yearData += state === "US" ? "US overall data <br/>" : "State: " + Object.keys(USStates).find(key => USStates[key] === state) + "<br>";
+        yearData += "Year: " + year + "<br/>";
+        var countryData = stateData.data.find(d => d.code === state);
+        var data = countryData.years.find(d => d.year === year);
 
-    // append the svg object to the body of the page
-    const svg = d3.select("#svg-treemap")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            `translate(${margin.left}, ${margin.top})`);
+        Object.keys(color)
+            .reverse()
+            .forEach(
+                k => yearData += k + ": " + (data[k]) + " BBtu<br>"
+        )
 
-    var countryData = source.data.find(d=>d.code===state);
-    var data = countryData.years.find(d=>d.year===year);
-    console.log(data);
-    var treeData = {
-        name: "Renewables",
-        children: [
-            {
-                name: "Non-combustible Renewables",
-                children: [
-                    { name: "Hydropower", value: data.Hydropower },
-                    { name: "Solar", value: data.Solar },
-                    { name: "Wind", value: data.Wind },
-                    { name: "Geothermal", value: data.Geothermal }
-                ]
-            },
-            {
-                name: "Biomass",
-                children: [
-                    { name: "Wood and Waste", value: data.Wood + data.Waste },
-                    { name: "Biofuel", value: data.Biodiesel + data.BiodieselLoss + data.FuelEthanol + data.FuelEthanolLoss }
-                ]
-            }
-        ]
-    };
-    console.log(treeData);
-    const root = d3.hierarchy(treeData).sum(d => d.value);
+        tooltip
+            .html(yearData)
+            .style("opacity", 1);
 
-    
-    d3.treemap()
-        .size([width, height])
-        .paddingTop(28)
-        .paddingRight(7)
-        .paddingInner(3)
-        // Padding between each rectangle
-        //.paddingOuter(6)
-        //.padding(20)
-        (root)
+        d3.select(this).style("stroke", "black");
+    }
 
-    // use this information to add rectangles:
-    svg
-        .selectAll("rect")
-        .data(root.leaves())
-        .join("rect")
-        .attr('x', function (d) { return d.x0; })
-        .attr('y', function (d) { return d.y0; })
-        .attr('width', function (d) { return d.x1 - d.x0; })
-        .attr('height', function (d) { return d.y1 - d.y0; })
-        .style("stroke", "black")
-        .style("fill", function (d) { return "white" })
+    function onDataMouseMove(e, d) {
+        tooltip.style("transform", "translateY(-55%)")
+            .style("left", (e.pageX) + 200 + "px")
+            .style("top", "200px")
+    }
 
-    // and to add the text labels
-    svg
-        .selectAll("text")
-        .data(root.leaves())
-        .enter()
-        .append("text")
-        .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
-        .attr("y", function (d) { return d.y0 + 20 })    // +20 to adjust position (lower)
-        .text(function (d) { return d.data.name })
-        .attr("font-size", "19px")
-        .attr("fill", "black")
+    function onDataMouseLeave(e, d) {
+        tooltip
+            .style("opacity", 0)
+            .style("left", "-100px")
+            .style("top", "-100px");
 
-    // and to add the text labels
-    svg
-        .selectAll("vals")
-        .data(root.leaves())
-        .enter()
-        .append("text")
-        .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
-        .attr("y", function (d) { return d.y0 + 35 })    // +20 to adjust position (lower)
-        .text(function (d) { return d.data.value })
-        .attr("font-size", "11px")
-        .attr("fill", "black")
-
-    // Add title for the 3 groups
-    svg
-        .append("text")
-        .attr("x", 0)
-        .attr("y", 14)    // +20 to adjust position (lower)
-        .text("Three group leaders and 14 employees")
-        .attr("font-size", "19px")
-        .attr("fill", "grey");
+        d3.select(this).style("stroke", "none")
+    }
 
     return svg;
 }

@@ -62,3 +62,10 @@ body {background-color: lightgrey;}
     background-color: DodgerBlue !important;
     color: #ffffff;
 }
+.tooltip{
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 10px;
+}
