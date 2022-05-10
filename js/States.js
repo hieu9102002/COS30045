@@ -310,7 +310,7 @@ window.onload = () => {
                 Object.keys(color)
                     .reverse()
                     .forEach(
-                        k => yearData += k + ": " + (data[k]) + " BBtu<br>"
+                        k => yearData += k + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
                     )
 
                 tooltip
@@ -617,7 +617,7 @@ function createHighlightChart(data, color, keys, tooltip, stateData) {
         Object.keys(color)
             .reverse()
             .forEach(
-                k => yearData += k + ": " + (data[k]) + " BBtu<br>"
+                k => yearData += k + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
         )
 
         tooltip
