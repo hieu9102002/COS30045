@@ -69,7 +69,7 @@ window.onload = () => {
             renewable_percentage_2019: 0
         }
     }).then(statesCell => {
-        d3.json("./data/data/USDetail/transformed.json").then(stateData => { //Read in data file
+        d3.json("./data/transformed.json").then(stateData => { //Read in data file
             //combine two files
 
             statesCell.forEach(stateCell => {
@@ -320,7 +320,7 @@ window.onload = () => {
             }
 
             function onDataMouseMove(e, d) {
-                let y = e.pageY > 650 ? 650: e.pageY;
+                let y = e.pageY > 650 ? 650 : e.pageY;
                 tooltip.style("transform", "translateY(-55%)")
                     .style("left", (e.pageX) + colBandwidth + "px")
                     .style("top", y + "px")
