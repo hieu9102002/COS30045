@@ -1,0 +1,439 @@
+{
+	"nodes": [
+		{
+			"node": 0,
+			"name": "Solar",
+			"data": {
+				"id": "Solar",
+				"name": "Solar",
+				"value": 1017111.0
+			}
+		},
+		{
+			"node": 1,
+			"name": "Wind",
+			"data": {
+				"id": "Wind",
+				"name": "Wind",
+				"value": 2634834.0
+			}
+		},
+		{
+			"node": 2,
+			"name": "Geothermal",
+			"data": {
+				"id": "Geothermal",
+				"name": "Geothermal",
+				"value": 201285.0
+			}
+		},
+		{
+			"node": 3,
+			"name": "Hydropower",
+			"data": {
+				"id": "Hydropower",
+				"name": "Hydropower",
+				"value": 2563516.0
+			}
+		},
+		{
+			"node": 4,
+			"name": "Electric Power Sector",
+			"data": {
+				"id": "ElectricPower",
+				"name": "Electric Power Sector",
+				"value": 36887890.0
+			}
+		},
+		{
+			"node": 5,
+			"name": "Transportation Sector",
+			"data": {
+				"id": "Transportation",
+				"name": "Transportation Sector",
+				"value": 28461319.0
+			}
+		},
+		{
+			"node": 6,
+			"name": "Industrial Sector",
+			"data": {
+				"id": "Industrial",
+				"name": "Industrial Sector",
+				"value": 26336760.0
+			}
+		},
+		{
+			"node": 7,
+			"name": "Commercial Sector",
+			"data": {
+				"id": "Commercial",
+				"name": "Commercial Sector",
+				"value": 9442341.0
+			}
+		},
+		{
+			"node": 8,
+			"name": "Residential Sector",
+			"data": {
+				"id": "Residential",
+				"name": "Residential Sector",
+				"value": 12008193.0
+			}
+		},
+		{
+			"node": 9,
+			"name": "Electricity Loss",
+			"data": {
+				"id": "ElectricLoss",
+				"name": "Electricity Loss",
+				"value": 24017465.0
+			}
+		},
+		{
+			"node": 10,
+			"name": "Electricity Import",
+			"data": {
+				"id": "ElectricImport",
+				"name": "Electricity Import",
+				"value": 201487.0
+			}
+		},
+		{
+			"node": 11,
+			"name": "Electricity Export",
+			"data": {
+				"id": "ElectricExport",
+				"name": "Electricity Export",
+				"value": 68267.0
+			}
+		},
+		{
+			"node": 12,
+			"name": "Biomass",
+			"data": {
+				"id": "Biomass",
+				"name": "Biomass",
+				"value": 4915724.0
+			}
+		}
+	],
+	"links": [
+		{
+			"source": 10,
+			"target": 4,
+			"value": 201487.0,
+			"data": {
+				"id": "ElectricImport->ElectricPower",
+				"source": "ElectricImport",
+				"target": "ElectricPower",
+				"value": 201487.0
+			}
+		},
+		{
+			"source": 4,
+			"target": 5,
+			"value": 26041.0,
+			"data": {
+				"id": "ElectricPower->Transportation",
+				"source": "ElectricPower",
+				"target": "Transportation",
+				"value": 26041.0
+			}
+		},
+		{
+			"source": 4,
+			"target": 8,
+			"value": 4914266.0,
+			"data": {
+				"id": "ElectricPower->Residential",
+				"source": "ElectricPower",
+				"target": "Residential",
+				"value": 4914266.0
+			}
+		},
+		{
+			"source": 4,
+			"target": 6,
+			"value": 3420028.0,
+			"data": {
+				"id": "ElectricPower->Industrial",
+				"source": "ElectricPower",
+				"target": "Industrial",
+				"value": 3420028.0
+			}
+		},
+		{
+			"source": 4,
+			"target": 9,
+			"value": 24017465.0,
+			"data": {
+				"id": "ElectricPower->ElectricLoss",
+				"source": "ElectricPower",
+				"target": "ElectricLoss",
+				"value": 24017465.0
+			}
+		},
+		{
+			"source": 4,
+			"target": 11,
+			"value": 68267.0,
+			"data": {
+				"id": "ElectricPower->ElectricExport",
+				"source": "ElectricPower",
+				"target": "ElectricExport",
+				"value": 68267.0
+			}
+		},
+		{
+			"source": 4,
+			"target": 7,
+			"value": 4643311.0,
+			"data": {
+				"id": "ElectricPower->Commercial",
+				"source": "ElectricPower",
+				"target": "Commercial",
+				"value": 4643311.0
+			}
+		},
+		{
+			"source": 2,
+			"target": 8,
+			"value": 39600.0,
+			"data": {
+				"id": "Geothermal->Residential",
+				"source": "Geothermal",
+				"target": "Residential",
+				"value": 39600.0
+			}
+		},
+		{
+			"source": 2,
+			"target": 6,
+			"value": 4200.0,
+			"data": {
+				"id": "Geothermal->Industrial",
+				"source": "Geothermal",
+				"target": "Industrial",
+				"value": 4200.0
+			}
+		},
+		{
+			"source": 2,
+			"target": 4,
+			"value": 133851.0,
+			"data": {
+				"id": "Geothermal->ElectricPower",
+				"source": "Geothermal",
+				"target": "ElectricPower",
+				"value": 133851.0
+			}
+		},
+		{
+			"source": 2,
+			"target": 7,
+			"value": 23634.0,
+			"data": {
+				"id": "Geothermal->Commercial",
+				"source": "Geothermal",
+				"target": "Commercial",
+				"value": 23634.0
+			}
+		},
+		{
+			"source": 3,
+			"target": 6,
+			"value": 9203.0,
+			"data": {
+				"id": "Hydropower->Industrial",
+				"source": "Hydropower",
+				"target": "Industrial",
+				"value": 9203.0
+			}
+		},
+		{
+			"source": 3,
+			"target": 4,
+			"value": 2552636.0,
+			"data": {
+				"id": "Hydropower->ElectricPower",
+				"source": "Hydropower",
+				"target": "ElectricPower",
+				"value": 2552636.0
+			}
+		},
+		{
+			"source": 3,
+			"target": 7,
+			"value": 1677.0,
+			"data": {
+				"id": "Hydropower->Commercial",
+				"source": "Hydropower",
+				"target": "Commercial",
+				"value": 1677.0
+			}
+		},
+		{
+			"source": 0,
+			"target": 8,
+			"value": 251461.0,
+			"data": {
+				"id": "Solar->Residential",
+				"source": "Solar",
+				"target": "Residential",
+				"value": 251461.0
+			}
+		},
+		{
+			"source": 0,
+			"target": 6,
+			"value": 27843.0,
+			"data": {
+				"id": "Solar->Industrial",
+				"source": "Solar",
+				"target": "Industrial",
+				"value": 27843.0
+			}
+		},
+		{
+			"source": 0,
+			"target": 4,
+			"value": 634613.0,
+			"data": {
+				"id": "Solar->ElectricPower",
+				"source": "Solar",
+				"target": "ElectricPower",
+				"value": 634613.0
+			}
+		},
+		{
+			"source": 0,
+			"target": 7,
+			"value": 103195.0,
+			"data": {
+				"id": "Solar->Commercial",
+				"source": "Solar",
+				"target": "Commercial",
+				"value": 103195.0
+			}
+		},
+		{
+			"source": 1,
+			"target": 6,
+			"value": 888.0,
+			"data": {
+				"id": "Wind->Industrial",
+				"source": "Wind",
+				"target": "Industrial",
+				"value": 888.0
+			}
+		},
+		{
+			"source": 1,
+			"target": 4,
+			"value": 2632354.0,
+			"data": {
+				"id": "Wind->ElectricPower",
+				"source": "Wind",
+				"target": "ElectricPower",
+				"value": 2632354.0
+			}
+		},
+		{
+			"source": 1,
+			"target": 7,
+			"value": 1592.0,
+			"data": {
+				"id": "Wind->Commercial",
+				"source": "Wind",
+				"target": "Commercial",
+				"value": 1592.0
+			}
+		},
+		{
+			"source": 12,
+			"target": 5,
+			"value": 1392854.0,
+			"data": {
+				"id": "Biomass->Transportation",
+				"source": "Biomass",
+				"target": "Transportation",
+				"value": 1392854.0
+			}
+		},
+		{
+			"source": 12,
+			"target": 6,
+			"value": 2381052.0,
+			"data": {
+				"id": "Biomass->Industrial",
+				"source": "Biomass",
+				"target": "Industrial",
+				"value": 2381052.0
+			}
+		},
+		{
+			"source": 12,
+			"target": 7,
+			"value": 149299.0,
+			"data": {
+				"id": "Biomass->Commercial",
+				"source": "Biomass",
+				"target": "Commercial",
+				"value": 149299.0
+			}
+		},
+		{
+			"source": 12,
+			"target": 4,
+			"value": 448137.0,
+			"data": {
+				"id": "Biomass->ElectricPower",
+				"source": "Biomass",
+				"target": "ElectricPower",
+				"value": 448137.0
+			}
+		},
+		{
+			"source": 12,
+			"target": 8,
+			"value": 544381.0,
+			"data": {
+				"id": "Biomass->Residential",
+				"source": "Biomass",
+				"target": "Residential",
+				"value": 544381.0
+			}
+		}
+	],
+	"nodelist": [
+		"Solar",
+		"Wind",
+		"Geothermal",
+		"Hydropower",
+		"ElectricPower",
+		"Transportation",
+		"Industrial",
+		"Commercial",
+		"Residential",
+		"ElectricLoss",
+		"ElectricImport",
+		"ElectricExport",
+		"Biomass"
+	],
+	"nodeid": {
+		"Solar": 0,
+		"Wind": 1,
+		"Geothermal": 2,
+		"Hydropower": 3,
+		"ElectricPower": 4,
+		"Transportation": 5,
+		"Industrial": 6,
+		"Commercial": 7,
+		"Residential": 8,
+		"ElectricLoss": 9,
+		"ElectricImport": 10,
+		"ElectricExport": 11,
+		"Biomass": 12
+	}
+}
