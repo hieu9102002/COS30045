@@ -1,0 +1,154 @@
+{
+	"Biodiesel": [
+		"BiodieselSum",
+		"Biofuel",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"BiodieselLoss": [
+		"BiodieselSum",
+		"Biofuel",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"BiodieselSum": [
+		"Biofuel",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Biofuel": [
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Biomass": [
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Coal": [
+		"FossilFuel",
+		"Nonrenewable",
+		"Total"
+	],
+	"Commercial": [
+		"Consumption"
+	],
+	"ElectricPower": [
+		"Consumption"
+	],
+	"FossilFuel": [
+		"Nonrenewable",
+		"Total"
+	],
+	"FuelEthanol": [
+		"FuelEthanolSum",
+		"Biofuel",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"FuelEthanolLoss": [
+		"FuelEthanolSum",
+		"Biofuel",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"FuelEthanolSum": [
+		"Biofuel",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Geothermal": [
+		"NoncombustibleRenewable",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Hydropower": [
+		"NoncombustibleRenewable",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Industrial": [
+		"Consumption"
+	],
+	"NaturalGas": [
+		"FossilFuel",
+		"Nonrenewable",
+		"Total"
+	],
+	"NoncombustibleRenewable": [
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Nonrenewable": [
+		"Total"
+	],
+	"Nuclear": [
+		"Nonrenewable",
+		"Clean",
+		"Total"
+	],
+	"Petroleum": [
+		"FossilFuel",
+		"Nonrenewable",
+		"Total"
+	],
+	"Renewable": [
+		"Clean",
+		"Total"
+	],
+	"Residential": [
+		"Consumption"
+	],
+	"Solar": [
+		"NoncombustibleRenewable",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Transportation": [
+		"Consumption"
+	],
+	"Waste": [
+		"WoodWaste",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Wind": [
+		"NoncombustibleRenewable",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"Wood": [
+		"WoodWaste",
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	],
+	"WoodWaste": [
+		"Biomass",
+		"Renewable",
+		"Clean",
+		"Total"
+	]
+}

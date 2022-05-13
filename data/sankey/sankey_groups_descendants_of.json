@@ -1,0 +1,122 @@
+{
+	"BiodieselSum": [
+		"Biodiesel",
+		"BiodieselLoss"
+	],
+	"Biofuel": [
+		"BiodieselSum",
+		"FuelEthanolSum",
+		"Biodiesel",
+		"BiodieselLoss",
+		"FuelEthanol",
+		"FuelEthanolLoss"
+	],
+	"Biomass": [
+		"Biofuel",
+		"WoodWaste",
+		"BiodieselSum",
+		"FuelEthanolSum",
+		"Biodiesel",
+		"BiodieselLoss",
+		"FuelEthanol",
+		"FuelEthanolLoss",
+		"Wood",
+		"Waste"
+	],
+	"Clean": [
+		"Nuclear",
+		"Renewable",
+		"NoncombustibleRenewable",
+		"Biomass",
+		"Solar",
+		"Wind",
+		"Geothermal",
+		"Hydropower",
+		"Biofuel",
+		"WoodWaste",
+		"BiodieselSum",
+		"FuelEthanolSum",
+		"Biodiesel",
+		"BiodieselLoss",
+		"FuelEthanol",
+		"FuelEthanolLoss",
+		"Wood",
+		"Waste"
+	],
+	"Consumption": [
+		"ElectricPower",
+		"Transportation",
+		"Industrial",
+		"Commercial",
+		"Residential"
+	],
+	"FossilFuel": [
+		"Coal",
+		"NaturalGas",
+		"Petroleum"
+	],
+	"FuelEthanolSum": [
+		"FuelEthanol",
+		"FuelEthanolLoss"
+	],
+	"NoncombustibleRenewable": [
+		"Solar",
+		"Wind",
+		"Geothermal",
+		"Hydropower"
+	],
+	"Nonrenewable": [
+		"FossilFuel",
+		"Nuclear",
+		"Coal",
+		"NaturalGas",
+		"Petroleum"
+	],
+	"Renewable": [
+		"NoncombustibleRenewable",
+		"Biomass",
+		"Solar",
+		"Wind",
+		"Geothermal",
+		"Hydropower",
+		"Biofuel",
+		"WoodWaste",
+		"BiodieselSum",
+		"FuelEthanolSum",
+		"Biodiesel",
+		"BiodieselLoss",
+		"FuelEthanol",
+		"FuelEthanolLoss",
+		"Wood",
+		"Waste"
+	],
+	"Total": [
+		"Nonrenewable",
+		"Renewable",
+		"FossilFuel",
+		"Nuclear",
+		"Coal",
+		"NaturalGas",
+		"Petroleum",
+		"NoncombustibleRenewable",
+		"Biomass",
+		"Solar",
+		"Wind",
+		"Geothermal",
+		"Hydropower",
+		"Biofuel",
+		"WoodWaste",
+		"BiodieselSum",
+		"FuelEthanolSum",
+		"Biodiesel",
+		"BiodieselLoss",
+		"FuelEthanol",
+		"FuelEthanolLoss",
+		"Wood",
+		"Waste"
+	],
+	"WoodWaste": [
+		"Wood",
+		"Waste"
+	]
+}

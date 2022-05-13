@@ -3,6 +3,14 @@
 
 "use strict";
 
+const NODE = {
+    node: {
+        name: "",
+        id: "",
+        color: ""
+    }
+}
+
 const minVisibleLink = 0,
     minVisibleNode = 0;
 
@@ -113,18 +121,141 @@ const Sankey = d3.sankey()
 // load data and draw sankey
 
 d3.json("./data/sankey.json")
-    .then(function (sankeydata) {
+    .then(function (jsondata) {
 
-        sankeymain(sankeydata);
+        sankeymain(jsondata);
 
     });
 
-
-let sankeyReformat = (data, selectAll = false, neededNodes = [
-    "Solar", "Wind", 
-    "Geothermal", 
+let sankeyReformat = (jsondata, selectAll = false, neededNodes = [
+    "Solar", "Wind",
+    "Geothermal",
     "Hydropower", "Biomass",
     "ElectricPower",
+    "ElectricLoss",
+    "Transportation",
+    "Industrial",
+    "Commercial",
+    "Residential"]) => {
+
+    const data = jsondata;
+
+    let reformatted = {
+        nodes: [],
+        links: []
+    }
+
+    let sourceCount = {}, // map[node]: how many links begin with this node
+        EndsAt = {}; // map[node]: how many links end at this node
+
+    let validLinksMap = {}, // map[linkid]: is the link still valid to be included? 
+        validLinks = {}; // map[linkid]: the link with the linkid
+
+    for (let link of data.links) {
+
+        for (let map of [sourceCount, EndsAt]) {
+            for (let node of [link.data.target, link.data.source]) {
+                if (map[node] == undefined) map[node] = 0;
+            }
+        }
+
+        EndsAt[link.data.target]++;
+
+        sourceCount[link.data.source]++;
+
+        if (neededNodes.includes(link.data.source) && neededNodes.includes(link.data.target)) {
+
+            validLinksMap[link.data.id] = 1;
+
+            validLinks[link.data.id] = link;
+
+        }
+    }
+
+    let sankeyIsValid = false;
+
+    while (!sankeyIsValid) {
+
+        sankeyIsValid = true;
+
+        let newValidLinks = {};
+
+        for (let linkid in validLinks) {
+
+            let link = validLinks[linkid];
+
+            if (validLinksMap[linkid] == 1) {
+
+                newValidLinks[linkid] = link;
+
+            }
+        }
+
+        validLinks = newValidLinks;
+
+        let ValidBeginsAt = {}, // map[node]: how many links begin with this node
+            ValidEndsAt = {}; // map[node]: how many links end at this node
+
+        for (let linkid in validLinks) {
+
+            let link = validLinks[linkid];
+
+            for (let map of [ValidBeginsAt, ValidEndsAt]) {
+                for (let node of [link.data.target, link.data.source]) {
+                    if (map[node] == undefined) map[node] = 0;
+                }
+            }
+
+            ValidEndsAt[link.data.target]++;
+
+            ValidBeginsAt[link.data.source]++;
+
+        }
+
+        for (let linkid in validLinks) {
+
+            let link = validLinks[linkid];
+
+            console.log(linkid + " Valid ends at " + ValidEndsAt[link.data.source])
+            console.log(linkid + " Valid begins at " + ValidBeginsAt[link.data.target])
+            console.log(linkid + " Ends at " + EndsAt[link.data.source])
+
+            if (ValidEndsAt[link.data.source] > 0) {
+                if (ValidEndsAt[link.data.source] < EndsAt[link.data.source]) {
+                    ValidBeginsAt[link.data.target]--;
+                    validLinksMap[linkid] = 0;
+                    sankeyIsValid = false;
+                }
+            }
+        }
+    }
+
+    let validNodes = {}
+
+    for (let linkid in validLinks) {
+
+        let link = validLinks[linkid];
+        
+        for (let node of [link.data.target, link.data.source]) {
+            validNodes[node] = 1
+            // node.data.order;
+        }
+    }
+
+
+
+
+    console.log(validLinksMap);
+
+    return data;
+}
+
+let sankeyReformatOld = (data, selectAll = false, neededNodes = [
+    "Solar", "Wind",
+    "Geothermal",
+    "Hydropower", "Biomass",
+    "ElectricPower",
+    "ElectricLoss",
     "Transportation",
     "Industrial",
     "Commercial",
@@ -155,14 +286,14 @@ let sankeyReformat = (data, selectAll = false, neededNodes = [
         }
     }
 
-    for (let flow of neededFlows) {
-        for (let node of neededNodes) {
-            let t = flow["nodes"].indexOf(node);
-            if (t >= 0) {
-                nasa[node] = t;
-            }
-        }
-    }
+    // for (let flow of neededFlows) {
+    //     for (let node of neededNodes) {
+    //         let t = flow["nodes"].indexOf(node);
+    //         if (t >= 0) {
+    //             nasa[node] = t;
+    //         }
+    //     }
+    // }
 
     let newneededFlows = [];
 
@@ -233,18 +364,18 @@ let sankeyReformat = (data, selectAll = false, neededNodes = [
 
             let value = sankeyOBJ[source][target];
 
-            if(sumObj[source] === undefined) {
+            if (sumObj[source] === undefined) {
                 sumObj[source] = 0;
             }
 
-            if(sumObj[source] === undefined) {
+            if (sumObj[source] === undefined) {
                 sumObj[source] = 0;
             }
 
             sumObj[source] += value;
 
             sumObj[target] += value;
-            
+
             reformatted.links.push(
                 {
                     source: nodeidmap[source],
@@ -270,9 +401,9 @@ let sankeyReformat = (data, selectAll = false, neededNodes = [
 }
 
 
-let sankeymain = (data) => {
+let sankeymain = (jsondata) => {
 
-    let sankeydata = sankeyReformat(data);
+    let sankeydata = sankeyReformat(jsondata);
 
     // initialize graph data
     let graph = Sankey(sankeydata);

@@ -13,8 +13,6 @@ NEEDED_YEAR = 2019
 
 # filenames
 FILE_DATASET = "complete_seds.csv"
-FILE_MSN = "msn.csv"
-FILE_STATECODE = "statecode.csv"
 FILE_SANKEY = "sankey.xlsx"
 
 # select needed years
@@ -25,8 +23,7 @@ NEEDED_YEARS = range(2000, 2020)
 # ----------------------------------------------------------------------------------------------------------------
 
 # read sankey and select needed attributes
-DF_SANKEY = pd.read_excel(FILE_SANKEY, sheet_name=[
-                          'Nodes', 'Links', 'NodesMSN', 'LinksMSN', 'Group', 'GroupSum'])
+DF_SANKEY = pd.read_excel(FILE_SANKEY, sheet_name=['Nodes', 'Links', 'NodesMSN', 'LinksMSN', 'Group', 'GroupSum'])
 
 # select needed msn
 NEEDED_MSN = DF_SANKEY["NodesMSN"]["MSN"].drop_duplicates().values.tolist(
@@ -34,8 +31,7 @@ NEEDED_MSN = DF_SANKEY["NodesMSN"]["MSN"].drop_duplicates().values.tolist(
 
 
 # read data
-DF_DATASET = pd.read_csv(FILE_DATASET, usecols=[
-                         "StateCode", "Year", "MSN", "Data"])
+DF_DATASET = pd.read_csv(FILE_DATASET, usecols=["StateCode", "Year", "MSN", "Data"])
 
 # filter dataset
 DF_DATASET = DF_DATASET[
@@ -50,10 +46,7 @@ DF_DATASET = DF_DATASET[
 # ----------------------------------------------------------------------------------------------------------------
 
 # pivot dataframe
-DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=[
-                              "MSN"], values=["Data"])["Data"]
-# change to normal dataframe
-# https://stackoverflow.com/questions/43756052/transform-pandas-pivot-table-to-regular-dataframe
+DF_DATASET = DF_DATASET.pivot(index=["StateCode", "Year"], columns=["MSN"], values=["Data"])["Data"]
 DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 
 
@@ -61,6 +54,8 @@ DF_DATASET = pd.DataFrame(DF_DATASET.to_records())
 DF_NODES = DF_DATASET[["StateCode", "Year"]]
 
 NODES = DF_SANKEY["Nodes"].set_index("Node").to_dict(orient="index")
+
+NODES_DETAILS = DF_SANKEY["Nodes"].set_index("Node").to_json(orient="index", path_or_buf="nodes.json")
 
 DF_NODES = DF_NODES.assign(**{node: 0 for node in NODES.keys()})
 
