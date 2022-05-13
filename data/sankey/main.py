@@ -38,12 +38,12 @@ GROUPS_DETAILS = DF_SANKEY["Groups"].fillna("").set_index("id").to_dict("index")
 LINKS_DETAILS = DF_SANKEY["Links"].fillna("").set_index("link").to_dict("index")
 
 ATTR_DETAILS = {
-    "links": LINKS_DETAILS,
-    "nodes": NODES_DETAILS,
-    "groups": GROUPS_DETAILS
+    **LINKS_DETAILS,
+    **NODES_DETAILS,
+    **GROUPS_DETAILS
 }
 
-# writejson(ATTR_DETAILS, "attr.json")
+writejson(ATTR_DETAILS, "attr.json")
 
 # ----------------------------------------------------------------------------------------------------------------
 # CALCULATE AND STORE VALUES
@@ -123,7 +123,7 @@ def _temp(msn):
     if(msn in LINKS_DETAILS.keys()):
         return "links"
     elif(msn in GROUPS_DETAILS.keys()):
-        return "groups"
+        return "nodes"
     elif(msn in NODES_DETAILS.keys()):
         return "nodes"
     return 0
@@ -158,7 +158,7 @@ for value in DATAVALUES_RECARRAY:
 
     DATAVALUES[state][year][attr][msn] = value
 
-# writejson(DATA, "values.json")
+writejson(DATAVALUES, "values.json")
 
 
 # ----------------------------------------------------------------------------------------------------------------

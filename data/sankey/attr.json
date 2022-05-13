@@ -1,568 +1,562 @@
 {
-	"links": {
-		"Biodiesel->Transportation": {
-			"source": "Biodiesel",
-			"target": "Transportation",
-			"id": "Biodiesel->Transportation"
-		},
-		"BiodieselLoss->Industrial": {
-			"source": "BiodieselLoss",
-			"target": "Industrial",
-			"id": "BiodieselLoss->Industrial"
-		},
-		"Coal->Transportation": {
-			"source": "Coal",
-			"target": "Transportation",
-			"id": "Coal->Transportation"
-		},
-		"Coal->Residential": {
-			"source": "Coal",
-			"target": "Residential",
-			"id": "Coal->Residential"
-		},
-		"Coal->Industrial": {
-			"source": "Coal",
-			"target": "Industrial",
-			"id": "Coal->Industrial"
-		},
-		"Coal->ElectricPower": {
-			"source": "Coal",
-			"target": "ElectricPower",
-			"id": "Coal->ElectricPower"
-		},
-		"Coal->Commercial": {
-			"source": "Coal",
-			"target": "Commercial",
-			"id": "Coal->Commercial"
-		},
-		"CoalCokeImport->Industrial": {
-			"source": "CoalCokeImport",
-			"target": "Industrial",
-			"id": "CoalCokeImport->Industrial"
-		},
-		"ElectricImport->ElectricPower": {
-			"source": "ElectricImport",
-			"target": "ElectricPower",
-			"id": "ElectricImport->ElectricPower"
-		},
-		"ElectricPower->Transportation": {
-			"source": "ElectricPower",
-			"target": "Transportation",
-			"id": "ElectricPower->Transportation"
-		},
-		"ElectricPower->Residential": {
-			"source": "ElectricPower",
-			"target": "Residential",
-			"id": "ElectricPower->Residential"
-		},
-		"ElectricPower->Industrial": {
-			"source": "ElectricPower",
-			"target": "Industrial",
-			"id": "ElectricPower->Industrial"
-		},
-		"ElectricPower->ElectricLoss": {
-			"source": "ElectricPower",
-			"target": "ElectricLoss",
-			"id": "ElectricPower->ElectricLoss"
-		},
-		"ElectricPower->ElectricExport": {
-			"source": "ElectricPower",
-			"target": "ElectricExport",
-			"id": "ElectricPower->ElectricExport"
-		},
-		"ElectricPower->Commercial": {
-			"source": "ElectricPower",
-			"target": "Commercial",
-			"id": "ElectricPower->Commercial"
-		},
-		"FuelEthanol->Transportation": {
-			"source": "FuelEthanol",
-			"target": "Transportation",
-			"id": "FuelEthanol->Transportation"
-		},
-		"FuelEthanol->Industrial": {
-			"source": "FuelEthanol",
-			"target": "Industrial",
-			"id": "FuelEthanol->Industrial"
-		},
-		"FuelEthanol->Commercial": {
-			"source": "FuelEthanol",
-			"target": "Commercial",
-			"id": "FuelEthanol->Commercial"
-		},
-		"FuelEthanolLoss->Industrial": {
-			"source": "FuelEthanolLoss",
-			"target": "Industrial",
-			"id": "FuelEthanolLoss->Industrial"
-		},
-		"Geothermal->Residential": {
-			"source": "Geothermal",
-			"target": "Residential",
-			"id": "Geothermal->Residential"
-		},
-		"Geothermal->Industrial": {
-			"source": "Geothermal",
-			"target": "Industrial",
-			"id": "Geothermal->Industrial"
-		},
-		"Geothermal->ElectricPower": {
-			"source": "Geothermal",
-			"target": "ElectricPower",
-			"id": "Geothermal->ElectricPower"
-		},
-		"Geothermal->Commercial": {
-			"source": "Geothermal",
-			"target": "Commercial",
-			"id": "Geothermal->Commercial"
-		},
-		"Hydropower->Industrial": {
-			"source": "Hydropower",
-			"target": "Industrial",
-			"id": "Hydropower->Industrial"
-		},
-		"Hydropower->ElectricPower": {
-			"source": "Hydropower",
-			"target": "ElectricPower",
-			"id": "Hydropower->ElectricPower"
-		},
-		"Hydropower->Commercial": {
-			"source": "Hydropower",
-			"target": "Commercial",
-			"id": "Hydropower->Commercial"
-		},
-		"Industrial->CoalCokeExport": {
-			"source": "Industrial",
-			"target": "CoalCokeExport",
-			"id": "Industrial->CoalCokeExport"
-		},
-		"NaturalGas->Transportation": {
-			"source": "NaturalGas",
-			"target": "Transportation",
-			"id": "NaturalGas->Transportation"
-		},
-		"NaturalGas->Residential": {
-			"source": "NaturalGas",
-			"target": "Residential",
-			"id": "NaturalGas->Residential"
-		},
-		"NaturalGas->Industrial": {
-			"source": "NaturalGas",
-			"target": "Industrial",
-			"id": "NaturalGas->Industrial"
-		},
-		"NaturalGas->ElectricPower": {
-			"source": "NaturalGas",
-			"target": "ElectricPower",
-			"id": "NaturalGas->ElectricPower"
-		},
-		"NaturalGas->Commercial": {
-			"source": "NaturalGas",
-			"target": "Commercial",
-			"id": "NaturalGas->Commercial"
-		},
-		"Nuclear->ElectricPower": {
-			"source": "Nuclear",
-			"target": "ElectricPower",
-			"id": "Nuclear->ElectricPower"
-		},
-		"Petroleum->Transportation": {
-			"source": "Petroleum",
-			"target": "Transportation",
-			"id": "Petroleum->Transportation"
-		},
-		"Petroleum->Residential": {
-			"source": "Petroleum",
-			"target": "Residential",
-			"id": "Petroleum->Residential"
-		},
-		"Petroleum->Industrial": {
-			"source": "Petroleum",
-			"target": "Industrial",
-			"id": "Petroleum->Industrial"
-		},
-		"Petroleum->ElectricPower": {
-			"source": "Petroleum",
-			"target": "ElectricPower",
-			"id": "Petroleum->ElectricPower"
-		},
-		"Petroleum->Commercial": {
-			"source": "Petroleum",
-			"target": "Commercial",
-			"id": "Petroleum->Commercial"
-		},
-		"Solar->Residential": {
-			"source": "Solar",
-			"target": "Residential",
-			"id": "Solar->Residential"
-		},
-		"Solar->Industrial": {
-			"source": "Solar",
-			"target": "Industrial",
-			"id": "Solar->Industrial"
-		},
-		"Solar->ElectricPower": {
-			"source": "Solar",
-			"target": "ElectricPower",
-			"id": "Solar->ElectricPower"
-		},
-		"Solar->Commercial": {
-			"source": "Solar",
-			"target": "Commercial",
-			"id": "Solar->Commercial"
-		},
-		"Waste->Industrial": {
-			"source": "Waste",
-			"target": "Industrial",
-			"id": "Waste->Industrial"
-		},
-		"Waste->ElectricPower": {
-			"source": "Waste",
-			"target": "ElectricPower",
-			"id": "Waste->ElectricPower"
-		},
-		"Waste->Commercial": {
-			"source": "Waste",
-			"target": "Commercial",
-			"id": "Waste->Commercial"
-		},
-		"Wind->Industrial": {
-			"source": "Wind",
-			"target": "Industrial",
-			"id": "Wind->Industrial"
-		},
-		"Wind->ElectricPower": {
-			"source": "Wind",
-			"target": "ElectricPower",
-			"id": "Wind->ElectricPower"
-		},
-		"Wind->Commercial": {
-			"source": "Wind",
-			"target": "Commercial",
-			"id": "Wind->Commercial"
-		},
-		"Wood->Residential": {
-			"source": "Wood",
-			"target": "Residential",
-			"id": "Wood->Residential"
-		},
-		"Wood->Industrial": {
-			"source": "Wood",
-			"target": "Industrial",
-			"id": "Wood->Industrial"
-		},
-		"Wood->ElectricPower": {
-			"source": "Wood",
-			"target": "ElectricPower",
-			"id": "Wood->ElectricPower"
-		},
-		"Wood->Commercial": {
-			"source": "Wood",
-			"target": "Commercial",
-			"id": "Wood->Commercial"
-		},
-		"WoodProduction->Wood": {
-			"source": "WoodProduction",
-			"target": "Wood",
-			"id": "WoodProduction->Wood"
-		},
-		"WoodProduction->DensifiedBiomassExport": {
-			"source": "WoodProduction",
-			"target": "DensifiedBiomassExport",
-			"id": "WoodProduction->DensifiedBiomassExport"
-		},
-		"NetInterstateImport->ElectricPower": {
-			"source": "NetInterstateImport",
-			"target": "ElectricPower",
-			"id": "NetInterstateImport->ElectricPower"
-		},
-		"ElectricPower->NetInterstateExport": {
-			"source": "ElectricPower",
-			"target": "NetInterstateExport",
-			"id": "ElectricPower->NetInterstateExport"
-		}
+	"Biodiesel->Transportation": {
+		"source": "Biodiesel",
+		"target": "Transportation",
+		"id": "Biodiesel->Transportation"
 	},
-	"nodes": {
-		"Solar": {
-			"node": "Solar",
-			"name": "Solar",
-			"order": 1,
-			"column": 2,
-			"color": "yellow"
-		},
-		"Wind": {
-			"node": "Wind",
-			"name": "Wind",
-			"order": 2,
-			"column": 2,
-			"color": "lightblue"
-		},
-		"Geothermal": {
-			"node": "Geothermal",
-			"name": "Geothermal",
-			"order": 3,
-			"column": 2,
-			"color": "brown"
-		},
-		"Hydropower": {
-			"node": "Hydropower",
-			"name": "Hydropower",
-			"order": 4,
-			"column": 2,
-			"color": "blue"
-		},
-		"Wood": {
-			"node": "Wood",
-			"name": "Wood",
-			"order": 5,
-			"column": 2,
-			"color": "wood"
-		},
-		"Waste": {
-			"node": "Waste",
-			"name": "Waste",
-			"order": 6,
-			"column": 2,
-			"color": "brown"
-		},
-		"Biodiesel": {
-			"node": "Biodiesel",
-			"name": "Biodiesel",
-			"order": 7,
-			"column": 2,
-			"color": ""
-		},
-		"BiodieselLoss": {
-			"node": "BiodieselLoss",
-			"name": "Biodiesel loss and coproducts",
-			"order": 8,
-			"column": 2,
-			"color": ""
-		},
-		"FuelEthanol": {
-			"node": "FuelEthanol",
-			"name": "Fuel ethanol",
-			"order": 9,
-			"column": 2,
-			"color": ""
-		},
-		"FuelEthanolLoss": {
-			"node": "FuelEthanolLoss",
-			"name": "Fuel ethanol loss and coproducts",
-			"order": 10,
-			"column": 2,
-			"color": ""
-		},
-		"Nuclear": {
-			"node": "Nuclear",
-			"name": "Nuclear",
-			"order": 11,
-			"column": 2,
-			"color": "green"
-		},
-		"Coal": {
-			"node": "Coal",
-			"name": "Coal",
-			"order": 12,
-			"column": 2,
-			"color": "grey"
-		},
-		"NaturalGas": {
-			"node": "NaturalGas",
-			"name": "Natural gas",
-			"order": 13,
-			"column": 2,
-			"color": "orange"
-		},
-		"Petroleum": {
-			"node": "Petroleum",
-			"name": "Petroleum",
-			"order": 14,
-			"column": 2,
-			"color": "black"
-		},
-		"ElectricPower": {
-			"node": "ElectricPower",
-			"name": "Electric Power Sector",
-			"order": 15,
-			"column": 3,
-			"color": ""
-		},
-		"Transportation": {
-			"node": "Transportation",
-			"name": "Transportation Sector",
-			"order": 16,
-			"column": 4,
-			"color": ""
-		},
-		"Industrial": {
-			"node": "Industrial",
-			"name": "Industrial Sector",
-			"order": 17,
-			"column": 4,
-			"color": ""
-		},
-		"Commercial": {
-			"node": "Commercial",
-			"name": "Commercial Sector",
-			"order": 18,
-			"column": 4,
-			"color": ""
-		},
-		"Residential": {
-			"node": "Residential",
-			"name": "Residential Sector",
-			"order": 19,
-			"column": 4,
-			"color": ""
-		},
-		"ElectricLoss": {
-			"node": "ElectricLoss",
-			"name": "Electricity Loss",
-			"order": 20,
-			"column": 4,
-			"color": ""
-		},
-		"ElectricImport": {
-			"node": "ElectricImport",
-			"name": "Electricity Import",
-			"order": 22,
-			"column": 2,
-			"color": ""
-		},
-		"ElectricExport": {
-			"node": "ElectricExport",
-			"name": "Electricity Export",
-			"order": 25,
-			"column": 4,
-			"color": ""
-		},
-		"CoalCokeImport": {
-			"node": "CoalCokeImport",
-			"name": "Coal Coke Import",
-			"order": 23,
-			"column": 3,
-			"color": ""
-		},
-		"CoalCokeExport": {
-			"node": "CoalCokeExport",
-			"name": "Coal Coke Export",
-			"order": 26,
-			"column": 5,
-			"color": ""
-		},
-		"DensifiedBiomassExport": {
-			"node": "DensifiedBiomassExport",
-			"name": "Densified Biomass Export",
-			"order": 21,
-			"column": 2,
-			"color": ""
-		},
-		"WoodProduction": {
-			"node": "WoodProduction",
-			"name": "Wood Production",
-			"order": 0,
-			"column": 1,
-			"color": ""
-		},
-		"NetInterstateImport": {
-			"node": "NetInterstateImport",
-			"name": "Net Interstate Electricity Import",
-			"order": 24,
-			"column": 2,
-			"color": ""
-		},
-		"NetInterstateExport": {
-			"node": "NetInterstateExport",
-			"name": "Net Interstate Electricity Export",
-			"order": 27,
-			"column": 4,
-			"color": ""
-		}
+	"BiodieselLoss->Industrial": {
+		"source": "BiodieselLoss",
+		"target": "Industrial",
+		"id": "BiodieselLoss->Industrial"
 	},
-	"groups": {
-		"BiodieselSum": {
-			"node": "BiodieselSum",
-			"name": "Biodiesel and coproducts",
-			"order": 28,
-			"column": 0,
-			"color": ""
-		},
-		"FuelEthanolSum": {
-			"node": "FuelEthanolSum",
-			"name": "Fuel ethanol and coporducts",
-			"order": 29,
-			"column": 0,
-			"color": ""
-		},
-		"Biofuel": {
-			"node": "Biofuel",
-			"name": "Biofuel",
-			"order": 30,
-			"column": 0,
-			"color": ""
-		},
-		"WoodWaste": {
-			"node": "WoodWaste",
-			"name": "Wood and waste",
-			"order": 31,
-			"column": 0,
-			"color": "wood"
-		},
-		"Biomass": {
-			"node": "Biomass",
-			"name": "Biomass",
-			"order": 32,
-			"column": 0,
-			"color": "wood"
-		},
-		"NoncombustibleRenewable": {
-			"node": "NoncombustibleRenewable",
-			"name": "Noncombustible renewable energy",
-			"order": 33,
-			"column": 0,
-			"color": ""
-		},
-		"Renewable": {
-			"node": "Renewable",
-			"name": "Renewable energy",
-			"order": 34,
-			"column": 0,
-			"color": "green"
-		},
-		"FossilFuel": {
-			"node": "FossilFuel",
-			"name": "Fossil Fuel",
-			"order": 35,
-			"column": 0,
-			"color": "grey"
-		},
-		"Nonrenewable": {
-			"node": "Nonrenewable",
-			"name": "Nonrenewable energy",
-			"order": 36,
-			"column": 0,
-			"color": "grey"
-		},
-		"Clean": {
-			"node": "Clean",
-			"name": "Clean energy",
-			"order": 37,
-			"column": 0,
-			"color": ""
-		},
-		"Total": {
-			"node": "Total",
-			"name": "Total energy consumption",
-			"order": 38,
-			"column": 0,
-			"color": ""
-		},
-		"Consumption": {
-			"node": "Consumption",
-			"name": "Total consumption",
-			"order": 39,
-			"column": 5,
-			"color": ""
-		}
+	"Coal->Transportation": {
+		"source": "Coal",
+		"target": "Transportation",
+		"id": "Coal->Transportation"
+	},
+	"Coal->Residential": {
+		"source": "Coal",
+		"target": "Residential",
+		"id": "Coal->Residential"
+	},
+	"Coal->Industrial": {
+		"source": "Coal",
+		"target": "Industrial",
+		"id": "Coal->Industrial"
+	},
+	"Coal->ElectricPower": {
+		"source": "Coal",
+		"target": "ElectricPower",
+		"id": "Coal->ElectricPower"
+	},
+	"Coal->Commercial": {
+		"source": "Coal",
+		"target": "Commercial",
+		"id": "Coal->Commercial"
+	},
+	"CoalCokeImport->Industrial": {
+		"source": "CoalCokeImport",
+		"target": "Industrial",
+		"id": "CoalCokeImport->Industrial"
+	},
+	"ElectricImport->ElectricPower": {
+		"source": "ElectricImport",
+		"target": "ElectricPower",
+		"id": "ElectricImport->ElectricPower"
+	},
+	"ElectricPower->Transportation": {
+		"source": "ElectricPower",
+		"target": "Transportation",
+		"id": "ElectricPower->Transportation"
+	},
+	"ElectricPower->Residential": {
+		"source": "ElectricPower",
+		"target": "Residential",
+		"id": "ElectricPower->Residential"
+	},
+	"ElectricPower->Industrial": {
+		"source": "ElectricPower",
+		"target": "Industrial",
+		"id": "ElectricPower->Industrial"
+	},
+	"ElectricPower->ElectricLoss": {
+		"source": "ElectricPower",
+		"target": "ElectricLoss",
+		"id": "ElectricPower->ElectricLoss"
+	},
+	"ElectricPower->ElectricExport": {
+		"source": "ElectricPower",
+		"target": "ElectricExport",
+		"id": "ElectricPower->ElectricExport"
+	},
+	"ElectricPower->Commercial": {
+		"source": "ElectricPower",
+		"target": "Commercial",
+		"id": "ElectricPower->Commercial"
+	},
+	"FuelEthanol->Transportation": {
+		"source": "FuelEthanol",
+		"target": "Transportation",
+		"id": "FuelEthanol->Transportation"
+	},
+	"FuelEthanol->Industrial": {
+		"source": "FuelEthanol",
+		"target": "Industrial",
+		"id": "FuelEthanol->Industrial"
+	},
+	"FuelEthanol->Commercial": {
+		"source": "FuelEthanol",
+		"target": "Commercial",
+		"id": "FuelEthanol->Commercial"
+	},
+	"FuelEthanolLoss->Industrial": {
+		"source": "FuelEthanolLoss",
+		"target": "Industrial",
+		"id": "FuelEthanolLoss->Industrial"
+	},
+	"Geothermal->Residential": {
+		"source": "Geothermal",
+		"target": "Residential",
+		"id": "Geothermal->Residential"
+	},
+	"Geothermal->Industrial": {
+		"source": "Geothermal",
+		"target": "Industrial",
+		"id": "Geothermal->Industrial"
+	},
+	"Geothermal->ElectricPower": {
+		"source": "Geothermal",
+		"target": "ElectricPower",
+		"id": "Geothermal->ElectricPower"
+	},
+	"Geothermal->Commercial": {
+		"source": "Geothermal",
+		"target": "Commercial",
+		"id": "Geothermal->Commercial"
+	},
+	"Hydropower->Industrial": {
+		"source": "Hydropower",
+		"target": "Industrial",
+		"id": "Hydropower->Industrial"
+	},
+	"Hydropower->ElectricPower": {
+		"source": "Hydropower",
+		"target": "ElectricPower",
+		"id": "Hydropower->ElectricPower"
+	},
+	"Hydropower->Commercial": {
+		"source": "Hydropower",
+		"target": "Commercial",
+		"id": "Hydropower->Commercial"
+	},
+	"Industrial->CoalCokeExport": {
+		"source": "Industrial",
+		"target": "CoalCokeExport",
+		"id": "Industrial->CoalCokeExport"
+	},
+	"NaturalGas->Transportation": {
+		"source": "NaturalGas",
+		"target": "Transportation",
+		"id": "NaturalGas->Transportation"
+	},
+	"NaturalGas->Residential": {
+		"source": "NaturalGas",
+		"target": "Residential",
+		"id": "NaturalGas->Residential"
+	},
+	"NaturalGas->Industrial": {
+		"source": "NaturalGas",
+		"target": "Industrial",
+		"id": "NaturalGas->Industrial"
+	},
+	"NaturalGas->ElectricPower": {
+		"source": "NaturalGas",
+		"target": "ElectricPower",
+		"id": "NaturalGas->ElectricPower"
+	},
+	"NaturalGas->Commercial": {
+		"source": "NaturalGas",
+		"target": "Commercial",
+		"id": "NaturalGas->Commercial"
+	},
+	"Nuclear->ElectricPower": {
+		"source": "Nuclear",
+		"target": "ElectricPower",
+		"id": "Nuclear->ElectricPower"
+	},
+	"Petroleum->Transportation": {
+		"source": "Petroleum",
+		"target": "Transportation",
+		"id": "Petroleum->Transportation"
+	},
+	"Petroleum->Residential": {
+		"source": "Petroleum",
+		"target": "Residential",
+		"id": "Petroleum->Residential"
+	},
+	"Petroleum->Industrial": {
+		"source": "Petroleum",
+		"target": "Industrial",
+		"id": "Petroleum->Industrial"
+	},
+	"Petroleum->ElectricPower": {
+		"source": "Petroleum",
+		"target": "ElectricPower",
+		"id": "Petroleum->ElectricPower"
+	},
+	"Petroleum->Commercial": {
+		"source": "Petroleum",
+		"target": "Commercial",
+		"id": "Petroleum->Commercial"
+	},
+	"Solar->Residential": {
+		"source": "Solar",
+		"target": "Residential",
+		"id": "Solar->Residential"
+	},
+	"Solar->Industrial": {
+		"source": "Solar",
+		"target": "Industrial",
+		"id": "Solar->Industrial"
+	},
+	"Solar->ElectricPower": {
+		"source": "Solar",
+		"target": "ElectricPower",
+		"id": "Solar->ElectricPower"
+	},
+	"Solar->Commercial": {
+		"source": "Solar",
+		"target": "Commercial",
+		"id": "Solar->Commercial"
+	},
+	"Waste->Industrial": {
+		"source": "Waste",
+		"target": "Industrial",
+		"id": "Waste->Industrial"
+	},
+	"Waste->ElectricPower": {
+		"source": "Waste",
+		"target": "ElectricPower",
+		"id": "Waste->ElectricPower"
+	},
+	"Waste->Commercial": {
+		"source": "Waste",
+		"target": "Commercial",
+		"id": "Waste->Commercial"
+	},
+	"Wind->Industrial": {
+		"source": "Wind",
+		"target": "Industrial",
+		"id": "Wind->Industrial"
+	},
+	"Wind->ElectricPower": {
+		"source": "Wind",
+		"target": "ElectricPower",
+		"id": "Wind->ElectricPower"
+	},
+	"Wind->Commercial": {
+		"source": "Wind",
+		"target": "Commercial",
+		"id": "Wind->Commercial"
+	},
+	"Wood->Residential": {
+		"source": "Wood",
+		"target": "Residential",
+		"id": "Wood->Residential"
+	},
+	"Wood->Industrial": {
+		"source": "Wood",
+		"target": "Industrial",
+		"id": "Wood->Industrial"
+	},
+	"Wood->ElectricPower": {
+		"source": "Wood",
+		"target": "ElectricPower",
+		"id": "Wood->ElectricPower"
+	},
+	"Wood->Commercial": {
+		"source": "Wood",
+		"target": "Commercial",
+		"id": "Wood->Commercial"
+	},
+	"WoodProduction->Wood": {
+		"source": "WoodProduction",
+		"target": "Wood",
+		"id": "WoodProduction->Wood"
+	},
+	"WoodProduction->DensifiedBiomassExport": {
+		"source": "WoodProduction",
+		"target": "DensifiedBiomassExport",
+		"id": "WoodProduction->DensifiedBiomassExport"
+	},
+	"NetInterstateImport->ElectricPower": {
+		"source": "NetInterstateImport",
+		"target": "ElectricPower",
+		"id": "NetInterstateImport->ElectricPower"
+	},
+	"ElectricPower->NetInterstateExport": {
+		"source": "ElectricPower",
+		"target": "NetInterstateExport",
+		"id": "ElectricPower->NetInterstateExport"
+	},
+	"Solar": {
+		"node": "Solar",
+		"name": "Solar",
+		"order": 1,
+		"column": 2,
+		"color": "yellow"
+	},
+	"Wind": {
+		"node": "Wind",
+		"name": "Wind",
+		"order": 2,
+		"column": 2,
+		"color": "lightblue"
+	},
+	"Geothermal": {
+		"node": "Geothermal",
+		"name": "Geothermal",
+		"order": 3,
+		"column": 2,
+		"color": "brown"
+	},
+	"Hydropower": {
+		"node": "Hydropower",
+		"name": "Hydropower",
+		"order": 4,
+		"column": 2,
+		"color": "blue"
+	},
+	"Wood": {
+		"node": "Wood",
+		"name": "Wood",
+		"order": 5,
+		"column": 2,
+		"color": "wood"
+	},
+	"Waste": {
+		"node": "Waste",
+		"name": "Waste",
+		"order": 6,
+		"column": 2,
+		"color": "brown"
+	},
+	"Biodiesel": {
+		"node": "Biodiesel",
+		"name": "Biodiesel",
+		"order": 7,
+		"column": 2,
+		"color": "green"
+	},
+	"BiodieselLoss": {
+		"node": "BiodieselLoss",
+		"name": "Biodiesel loss and coproducts",
+		"order": 8,
+		"column": 2,
+		"color": "green"
+	},
+	"FuelEthanol": {
+		"node": "FuelEthanol",
+		"name": "Fuel ethanol",
+		"order": 9,
+		"column": 2,
+		"color": "green"
+	},
+	"FuelEthanolLoss": {
+		"node": "FuelEthanolLoss",
+		"name": "Fuel ethanol loss and coproducts",
+		"order": 10,
+		"column": 2,
+		"color": "green"
+	},
+	"Nuclear": {
+		"node": "Nuclear",
+		"name": "Nuclear",
+		"order": 11,
+		"column": 2,
+		"color": "green"
+	},
+	"Coal": {
+		"node": "Coal",
+		"name": "Coal",
+		"order": 12,
+		"column": 2,
+		"color": "grey"
+	},
+	"NaturalGas": {
+		"node": "NaturalGas",
+		"name": "Natural gas",
+		"order": 13,
+		"column": 2,
+		"color": "orange"
+	},
+	"Petroleum": {
+		"node": "Petroleum",
+		"name": "Petroleum",
+		"order": 14,
+		"column": 2,
+		"color": "black"
+	},
+	"ElectricPower": {
+		"node": "ElectricPower",
+		"name": "Electric Power Sector",
+		"order": 15,
+		"column": 3,
+		"color": "purple"
+	},
+	"Transportation": {
+		"node": "Transportation",
+		"name": "Transportation Sector",
+		"order": 16,
+		"column": 4,
+		"color": "#010101"
+	},
+	"Industrial": {
+		"node": "Industrial",
+		"name": "Industrial Sector",
+		"order": 17,
+		"column": 4,
+		"color": "#69779B"
+	},
+	"Commercial": {
+		"node": "Commercial",
+		"name": "Commercial Sector",
+		"order": 18,
+		"column": 4,
+		"color": "#ACDBDF"
+	},
+	"Residential": {
+		"node": "Residential",
+		"name": "Residential Sector",
+		"order": 19,
+		"column": 4,
+		"color": "#F0ECE2"
+	},
+	"ElectricLoss": {
+		"node": "ElectricLoss",
+		"name": "Electricity Loss",
+		"order": 20,
+		"column": 4,
+		"color": "purple"
+	},
+	"ElectricImport": {
+		"node": "ElectricImport",
+		"name": "Electricity Import",
+		"order": 22,
+		"column": 2,
+		"color": "purple"
+	},
+	"ElectricExport": {
+		"node": "ElectricExport",
+		"name": "Electricity Export",
+		"order": 25,
+		"column": 4,
+		"color": "purple"
+	},
+	"CoalCokeImport": {
+		"node": "CoalCokeImport",
+		"name": "Coal Coke Import",
+		"order": 23,
+		"column": 3,
+		"color": ""
+	},
+	"CoalCokeExport": {
+		"node": "CoalCokeExport",
+		"name": "Coal Coke Export",
+		"order": 26,
+		"column": 5,
+		"color": ""
+	},
+	"DensifiedBiomassExport": {
+		"node": "DensifiedBiomassExport",
+		"name": "Densified Biomass Export",
+		"order": 21,
+		"column": 2,
+		"color": ""
+	},
+	"WoodProduction": {
+		"node": "WoodProduction",
+		"name": "Wood Production",
+		"order": 0,
+		"column": 1,
+		"color": ""
+	},
+	"NetInterstateImport": {
+		"node": "NetInterstateImport",
+		"name": "Net Interstate Electricity Import",
+		"order": 24,
+		"column": 2,
+		"color": ""
+	},
+	"NetInterstateExport": {
+		"node": "NetInterstateExport",
+		"name": "Net Interstate Electricity Export",
+		"order": 27,
+		"column": 4,
+		"color": ""
+	},
+	"BiodieselSum": {
+		"node": "BiodieselSum",
+		"name": "Biodiesel and coproducts",
+		"order": 28,
+		"column": 0,
+		"color": "green"
+	},
+	"FuelEthanolSum": {
+		"node": "FuelEthanolSum",
+		"name": "Fuel ethanol and coporducts",
+		"order": 29,
+		"column": 0,
+		"color": "green"
+	},
+	"Biofuel": {
+		"node": "Biofuel",
+		"name": "Biofuel",
+		"order": 30,
+		"column": 0,
+		"color": "green"
+	},
+	"WoodWaste": {
+		"node": "WoodWaste",
+		"name": "Wood and waste",
+		"order": 31,
+		"column": 0,
+		"color": "wood"
+	},
+	"Biomass": {
+		"node": "Biomass",
+		"name": "Biomass",
+		"order": 32,
+		"column": 0,
+		"color": "green"
+	},
+	"NoncombustibleRenewable": {
+		"node": "NoncombustibleRenewable",
+		"name": "Noncombustible renewable energy",
+		"order": 33,
+		"column": 0,
+		"color": ""
+	},
+	"Renewable": {
+		"node": "Renewable",
+		"name": "Renewable energy",
+		"order": 34,
+		"column": 0,
+		"color": "green"
+	},
+	"FossilFuel": {
+		"node": "FossilFuel",
+		"name": "Fossil Fuel",
+		"order": 35,
+		"column": 0,
+		"color": "grey"
+	},
+	"Nonrenewable": {
+		"node": "Nonrenewable",
+		"name": "Nonrenewable energy",
+		"order": 36,
+		"column": 0,
+		"color": "grey"
+	},
+	"Clean": {
+		"node": "Clean",
+		"name": "Clean energy",
+		"order": 37,
+		"column": 0,
+		"color": ""
+	},
+	"Total": {
+		"node": "Total",
+		"name": "Total energy consumption",
+		"order": 38,
+		"column": 0,
+		"color": ""
+	},
+	"Consumption": {
+		"node": "Consumption",
+		"name": "Total consumption",
+		"order": 39,
+		"column": 5,
+		"color": ""
 	}
 }

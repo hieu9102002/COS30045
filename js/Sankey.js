@@ -5,13 +5,30 @@
 
 // load data and draw sankey
 
-d3.json("./data/sankey/data.json")
-    .then(function (jsondata) {
+Promise.all([
+    d3.json("./data/sankey/attr.json"),
+    d3.json("./data/sankey/groups.json"),
+    d3.json("./data/sankey/values.json"),
+]).then(function (files) {
+    const jsondata = {
+        attr: files[0],
+        groups: files[1],
+        data: files[2]
+    }
 
-        let s = SANKEY(jsondata).state("CA").year(2018)
-        s.draw();
+    SANKEY(jsondata).state("CA").year(2018).draw();
 
-    });
+}).catch(function (err) {
+    console.error(err);
+})
+
+// d3.json("./data/sankey/data.json")
+//     .then(function (jsondata) {
+
+//         let s = SANKEY(jsondata).state("CA").year(2018)
+//         s.draw();
+
+//     });
 
 
 
@@ -39,7 +56,7 @@ function SANKEY(JSONDATA) {
             "Transportation",
             "Industrial",
             "Commercial",
-            "Residential"
+            "Residential",
         ]
 
     SANKEY.state = (state) => { STATE = state; return SANKEY; }
@@ -51,8 +68,6 @@ function SANKEY(JSONDATA) {
     SANKEY.draw = () => {
 
         STATEDATA = DATASET[STATE][YEAR];
-
-        console.log(STATE, YEAR, STATEDATA);
 
         let sankeydata = INPUTCREATOR.create(STATEDATA, NEEDEDNODES);
 
@@ -67,8 +82,9 @@ function SANKEY(JSONDATA) {
 function D3SankeyInputCreator(JSONDATA) {
 
     const ATTR = JSONDATA.attr;
+    const GROUPS = JSONDATA.groups;
 
-    let STATEDATA, NEEDEDNODES;
+    let STATEDATA, NEEDEDNODES, NEEDEDGROUPS;
 
     D3SankeyInputCreator.create = (statedata, neededNodes) => {
 
@@ -76,17 +92,44 @@ function D3SankeyInputCreator(JSONDATA) {
 
         NEEDEDNODES = neededNodes;
 
-        let selectedLinks = select_links_from_needed_nodes();
+        NEEDEDGROUPS = addGroupDescendants();
 
-        let selectedNodes = select_nodes_from_selected_links(selectedLinks);
+        let selectedLinks = select_links_from_needed_nodes(true);
 
-        let sankeyinputdata = format_input_data(selectedLinks, selectedNodes);
+        let valueMap = calculate_values(selectedLinks);
+
+        let pointsMap = group_nodes(selectedLinks, valueMap, NEEDEDGROUPS);
+
+        let selectedNodes = select_nodes_from_selected_links(selectedLinks, pointsMap); // these nodes include groups
+
+        let sankeyinputdata = format_input_data(selectedLinks, selectedNodes, valueMap, pointsMap);
 
         return sankeyinputdata;
 
     }
 
-    function select_links_from_needed_nodes() {
+    function addGroupDescendants() {
+
+        let neededGroups = [];
+
+        for (const node of NEEDEDNODES) {
+
+            if (GROUPS.descendants_of[node] != undefined) {
+
+                neededGroups.push(node);
+
+                for (const descendant of GROUPS.descendants_of[node]) {
+                    if (!NEEDEDNODES.includes(descendant)) {
+                        NEEDEDNODES.push(descendant);
+                    }
+                }
+            }
+        }
+
+        return neededGroups;
+    }
+
+    function select_links_from_needed_nodes(strict = false) {
 
         let BeginsAt = {}, // map[node]: how many links begin with this node
             EndsAt = {}; // map[node]: how many links end at this node
@@ -96,29 +139,29 @@ function D3SankeyInputCreator(JSONDATA) {
 
         for (const link in STATEDATA.links) {
 
-            const source = ATTR.links[link].source;
-            const target = ATTR.links[link].target;
+            const source = ATTR[link].source;
+            const target = ATTR[link].target;
 
             for (let map of [BeginsAt, EndsAt]) {
-                for (let node of [source, target]) {
+                for (const node of [source, target]) {
                     if (map[node] == undefined) map[node] = 0;
                 }
             }
 
-            EndsAt[source]++;
+            EndsAt[target]++;
 
-            BeginsAt[target]++;
+            BeginsAt[source]++;
 
             if (NEEDEDNODES.includes(source) && NEEDEDNODES.includes(target)) {
 
-                selectedLinksMap[link] = 1;
+                selectedLinksMap[link] = true;
 
                 selectedLinks.push(link);
 
             }
         }
 
-        let selectedLinksIsValid = false;
+        let selectedLinksIsValid = !strict;
 
         while (!selectedLinksIsValid) {
 
@@ -129,8 +172,8 @@ function D3SankeyInputCreator(JSONDATA) {
 
             for (const link of selectedLinks) {
 
-                const source = ATTR.links[link].source;
-                const target = ATTR.links[link].target;
+                const source = ATTR[link].source;
+                const target = ATTR[link].target;
 
                 for (let map of [SelectedBeginsAt, SelectedEndsAt]) {
                     for (let node of [source, target]) {
@@ -146,13 +189,13 @@ function D3SankeyInputCreator(JSONDATA) {
 
             for (const link of selectedLinks) {
 
-                const source = ATTR.links[link].source;
-                const target = ATTR.links[link].target;
+                const source = ATTR[link].source;
+                const target = ATTR[link].target;
 
                 if (SelectedEndsAt[source] > 0) {
                     if (SelectedEndsAt[source] < EndsAt[source]) {
                         SelectedBeginsAt[target]--;
-                        selectedLinksMap[link] = 0;
+                        selectedLinksMap[link] = false;
                         selectedLinksIsValid = false;
                     }
                 }
@@ -162,7 +205,7 @@ function D3SankeyInputCreator(JSONDATA) {
 
             for (const link in selectedLinksMap) {
 
-                if (selectedLinksMap[link] == 1) {
+                if (selectedLinksMap[link]) {
 
                     selectedLinks.push(link);
 
@@ -173,13 +216,16 @@ function D3SankeyInputCreator(JSONDATA) {
         return selectedLinks;
     }
 
-    function select_nodes_from_selected_links(selectedLinks) {
+    function select_nodes_from_selected_links(selectedLinks, pointsMap) {
+
+        const sourceMap = pointsMap.sourceMap,
+            targetMap = pointsMap.targetMap;
 
         let selectedNodes = [];
 
         for (const link of selectedLinks) {
-            const source = ATTR.links[link].source;
-            const target = ATTR.links[link].target;
+            const source = sourceMap[link];
+            const target = targetMap[link];
 
             for (const node of [source, target]) {
                 if (!selectedNodes.includes(node)) {
@@ -191,17 +237,19 @@ function D3SankeyInputCreator(JSONDATA) {
         return selectedNodes;
     }
 
-    function format_input_data(selectedLinks, selectedNodes) {
+    function format_input_data(selectedLinks, selectedNodes, valueMap, pointsMap) {
 
         let sankeyinputdata = {
             nodes: [],
             links: []
         }
 
+        console.log(selectedNodes);
+
         selectedNodes.sort((node1id, node2id) => {
 
-            const node1 = ATTR.nodes[node1id];
-            const node2 = ATTR.nodes[node2id];
+            const node1 = ATTR[node1id];
+            const node2 = ATTR[node2id];
 
             if (node1.column != node1.column) {
                 return node1.column - node2.column;
@@ -217,11 +265,15 @@ function D3SankeyInputCreator(JSONDATA) {
 
             nodeidmap[nodeid] = i;
 
-            const value = STATEDATA.nodes[nodeid];
+            const value = valueMap[nodeid];
 
-            let node = ATTR.nodes[nodeid];
+            const total = STATEDATA[nodeid];
+
+            let node = ATTR[nodeid];
 
             node.value = value;
+
+            node.total = total;
 
             let nodeformatted = {
                 node: i,
@@ -232,17 +284,21 @@ function D3SankeyInputCreator(JSONDATA) {
             sankeyinputdata.nodes.push(nodeformatted);
         }
 
+        console.log(valueMap)
+
         for (const linkid of selectedLinks) {
 
-            const value = STATEDATA.links[linkid];
+            const value = valueMap[linkid];
+            const source = pointsMap.sourceMap[linkid];
+            const target = pointsMap.targetMap[linkid];
 
-            let link = ATTR.links[linkid];
+            let link = ATTR[linkid];
 
             link.value = value;
 
             let linkformatted = {
-                source: nodeidmap[link.source],
-                target: nodeidmap[link.target],
+                source: nodeidmap[source],
+                target: nodeidmap[target],
                 value: value,
                 data: link,
             }
@@ -250,7 +306,107 @@ function D3SankeyInputCreator(JSONDATA) {
             sankeyinputdata.links.push(linkformatted);
         }
 
+        console.log(sankeyinputdata)
+
         return sankeyinputdata;
+    }
+
+    function calculate_values(selectedLinks) {
+
+        let valueMap = {},
+            valueMapBeginsAt = {},
+            valueMapEndsAt = {};
+
+        for (const link of selectedLinks) {
+
+            valueMap[link] = STATEDATA.links[link];
+
+            const source = ATTR[link].source;
+            const target = ATTR[link].target;
+
+            for (const node of [source, target]) {
+                for (let map of [valueMap, valueMapBeginsAt, valueMapEndsAt]) {
+                    if (map[node] == undefined) {
+                        map[node] = 0;
+                    }
+                }
+
+            }
+
+            valueMapBeginsAt[source] += valueMap[link];
+            valueMapEndsAt[target] += valueMap[link];
+
+        }
+
+        for (const link of selectedLinks) {
+
+
+            const source = ATTR[link].source;
+            const target = ATTR[link].target;
+
+            for (const node of [source, target]) {
+                valueMap[node] = Math.max(valueMapBeginsAt[node], valueMapEndsAt[node]);
+
+            }
+
+        }
+
+        return valueMap;
+    }
+
+    function group_nodes(selectedLinks, valueMap, neededGroups) {
+
+        let sourceMap = {},
+            targetMap = {};
+
+        for (const link of selectedLinks) {
+
+            const source = ATTR[link].source;
+            const target = ATTR[link].target;
+
+            sourceMap[link] = source;
+            targetMap[link] = target;
+
+        }
+
+        for (const group of neededGroups) {
+
+            valueMap[group] = 0;
+
+            const descendants = GROUPS.descendants_of[group];
+
+            for (const descendant of descendants) {
+
+                if(valueMap[descendant] == undefined) {
+                    valueMap[descendant] = 0;
+                }
+
+                valueMap[group] += valueMap[descendant];
+
+            }
+
+            for (const link of selectedLinks) {
+
+                for (let map of [sourceMap, targetMap]) {
+
+                    const node = map[link];
+
+                    if (descendants.includes(node)) {
+
+                        map[link] = group;
+
+                    }
+                }
+
+            }
+
+        }
+
+        return {
+            sourceMap: sourceMap,
+            targetMap: targetMap,
+        }
+
     }
 
     return D3SankeyInputCreator;
@@ -292,7 +448,7 @@ function D3SankeyDrawer() {
     // Set the sankey diagram properties
     const d3sankeygraph = d3.sankey()
         .nodeWidth(sankeyNodeWidth)
-        .nodePadding(sankeyNodePadding)
+        // .nodePadding(sankeyNodePadding)
         .size([sankeyareaWidth, sankeyareaHeight]);
 
     D3SankeyDrawer.drawsankey = (sankeydata) => {
@@ -600,73 +756,3 @@ function D3SankeyDrawer() {
 
     return D3SankeyDrawer;
 }
-
-// // format variables
-//     const Format = d3.format(",.0f"),
-//         Color = function (d) {
-
-//             let _color = 0;
-
-//             switch (d.data.id) {
-//                 case "Solar":
-//                     _color = '#f9d71c';
-//                     break;
-
-//                 case "Wind":
-//                     _color = '#a6cee3';
-//                     break;
-
-//                 case "Geothermal":
-//                     _color = '#d7191c';
-//                     break;
-
-//                 case "Biomass":
-//                     _color = '#33a02c';
-//                     break;
-
-//                 case "Hydropower":
-//                     _color = '#2155CD';
-//                     break;
-
-//                 case "ElectricPower":
-//                     _color = 'purple';
-//                     break;
-
-//                 case "ElectricLoss":
-//                     _color = '#36AE7C';
-//                     break;
-
-//                 case "Transportation":
-//                     _color = '#010101';
-//                     break;
-
-//                 case "Industrial":
-//                     _color = '#69779B';
-//                     break;
-
-//                 case "Commercial":
-//                     _color = '#ACDBDF';
-//                     break;
-
-//                 case "Residential":
-//                     _color = '#F0ECE2';
-//                     break;
-
-//                 default:
-//                     _color = '';
-//                 // d3.scaleOrdinal(d3.schemeCategory10)(d.name.replace(/ .*/, ""));
-//                 // https://www.heavy.ai/blog/12-color-palettes-for-telling-better-stories-with-your-data
-//             }
-
-//             return _color;
-//         };
-//     // ['#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6']
-//     // ['#d7191c','#fdae61','#ffffbf','#abdda4','#2b83ba']
-//     // ['#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6']
-//     // https://colorbrewer2.org/?type=qualitative&scheme=Paired&n=4
-//     // ['#a6cee3','#1f78b4','#b2df8a','#33a02c']
-//     // https://colorhunt.co/palette/e8f9fd79dae80aa1dd2155cd
-
-
-
-
