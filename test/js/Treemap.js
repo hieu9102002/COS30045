@@ -4,24 +4,28 @@
 
 // Treemap().draw();
 
-export default function Treemap(ID = "#my_dataviz") {
+export default class Treemap {
 
-    let DATA = { "children": [{ "name": "boss1", "children": [{ "name": "mister_a", "group": "A", "value": 28, "colname": "level3" }, { "name": "mister_b", "group": "A", "value": 19, "colname": "level3" }, { "name": "mister_c", "group": "C", "value": 18, "colname": "level3" }, { "name": "mister_d", "group": "C", "value": 19, "colname": "level3" }], "colname": "level2" }, { "name": "boss2", "children": [{ "name": "mister_e", "group": "C", "value": 14, "colname": "level3" }, { "name": "mister_f", "group": "A", "value": 11, "colname": "level3" }, { "name": "mister_g", "group": "B", "value": 15, "colname": "level3" }, { "name": "mister_h", "group": "B", "value": 16, "colname": "level3" }], "colname": "level2" }, { "name": "boss3", "children": [{ "name": "mister_i", "group": "B", "value": 10, "colname": "level3" }, { "name": "mister_j", "group": "A", "value": 13, "colname": "level3" }, { "name": "mister_k", "group": "A", "value": 13, "colname": "level3" }, { "name": "mister_l", "group": "D", "value": 25, "colname": "level3" }, { "name": "mister_m", "group": "D", "value": 16, "colname": "level3" }, { "name": "mister_n", "group": "D", "value": 28, "colname": "level3" }], "colname": "level2" }], "name": "CEO" }
+    constructor(ID = "#my_dataviz") {
 
-    // set the dimensions and margins of the graph
-    const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-        width = 445 - margin.left - margin.right,
-        height = 445 - margin.top - margin.bottom;
+        this.DATA = {};
 
-    // append the svg object to the body of the page
-    const svg = d3.select(ID)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // set the dimensions and margins of the graph
+        this.margin = { top: 10, right: 10, bottom: 10, left: 10 },
+        this.width = 445 - this.margin.left - this.margin.right,
+        this.height = 445 - this.margin.top - this.margin.bottom;
 
-    Treemap.formatToTree = (nodedata, name = "Sources") => {
+        // append the svg object to the body of the page
+        this.svg = d3.select(ID)
+            .append("svg")
+            .attr("width", this.width + this.margin.left + this.margin.right)
+            .attr("height", this.height + this.margin.top + this.margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+    }
+
+    formatToTree(nodedata, name = "Sources") {
 
         let formatted_data = {
             name: name,
@@ -41,36 +45,38 @@ export default function Treemap(ID = "#my_dataviz") {
         return formatted_data;
     }
 
-    Treemap.reset = () => {
+    reset() {
 
-        console.log(ID);
+        console.log(this.ID);
 
-        svg.html("");
+        this.svg.html("");
 
-        return Treemap;
+        return this;
     }
 
-    Treemap.setTreedata = (data) => {
-        
-        DATA = data;
+    setTreedata(data) {
 
-        return Treemap;
+        this.DATA = data;
+
+        console.log(data);
+
+        return this;
     }
 
 
-    Treemap.draw = () => {
+    draw() {
 
         // Give the data to this cluster layout:
-        const root = d3.hierarchy(DATA).sum(function (d) { return d.value }) // Here the size of each leave is given in the 'value' field in input data
+        const root = d3.hierarchy(this.DATA).sum(function (d) { return d.value }) // Here the size of each leave is given in the 'value' field in input data
 
         // Then d3.treemap computes the position of each element of the hierarchy
         d3.treemap()
-            .size([width, height])
+            .size([this.width, this.height])
             .padding(2)
             (root)
 
         // use this information to add rectangles:
-        svg
+        this.svg
             .selectAll("rect")
             .data(root.leaves())
             .enter()
@@ -83,7 +89,7 @@ export default function Treemap(ID = "#my_dataviz") {
             .style("fill", "slateblue")
 
         // and to add the text labels
-        svg
+        this.svg
             .selectAll("text")
             .data(root.leaves())
             .enter()
@@ -94,11 +100,9 @@ export default function Treemap(ID = "#my_dataviz") {
             .attr("font-size", "15px")
             .attr("fill", "white")
 
-        return Treemap;
+        return this;
 
     }
-
-    return Treemap;
 }
 
 

@@ -449,10 +449,8 @@ function SankeyDrawer() {
         .attr("id", "sankey");
 
     // add treemap
-    let TreemapSource = Treemap("#treemap-source").bind({});
-    console.log(TreemapSource);
-    let TreemapTarget = Treemap("#treemap-target").bind({});
-    console.log(TreemapTarget);
+    let TreemapSource = new Treemap("#treemap-source");
+    let TreemapTarget = new Treemap("#treemap-target");
 
     // add tooltip
     const tooltip = CHARTAREA
