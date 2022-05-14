@@ -3,114 +3,45 @@
 
 "use strict";
 
-// // load data and draw sankey
+import Treemap from "./Treemap.js";
 
-// Promise.all([
-//     d3.json("./data/sankey/attr.json"),
-//     d3.json("./data/sankey/groups.json"),
-//     d3.json("./data/sankey/values.json"),
-// ]).then(function (files) {
-//     const jsondata = {
-//         attr: files[0],
-//         groups: files[1],
-//         data: files[2]
-//     }
+function SankeyInput() {
 
-//     SANKEYMAIN(jsondata).state("CA").year(2018).draw();
+    let ATTR, GROUPS, VALUES, STATEVALUES,
+        NEEDEDNODES, STATE, YEAR,
+        STRICT = true,
+        ALLOW_DUPLICATES = false;
 
-// }).catch(function (err) {
-//     console.error(err);
-// })
+    SankeyInput.setData = (attr, groups, values) => {
 
-// // d3.json("./data/sankey/data.json")
-// //     .then(function (jsondata) {
+        ATTR = attr;
+        GROUPS = groups;
+        VALUES = values;
 
-// //         let s = SANKEY(jsondata).state("CA").year(2018)
-// //         s.draw();
+        return SankeyInput;
 
-// //     });
-
-export default SANKEYMAIN;
-
-function SANKEYMAIN(JSONDATA) {
-
-    const INPUTCREATOR = D3SankeyInputCreator(JSONDATA);
-
-    const SANKEYDRAWER = D3SankeyDrawer();
-
-    const ATTR = JSONDATA.attr;
-    const GROUPMAP = JSONDATA.groups;
-    const DATASET = JSONDATA.data;
-
-    let STATE = "US",
-        YEAR = 2019,
-        STATEDATA = DATASET[STATE][YEAR],
-        NEEDEDNODES = [
-            "Solar",
-            "Wind",
-            "Geothermal",
-            "Hydropower",
-            "Biomass",
-            "FossilFuel",
-            "ElectricPower",
-            "ElectricLoss",
-            "Transportation",
-            "Industrial",
-            "Commercial",
-            "Residential",
-            "ElectricImport",
-            "ElectricExport",
-            "NetInterstateImport",
-            "NetInterstateExport",
-        ]
-
-    SANKEYMAIN.state = (state) => { STATE = state; return SANKEYMAIN; }
-
-    SANKEYMAIN.year = (year) => { YEAR = year; return SANKEYMAIN; }
-
-    SANKEYMAIN.neededNodes = (neededNodes) => { NEEDEDNODES = neededNodes; return SANKEYMAIN; }
-
-    SANKEYMAIN.draw = () => {
-
-        let sankeydata = INPUTCREATOR.create(STATE, YEAR, NEEDEDNODES);
-
-        SANKEYDRAWER.reset();
-
-        SANKEYDRAWER.drawsankey(sankeydata);
-
-        return SANKEYMAIN;
     }
 
-    return SANKEYMAIN;
-}
-
-function D3SankeyInputCreator(JSONDATA) {
-
-    const ATTR = JSONDATA.attr;
-    const GROUPS = JSONDATA.groups;
-    const DATASET = JSONDATA.data;
-
-    let STATEDATA, NEEDEDNODES, STATE, YEAR;
-
-    D3SankeyInputCreator.create = (state, year, neededNodes) => {
+    SankeyInput.create = (state, year, neededNodes) => {
 
         STATE = state;
 
         YEAR = year;
 
-        STATEDATA = DATASET[STATE][YEAR];
-
         NEEDEDNODES = neededNodes;
 
-        let NEEDEDGROUPS = addGroupDescendants();
+        STATEVALUES = VALUES[STATE][YEAR];
 
-        let selectedLinks = select_links_from_needed_nodes(false);
+        let neededGroups = add_groups_descendants();
+
+        let selectedLinks = select_links_from_needed_nodes();
 
         let valueMap = calculate_values(selectedLinks);
 
-        let pointsMap = group_nodes(selectedLinks, valueMap, NEEDEDGROUPS);
+        let pointsMap = group_nodes(selectedLinks, valueMap, neededGroups);
 
-        let selectedNodes = select_nodes_from_selected_links(selectedLinks, pointsMap); // these nodes include groups
+        let selectedNodes = select_nodes_from_selected_links(selectedLinks, pointsMap);
+        // selectedNodes includes groups
 
         let sankeyinputdata = format_input_data(selectedLinks, selectedNodes, valueMap, pointsMap);
 
@@ -118,13 +49,13 @@ function D3SankeyInputCreator(JSONDATA) {
 
     }
 
-    function addGroupDescendants() {
+    function add_groups_descendants() {
 
         let neededGroups = [];
 
         for (const node of NEEDEDNODES) {
 
-            if(GROUPS.descendants_of[node] == undefined) {
+            if (GROUPS.descendants_of[node] == undefined) {
                 continue;
             }
 
@@ -143,7 +74,7 @@ function D3SankeyInputCreator(JSONDATA) {
         return neededGroups;
     }
 
-    function select_links_from_needed_nodes(strict = false) {
+    function select_links_from_needed_nodes() {
 
         let BeginsAt = {}, // map[node]: how many links begin with this node
             EndsAt = {}; // map[node]: how many links end at this node
@@ -151,7 +82,7 @@ function D3SankeyInputCreator(JSONDATA) {
         let selectedLinksMap = {}, // map[linkid]: is the link still valid to be included? 
             selectedLinks = []; // list of links that are needed
 
-        for (const link in STATEDATA.links) {
+        for (const link in STATEVALUES.links) {
 
             const source = ATTR[link].source;
             const target = ATTR[link].target;
@@ -181,7 +112,7 @@ function D3SankeyInputCreator(JSONDATA) {
             }
         }
 
-        let selectedLinksIsValid = !strict;
+        let selectedLinksIsValid = !STRICT;
 
         while (!selectedLinksIsValid) {
 
@@ -236,149 +167,6 @@ function D3SankeyInputCreator(JSONDATA) {
         return selectedLinks;
     }
 
-    function select_nodes_from_selected_links(selectedLinks, pointsMap) {
-
-        const sourceMap = pointsMap.sourceMap,
-            targetMap = pointsMap.targetMap;
-
-        let selectedNodes = [];
-
-        for (const link of selectedLinks) {
-            const source = sourceMap[link];
-            const target = targetMap[link];
-
-            for (const node of [source, target]) {
-                if (!selectedNodes.includes(node)) {
-                    selectedNodes.push(node);
-                }
-            }
-        }
-
-        return selectedNodes;
-    }
-
-    function format_input_data(selectedLinks, selectedNodes, valueMap, pointsMap, allow_duplicates = false) {
-
-        let sankeyinputdata = {
-            nodes: [],
-            links: []
-        }
-
-        selectedNodes.sort((node1id, node2id) => {
-
-            const node1 = ATTR[node1id];
-            const node2 = ATTR[node2id];
-
-            if (node2.column != node1.column) {
-                return node1.column - node2.column;
-            }
-            return (node1.order - node2.order);
-        });
-
-        let nodeidmap = {};
-
-        for (let i = 0; i < selectedNodes.length; i++) {
-
-            const nodeid = selectedNodes[i];
-
-            nodeidmap[nodeid] = i;
-
-            const value = valueMap[nodeid];
-
-            const total = STATEDATA[nodeid];
-
-            let data = {};
-
-            Object.assign(data, ATTR[nodeid]);
-
-            data.value = value;
-            data.total = total;
-            data.state = STATE;
-            data.year = YEAR;
-
-            let nodeformatted = {
-                node: i,
-                name: data.name,
-                data: data
-            }
-
-            sankeyinputdata.nodes.push(nodeformatted);
-        }
-
-        for (const linkid of selectedLinks) {
-
-            const value = valueMap[linkid];
-            const source = pointsMap.sourceMap[linkid];
-            const target = pointsMap.targetMap[linkid];
-
-            let data = {}
-
-            Object.assign(data, ATTR[linkid]);
-
-            data.value = value;
-            data.source = source;
-            data.target = target;
-            data.state = STATE;
-            data.year = YEAR;
-
-            let linkformatted = {
-                source: nodeidmap[source],
-                target: nodeidmap[target],
-                value: value,
-                data: data,
-            }
-
-            sankeyinputdata.links.push(linkformatted);
-        }
-
-        if (!allow_duplicates) {
-
-            let appearedValueMap = {};
-
-            for (const linkformatted of sankeyinputdata.links) {
-
-                const linkformattedid = linkformatted.data.source + "->" + linkformatted.data.target;
-
-                if (appearedValueMap[linkformattedid] == undefined) {
-
-                    appearedValueMap[linkformattedid] = 0;
-
-                }
-
-                appearedValueMap[linkformattedid] += linkformatted.value;
-            }
-
-            sankeyinputdata.links = [];
-
-            for (const linkid in appearedValueMap) {
-
-                const source = linkid.split("->")[0];
-                const target = linkid.split("->")[1];
-                const value = appearedValueMap[linkid];
-
-                let linkformatted = {
-                    source: nodeidmap[source],
-                    target: nodeidmap[target],
-                    value: value,
-                    data: {
-                        source: source,
-                        target: target,
-                        value: value,
-                        id: linkid,
-                        state: STATE,
-                        year: YEAR,
-                    },
-                }
-
-                sankeyinputdata.links.push(linkformatted);
-            }
-        }
-
-        sankeyinputdata.nasa = 10;
-
-        return sankeyinputdata;
-    }
-
     function calculate_values(selectedLinks) {
 
         let valueMap = {},
@@ -387,7 +175,7 @@ function D3SankeyInputCreator(JSONDATA) {
 
         for (const link of selectedLinks) {
 
-            valueMap[link] = STATEDATA.links[link];
+            valueMap[link] = STATEVALUES.links[link];
 
             const source = ATTR[link].source;
             const target = ATTR[link].target;
@@ -477,17 +265,160 @@ function D3SankeyInputCreator(JSONDATA) {
 
     }
 
-    return D3SankeyInputCreator;
+    function select_nodes_from_selected_links(selectedLinks, pointsMap) {
+
+        const sourceMap = pointsMap.sourceMap,
+            targetMap = pointsMap.targetMap;
+
+        let selectedNodes = [];
+
+        for (const link of selectedLinks) {
+            const source = sourceMap[link];
+            const target = targetMap[link];
+
+            for (const node of [source, target]) {
+                if (!selectedNodes.includes(node)) {
+                    selectedNodes.push(node);
+                }
+            }
+        }
+
+        return selectedNodes;
+    }
+
+    function format_input_data(selectedLinks, selectedNodes, valueMap, pointsMap) {
+
+        let sankeyinputdata = {
+            nodes: [],
+            links: []
+        }
+
+        selectedNodes.sort((node1id, node2id) => {
+
+            const node1 = ATTR[node1id];
+            const node2 = ATTR[node2id];
+
+            if (node2.column != node1.column) {
+                return node1.column - node2.column;
+            }
+            return (node1.order - node2.order);
+        });
+
+        let nodeidmap = {};
+
+        for (let i = 0; i < selectedNodes.length; i++) {
+
+            const nodeid = selectedNodes[i];
+
+            nodeidmap[nodeid] = i;
+
+            const value = valueMap[nodeid];
+
+            const total = STATEVALUES[nodeid];
+
+            let data = {};
+
+            Object.assign(data, ATTR[nodeid]);
+
+            data.value = value;
+            data.total = total;
+            data.state = STATE;
+            data.year = YEAR;
+
+            let nodeformatted = {
+                node: i,
+                name: data.name,
+                data: data
+            }
+
+            sankeyinputdata.nodes.push(nodeformatted);
+        }
+
+        for (const linkid of selectedLinks) {
+
+            const value = valueMap[linkid];
+            const source = pointsMap.sourceMap[linkid];
+            const target = pointsMap.targetMap[linkid];
+
+            let data = {}
+
+            Object.assign(data, ATTR[linkid]);
+
+            data.value = value;
+            data.source = source;
+            data.target = target;
+            data.state = STATE;
+            data.year = YEAR;
+
+            let linkformatted = {
+                source: nodeidmap[source],
+                target: nodeidmap[target],
+                value: value,
+                data: data,
+            }
+
+            sankeyinputdata.links.push(linkformatted);
+        }
+
+        if (!ALLOW_DUPLICATES) {
+
+            let appearedValueMap = {};
+
+            for (const linkformatted of sankeyinputdata.links) {
+
+                const linkformattedid = linkformatted.data.source + "->" + linkformatted.data.target;
+
+                if (appearedValueMap[linkformattedid] == undefined) {
+
+                    appearedValueMap[linkformattedid] = 0;
+
+                }
+
+                appearedValueMap[linkformattedid] += linkformatted.value;
+            }
+
+            sankeyinputdata.links = [];
+
+            for (const linkid in appearedValueMap) {
+
+                const source = linkid.split("->")[0];
+                const target = linkid.split("->")[1];
+                const value = appearedValueMap[linkid];
+
+                let linkformatted = {
+                    source: nodeidmap[source],
+                    target: nodeidmap[target],
+                    value: value,
+                    data: {
+                        source: source,
+                        target: target,
+                        value: value,
+                        id: linkid,
+                        state: STATE,
+                        year: YEAR,
+                    },
+                }
+
+                sankeyinputdata.links.push(linkformatted);
+            }
+        }
+
+        sankeyinputdata.nasa = 10;
+
+        return sankeyinputdata;
+    }
+
+    return SankeyInput;
 
 }
 
-function D3SankeyDrawer() {
+function SankeyDrawer() {
 
     const minVisibleLink = 0;
     const minVisibleNode = 0;
 
-    const svgWidth = 900,
-        svgHeight = 500;
+    const svgWidth = 900;
+    const svgHeight = 500;
 
     // set the dimensions and margins of the graph
     const sankeyMargin = { top: 20, right: 20, bottom: 20, left: 20 },
@@ -497,27 +428,69 @@ function D3SankeyDrawer() {
         sankeyNodePadding = 50,
         nodeTextPadding = 6;
 
-    // create svg chart
-    const CHARTAREA = d3.select("#sankey-chart");
-
-    CHARTAREA.style("width", `${svgWidth} px`)
-
-    // append svg
-    const svgsankey = CHARTAREA.append("svg")
-        .attr("width", svgWidth)
-        .attr("height", svgHeight);
-
-
-    // append (create) sankey
-    const sankeyarea = svgsankey.append("g")
-        .attr("transform", "translate(" + sankeyMargin.left + "," + sankeyMargin.top + ")")
-        .attr("id", "sankey");
-
     // Set the sankey diagram properties
     const d3sankeygraph = d3.sankey()
         .nodeWidth(sankeyNodeWidth)
         // .nodePadding(sankeyNodePadding)
         .size([sankeyareaWidth, sankeyareaHeight]);
+
+    // select svg chart
+    const CHARTAREA = d3.select("#sankey-chart")
+        .style("width", `${svgWidth} px`);
+
+    // add svg
+    const svg = CHARTAREA.append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    // append (create) sankey
+    const svgsankey = svg.append("g")
+        .attr("transform", "translate(" + sankeyMargin.left + "," + sankeyMargin.top + ")")
+        .attr("id", "sankey");
+
+    // add treemap
+    let TreemapSource = Treemap("#treemap-source").bind({});
+    console.log(TreemapSource);
+    let TreemapTarget = Treemap("#treemap-target").bind({});
+    console.log(TreemapTarget);
+
+    // add tooltip
+    const tooltip = CHARTAREA
+        .append("div")
+        .style("position", "absolute")
+
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
+
+        .style("visibility", "hidden")
+        .attr("id", "sankey-tooltip");
+
+    function onMouseOverTooltip(event, d) {
+
+        tooltip.html(d.tooltip)
+            .style("visibility", "visible")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY) + "px")
+    }
+
+    function onMouseMoveTooltip(event, d) {
+
+        let x = (event.pageX) + 20;
+        let y = event.pageY > 1650 ? 1650 : event.pageY;
+
+        tooltip
+            .style("transform", "translateY(-55%)")
+            .style("left", x + "px")
+            .style("top", y + "px")
+    }
+
+    function onMouseOutTooltip(event, d) {
+
+        tooltip.style("visibility", "hidden");
+    }
 
     function initialize_graph(sankeydata) {
 
@@ -536,8 +509,8 @@ function D3SankeyDrawer() {
             d.selected = false;
             d.textVisible = true;
             d.tooltip = `${d.data.name}
-            <br>${d.data.value.toLocaleString('en-US')} BBtu
-            <br>${d.data.state}, ${d.data.year}`;
+                <br>${d.data.value.toLocaleString('en-US')} BBtu
+                <br>${d.data.state}, ${d.data.year}`;
 
             d.original = {
                 color: d.data.color
@@ -547,41 +520,58 @@ function D3SankeyDrawer() {
         for (let d of graph.links) {
 
             d.tooltip = `${d.source.data.name} to ${d.target.data.name}
-            <br>${d.data.value.toLocaleString('en-US')} BBtu
-            <br>${d.data.state}, ${d.data.year}`;
+                <br>${d.data.value.toLocaleString('en-US')} BBtu
+                <br>${d.data.state}, ${d.data.year}`;
 
             d.original = {
                 color: 0
             }
         }
-        
+
         return graph;
     }
 
-    D3SankeyDrawer.reset = () => {
-        sankeyarea.html("");
+    // the function for reordering the links when a node is dragged
+    function reorderLinks(graph) {
+
+        for (let _node of graph.nodes) {
+
+            _node.sourceLinks.sort((a, b) => {
+                return a.ty - b.ty;
+            });
+
+            let sy = _node.y0;
+
+            for (let _link of _node.sourceLinks) {
+                _link.sy = sy;
+                sy += _link.width;
+            }
+
+            _node.targetLinks.sort((a, b) => {
+                return a.sy - b.sy;
+            });
+
+            let ty = _node.y0;
+
+            for (let _link of _node.targetLinks) {
+                _link.ty = ty;
+                ty += _link.width;
+            }
+        }
+
+        return graph;
     }
 
-    D3SankeyDrawer.drawsankey = (sankeydata) => {
+    SankeyDrawer.reset = () => {
+        svgsankey.html("");
+    }
+
+    SankeyDrawer.drawsankey = (sankeydata) => {
 
         let graph = initialize_graph(sankeydata);
 
-        // add tooltip
-        const tooltip = CHARTAREA
-            .append("div")
-            .style("position", "absolute")
-
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-
-            .style("visibility", "hidden")
-            .attr("id", "sankey-tooltip");
-
         // add links
-        const links = sankeyarea.append("g")
+        const links = svgsankey.append("g")
             .selectAll(".link")
             .data(graph.links)
             .enter()
@@ -620,7 +610,7 @@ function D3SankeyDrawer() {
         });
 
         // add nodes
-        const nodes = sankeyarea.append("g")
+        const nodes = svgsankey.append("g")
             .selectAll(".node")
             .data(graph.nodes)
             .enter().append("g")
@@ -665,97 +655,31 @@ function D3SankeyDrawer() {
             })
             .attr("text-anchor", "start");
 
-        graph.resetattributes = () => {
-            for (let node of graph.nodes) {
-                node.selected = false;
-                node.color = node.original.color;
-                node.textVisible = true;
-            }
-
-            for (let link of graph.links) {
-                link.color = link.original.color;
-            }
-        }
-
-        graph.deselectnodes = () => {
-
-            for (let node of graph.nodes) {
-                node.selected = false;
-                node.color = "grey";
-                node.textVisible = false;
-            }
-
-            for (let link of graph.links) {
-                link.color = "grey";
-            }
-        }
-
         // add onclick event
-        nodes.on("click", function (event, d) {
-
-            const node = d3.select(this);
-
-            d.selected = !d.selected;
-
-            if (d.selected) {
-
-                graph.deselectnodes(); // this will make d.selected = false
-
-                d.selected = true;
-
-                d.textVisible = true;
-
-                d.color = d.original.color;
-
-                for (let link of d.sourceLinks) {
-                    link.target.color = link.target.original.color;
-                    link.target.textVisible = true;
-                    link.color = link.target.original.color;
-                }
-
-                for (let link of d.targetLinks) {
-                    link.source.color = link.source.original.color;
-                    link.source.textVisible = true;
-                    link.color = link.source.original.color;
-                }
-            }
-
-            else {
-                graph.resetattributes();
-            }
-
-            d3sankeygraph.update(graph);
-
-            nodes.selectAll("rect")
-                .style("fill", (d) => d.color);
-
-            nodes.selectAll("text")
-                .style("visibility", (d) => {
-                    if (d.textVisible) {
-                        return "visible";
-                    }
-                    else {
-                        return "hidden";
-                    }
-                });
-
-            links.selectAll("path")
-                .style("stroke", (d) => d.color);
-
-        });
+        nodes.on("click", onClickNode);
 
         // add drag event
         nodes.call(
             // call the function for moving the node
-            d3.drag()
-                .subject(function (d) { return d; })
-                // onstart interfering with click
+            d3.drag().subject(function (d) { return d; })
+                // onstart interfering with onclick
                 // .on("start", function () { this.parentNode.appendChild(this); })
-                .on("drag", DragMove)
+                .on("drag", onDragNode)
         );
 
+        // add node mouse hover events
+        nodes.on("mouseover", onMouseOverTooltip)
+            .on("mousemove", onMouseMoveTooltip)
+            .on("mouseout", onMouseOutTooltip);
+
+        // add link mouse over events
+        links.on("mouseover", onMouseOverTooltip)
+            .on("mousemove", onMouseMoveTooltip)
+            .on("mouseout", onMouseOutTooltip);
+
+
         // the function for moving the nodes
-        function DragMove(mouse) {
+        function onDragNode(mouse) {
 
             // node
             const node = d3.select(this);
@@ -815,7 +739,7 @@ function D3SankeyDrawer() {
 
             // update graph data
 
-            graph.relayout();
+            graph = reorderLinks(graph);
 
             d3sankeygraph.update(graph);
 
@@ -831,75 +755,197 @@ function D3SankeyDrawer() {
 
         };
 
-        // the function for reordering the links when a node is dragged
-        graph.relayout = () => {
+        function onClickNode(event, d) {
 
-            for (let _node of graph.nodes) {
+            const node = d3.select(this);
 
-                _node.sourceLinks.sort((a, b) => {
-                    return a.ty - b.ty;
-                });
+            d.selected = !d.selected;
 
-                let sy = _node.y0;
+            if (d.selected) {
 
-                for (let _link of _node.sourceLinks) {
-                    _link.sy = sy;
-                    sy += _link.width;
+                // deselect all nodes
+                // this will make d.selected = false
+
+                for (let _node of graph.nodes) {
+                    _node.selected = false;
+                    _node.color = "grey";
+                    _node.textVisible = false;
                 }
 
-                _node.targetLinks.sort((a, b) => {
-                    return a.sy - b.sy;
-                });
+                for (let link of graph.links) {
+                    link.color = "grey";
+                }
 
-                let ty = _node.y0;
+                d.selected = true;
 
-                for (let _link of _node.targetLinks) {
-                    _link.ty = ty;
-                    ty += _link.width;
+                d.textVisible = true;
+
+                d.color = d.original.color;
+
+                for (let _link of d.sourceLinks) {
+                    _link.target.color = _link.target.original.color;
+                    _link.target.textVisible = true;
+                    _link.color = _link.target.original.color;
+                }
+
+                for (let _link of d.targetLinks) {
+                    _link.source.color = _link.source.original.color;
+                    _link.source.textVisible = true;
+                    _link.color = _link.source.original.color;
+                }
+
+                const nodesdata = onClickFormatSankeyNode(d);
+
+                const treedatasource = TreemapSource.formatToTree(nodesdata.sources, "Sources of " + d.name);
+
+                const treedatatarget = TreemapTarget.formatToTree(nodesdata.targets, "Consumptions of " + d.name);
+
+                TreemapSource = TreemapSource.reset();
+
+                TreemapTarget = TreemapTarget.reset();
+
+                TreemapSource.setTreedata(treedatasource).draw();
+
+                TreemapTarget.setTreedata(treedatatarget).draw();
+            }
+
+            else {
+
+                // reset attributes
+
+                for (let node of graph.nodes) {
+                    node.selected = false;
+                    node.color = node.original.color;
+                    node.textVisible = true;
+                }
+
+                for (let link of graph.links) {
+                    link.color = link.original.color;
                 }
             }
 
-            return graph;
+            d3sankeygraph.update(graph);
+
+            nodes.selectAll("rect")
+                .style("fill", (d) => d.color);
+
+            nodes.selectAll("text")
+                .style("visibility", (d) => {
+                    return d.textVisible ? "visible" : "hidden";
+                });
+
+            links.selectAll("path")
+                .style("stroke", (d) => d.color);
+
         }
 
-        // add node mouse hover events
+        // function to format selected node data to draw treemap
+        function onClickFormatSankeyNode(d) {
 
-        let onMouseOverTooltip = function (event, d) {
+            let sources = {}, targets = {};
 
-            tooltip.html(d.tooltip)
-                .style("visibility", "visible")
-                .style("left", (event.pageX) + "px")
-                .style("top", (event.pageY) + "px")
+            for (const link of d.sourceLinks) {
+                targets[link.data.target] = link.data.value;
+            }
+
+            for (const link of d.targetLinks) {
+                sources[link.data.source] = link.data.value;
+            }
+
+            return {
+                sources: sources,
+                targets: targets,
+            }
+
         }
-
-        let onMouseMoveTooltip = function (event, d) {
-
-            let x = (event.pageX) + 20;
-            let y = event.pageY > 1650 ? 1650 : event.pageY;
-
-            tooltip
-                .style("transform", "translateY(-55%)")
-                .style("left", x + "px")
-                .style("top", y + "px")
-        }
-
-        let onMouseOutTooltip = function (event, d) {
-
-            tooltip.style("visibility", "hidden");
-        }
-
-        nodes.on("mouseover", onMouseOverTooltip)
-            .on("mousemove", onMouseMoveTooltip)
-            .on("mouseout", onMouseOutTooltip);
-
-        // add link mouse over events
-        links.on("mouseover", onMouseOverTooltip)
-            .on("mousemove", onMouseMoveTooltip)
-            .on("mouseout", onMouseOutTooltip);
-
-
 
     }
 
-    return D3SankeyDrawer;
+    return SankeyDrawer;
 }
+
+export default function Sankey() {
+
+    let ATTR, GROUPS, VALUES,
+        STATE = "US", YEAR = 2019,
+        NEEDEDNODES = [
+            "Solar",
+            "Wind",
+            "Geothermal",
+            "Hydropower",
+            "Biomass",
+            "Coal", "Petroleum", "NaturalGas",
+            "Nuclear",
+            "ElectricPower",
+            "ElectricLoss",
+            "Transportation",
+            "Industrial",
+            "Commercial",
+            "Residential",
+            "ElectricImport",
+            "ElectricExport",
+            "NetInterstateImport",
+            "NetInterstateExport",
+        ]
+
+    let SankeyInputs = SankeyInput();
+
+    let SankeyDrawers = SankeyDrawer();
+
+    Sankey.setData = (data) => {
+
+        ATTR = data.ATTR;
+        GROUPS = data.GROUPS;
+        VALUES = data.VALUES;
+
+        SankeyInputs.setData(
+            ATTR,
+            GROUPS,
+            VALUES
+        );
+
+        return Sankey;
+
+    }
+
+    Sankey.state = (state) => { STATE = state; return Sankey; }
+
+    Sankey.year = (year) => { YEAR = year; return Sankey; }
+
+    Sankey.neededNodes = (neededNodes) => { NEEDEDNODES = neededNodes; return Sankey; }
+
+    Sankey.draw = () => {
+
+        let sankeydata = SankeyInputs.create(
+            STATE,
+            YEAR,
+            NEEDEDNODES,
+        );
+
+        SankeyDrawers.reset();
+
+        SankeyDrawers.drawsankey(sankeydata);
+
+        return Sankey;
+    }
+
+    return Sankey;
+}
+
+
+Promise.all([
+    d3.json("./data/sankey/attr.json"),
+    d3.json("./data/sankey/groups.json"),
+    d3.json("./data/sankey/values.json"),
+]).then(function (files) {
+    const jsondata = {
+        ATTR: files[0],
+        GROUPS: files[1],
+        VALUES: files[2]
+    }
+
+    Sankey().setData(jsondata).draw();
+
+}).catch(function (err) {
+    console.error(err);
+})
