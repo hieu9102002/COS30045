@@ -16,7 +16,7 @@ Promise.all([
         data: files[2]
     }
 
-    SANKEY(jsondata).state("CA").year(2018).draw();
+    SANKEYMAIN(jsondata).state("CA").year(2018).draw();
 
 }).catch(function (err) {
     console.error(err);
@@ -32,7 +32,7 @@ Promise.all([
 
 
 
-function SANKEY(JSONDATA) {
+function SANKEYMAIN(JSONDATA) {
 
     const INPUTCREATOR = D3SankeyInputCreator(JSONDATA);
 
@@ -64,22 +64,22 @@ function SANKEY(JSONDATA) {
             "NetInterstateExport",
         ]
 
-    SANKEY.state = (state) => { STATE = state; return SANKEY; }
+    SANKEYMAIN.state = (state) => { STATE = state; return SANKEYMAIN; }
 
-    SANKEY.year = (year) => { YEAR = year; return SANKEY; }
+    SANKEYMAIN.year = (year) => { YEAR = year; return SANKEYMAIN; }
 
-    SANKEY.neededNodes = (neededNodes) => { NEEDEDNODES = neededNodes; return SANKEY; }
+    SANKEYMAIN.neededNodes = (neededNodes) => { NEEDEDNODES = neededNodes; return SANKEYMAIN; }
 
-    SANKEY.draw = () => {
+    SANKEYMAIN.draw = () => {
 
         let sankeydata = INPUTCREATOR.create(STATE, YEAR, NEEDEDNODES);
 
         SANKEYDRAWER.drawsankey(sankeydata);
 
-        return SANKEY;
+        return SANKEYMAIN;
     }
 
-    return SANKEY;
+    return SANKEYMAIN;
 }
 
 function D3SankeyInputCreator(JSONDATA) {
