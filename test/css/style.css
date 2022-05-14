@@ -1,0 +1,100 @@
+.state-label {
+    fill: white;
+    stroke: black;
+    stroke-width: 1;
+    font-weight: bold;
+}
+
+body {
+    background-color: lightgrey;
+}
+
+
+.mouseover-label {
+    visibility: hidden;
+}
+
+.mouseover-label-selected {
+    visibility: visible;
+    fill: black;
+}
+
+.small-multiples-highlight {
+    fill: black;
+}
+
+.small-multiples-background {
+    fill: purple;
+}
+
+.vertical-line {
+    stroke: #000;
+    stroke-width: '1px';
+    pointer-events: none;
+}
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}
+
+.tooltip {
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#sankey-chart .node {
+    cursor: move;
+}
+
+#sankey-chart .node rect {
+    fill-opacity: 1;
+    /* stroke: none; */
+    shape-rendering: crispEdges;
+}
+
+#sankey-chart .node text {
+    text-shadow: 0 1px 0 #fff;
+}
+
+#sankey-chart .link {
+    fill: none;
+    stroke-opacity: 0.6;
+}
+
+#sankey-chart .link:hover {
+    stroke-opacity: 1;
+}

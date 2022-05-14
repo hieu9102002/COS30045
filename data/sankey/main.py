@@ -33,8 +33,8 @@ GROUPSUM_DICT : dict[str, dict]= transformGroupSum(DF_GROUPSUM=DF_SANKEY["GroupS
 # WRITE ATTRIBUTES (NODES, GROUPS, LINKS) DETAILS
 # ----------------------------------------------------------------------------------------------------------------
 
-NODES_DETAILS = DF_SANKEY["Nodes"].fillna("").set_index("id").to_dict("index")
-GROUPS_DETAILS = DF_SANKEY["Groups"].fillna("").set_index("id").to_dict("index")
+NODES_DETAILS = DF_SANKEY["Nodes"].fillna("").set_index("node").to_dict("index")
+GROUPS_DETAILS = DF_SANKEY["Groups"].fillna("").set_index("node").to_dict("index")
 LINKS_DETAILS = DF_SANKEY["Links"].fillna("").set_index("link").to_dict("index")
 
 ATTR_DETAILS = {

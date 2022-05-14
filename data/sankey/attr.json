@@ -280,282 +280,282 @@
 		"id": "ElectricPower->NetInterstateExport"
 	},
 	"Solar": {
-		"node": "Solar",
 		"name": "Solar",
 		"order": 1,
+		"id": "Solar",
 		"column": 2,
 		"color": "yellow"
 	},
 	"Wind": {
-		"node": "Wind",
 		"name": "Wind",
 		"order": 2,
+		"id": "Wind",
 		"column": 2,
 		"color": "lightblue"
 	},
 	"Geothermal": {
-		"node": "Geothermal",
 		"name": "Geothermal",
 		"order": 3,
+		"id": "Geothermal",
 		"column": 2,
 		"color": "brown"
 	},
 	"Hydropower": {
-		"node": "Hydropower",
 		"name": "Hydropower",
 		"order": 4,
+		"id": "Hydropower",
 		"column": 2,
 		"color": "blue"
 	},
 	"Wood": {
-		"node": "Wood",
 		"name": "Wood",
 		"order": 5,
+		"id": "Wood",
 		"column": 2,
 		"color": "wood"
 	},
 	"Waste": {
-		"node": "Waste",
 		"name": "Waste",
 		"order": 6,
+		"id": "Waste",
 		"column": 2,
 		"color": "brown"
 	},
 	"Biodiesel": {
-		"node": "Biodiesel",
 		"name": "Biodiesel",
 		"order": 7,
+		"id": "Biodiesel",
 		"column": 2,
 		"color": "green"
 	},
 	"BiodieselLoss": {
-		"node": "BiodieselLoss",
 		"name": "Biodiesel loss and coproducts",
 		"order": 8,
+		"id": "BiodieselLoss",
 		"column": 2,
 		"color": "green"
 	},
 	"FuelEthanol": {
-		"node": "FuelEthanol",
 		"name": "Fuel ethanol",
 		"order": 9,
+		"id": "FuelEthanol",
 		"column": 2,
 		"color": "green"
 	},
 	"FuelEthanolLoss": {
-		"node": "FuelEthanolLoss",
 		"name": "Fuel ethanol loss and coproducts",
 		"order": 10,
+		"id": "FuelEthanolLoss",
 		"column": 2,
 		"color": "green"
 	},
 	"Nuclear": {
-		"node": "Nuclear",
 		"name": "Nuclear",
 		"order": 11,
+		"id": "Nuclear",
 		"column": 2,
 		"color": "green"
 	},
 	"Coal": {
-		"node": "Coal",
 		"name": "Coal",
 		"order": 12,
+		"id": "Coal",
 		"column": 2,
 		"color": "grey"
 	},
 	"NaturalGas": {
-		"node": "NaturalGas",
 		"name": "Natural gas",
 		"order": 13,
+		"id": "NaturalGas",
 		"column": 2,
 		"color": "orange"
 	},
 	"Petroleum": {
-		"node": "Petroleum",
 		"name": "Petroleum",
 		"order": 14,
+		"id": "Petroleum",
 		"column": 2,
 		"color": "black"
 	},
 	"ElectricPower": {
-		"node": "ElectricPower",
 		"name": "Electric Power Sector",
 		"order": 15,
+		"id": "ElectricPower",
 		"column": 3,
 		"color": "purple"
 	},
 	"Transportation": {
-		"node": "Transportation",
 		"name": "Transportation Sector",
 		"order": 16,
+		"id": "Transportation",
 		"column": 4,
 		"color": "#010101"
 	},
 	"Industrial": {
-		"node": "Industrial",
 		"name": "Industrial Sector",
 		"order": 17,
+		"id": "Industrial",
 		"column": 4,
 		"color": "#69779B"
 	},
 	"Commercial": {
-		"node": "Commercial",
 		"name": "Commercial Sector",
 		"order": 18,
+		"id": "Commercial",
 		"column": 4,
 		"color": "#ACDBDF"
 	},
 	"Residential": {
-		"node": "Residential",
 		"name": "Residential Sector",
 		"order": 19,
+		"id": "Residential",
 		"column": 4,
 		"color": "#F0ECE2"
 	},
 	"ElectricLoss": {
-		"node": "ElectricLoss",
 		"name": "Electricity Loss",
 		"order": 20,
+		"id": "ElectricLoss",
 		"column": 4,
 		"color": "purple"
 	},
 	"ElectricImport": {
-		"node": "ElectricImport",
 		"name": "Electricity Import",
 		"order": 22,
+		"id": "ElectricImport",
 		"column": 2,
 		"color": "purple"
 	},
 	"ElectricExport": {
-		"node": "ElectricExport",
 		"name": "Electricity Export",
 		"order": 25,
+		"id": "ElectricExport",
 		"column": 4,
 		"color": "purple"
 	},
 	"CoalCokeImport": {
-		"node": "CoalCokeImport",
 		"name": "Coal Coke Import",
 		"order": 23,
+		"id": "CoalCokeImport",
 		"column": 3,
 		"color": ""
 	},
 	"CoalCokeExport": {
-		"node": "CoalCokeExport",
 		"name": "Coal Coke Export",
 		"order": 26,
+		"id": "CoalCokeExport",
 		"column": 5,
 		"color": ""
 	},
 	"DensifiedBiomassExport": {
-		"node": "DensifiedBiomassExport",
 		"name": "Densified Biomass Export",
 		"order": 21,
+		"id": "DensifiedBiomassExport",
 		"column": 2,
 		"color": ""
 	},
 	"WoodProduction": {
-		"node": "WoodProduction",
 		"name": "Wood Production",
 		"order": 0,
+		"id": "WoodProduction",
 		"column": 1,
 		"color": ""
 	},
 	"NetInterstateImport": {
-		"node": "NetInterstateImport",
 		"name": "Net Interstate Electricity Import",
 		"order": 24,
+		"id": "NetInterstateImport",
 		"column": 2,
-		"color": ""
+		"color": "purple"
 	},
 	"NetInterstateExport": {
-		"node": "NetInterstateExport",
 		"name": "Net Interstate Electricity Export",
 		"order": 27,
+		"id": "NetInterstateExport",
 		"column": 4,
-		"color": ""
+		"color": "purple"
 	},
 	"BiodieselSum": {
-		"node": "BiodieselSum",
 		"name": "Biodiesel and coproducts",
 		"order": 28,
+		"id": "BiodieselSum",
 		"column": 0,
 		"color": "green"
 	},
 	"FuelEthanolSum": {
-		"node": "FuelEthanolSum",
 		"name": "Fuel ethanol and coporducts",
 		"order": 29,
+		"id": "FuelEthanolSum",
 		"column": 0,
 		"color": "green"
 	},
 	"Biofuel": {
-		"node": "Biofuel",
 		"name": "Biofuel",
 		"order": 30,
+		"id": "Biofuel",
 		"column": 0,
 		"color": "green"
 	},
 	"WoodWaste": {
-		"node": "WoodWaste",
 		"name": "Wood and waste",
 		"order": 31,
+		"id": "WoodWaste",
 		"column": 0,
 		"color": "wood"
 	},
 	"Biomass": {
-		"node": "Biomass",
 		"name": "Biomass",
 		"order": 32,
+		"id": "Biomass",
 		"column": 0,
 		"color": "green"
 	},
 	"NoncombustibleRenewable": {
-		"node": "NoncombustibleRenewable",
 		"name": "Noncombustible renewable energy",
 		"order": 33,
+		"id": "NoncombustibleRenewable",
 		"column": 0,
 		"color": ""
 	},
 	"Renewable": {
-		"node": "Renewable",
 		"name": "Renewable energy",
 		"order": 34,
+		"id": "Renewable",
 		"column": 0,
 		"color": "green"
 	},
 	"FossilFuel": {
-		"node": "FossilFuel",
 		"name": "Fossil Fuel",
 		"order": 35,
+		"id": "FossilFuel",
 		"column": 0,
-		"color": "grey"
+		"color": "pink"
 	},
 	"Nonrenewable": {
-		"node": "Nonrenewable",
 		"name": "Nonrenewable energy",
 		"order": 36,
+		"id": "Nonrenewable",
 		"column": 0,
 		"color": "grey"
 	},
 	"Clean": {
-		"node": "Clean",
 		"name": "Clean energy",
 		"order": 37,
+		"id": "Clean",
 		"column": 0,
 		"color": ""
 	},
 	"Total": {
-		"node": "Total",
 		"name": "Total energy consumption",
 		"order": 38,
+		"id": "Total",
 		"column": 0,
 		"color": ""
 	},
 	"Consumption": {
-		"node": "Consumption",
 		"name": "Total consumption",
 		"order": 39,
+		"id": "Consumption",
 		"column": 5,
 		"color": ""
 	}
