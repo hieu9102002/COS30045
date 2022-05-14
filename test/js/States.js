@@ -1,3 +1,5 @@
+import SANKEYMAIN from "./Sankey.js";
+
 //US states dictionary
 const USStates = {
     "Alabama": "AL",
@@ -59,6 +61,18 @@ window.onload = () => {
     const textMargin = 14;
     const innerPadding = 0.05;
 
+    d3.json("./data/sankey/data.json")
+    .then(function (jsondata) {
+
+        console.log(jsondata);
+
+        let s = SANKEYMAIN(jsondata).state("CA").year(2018)
+        s.draw();
+
+        return s;
+
+    }).then(SANKEYMAIN => {
+
 
     d3.csv("./data/publication-grids.csv", d => { //Read in US grid file
         return {
@@ -70,47 +84,7 @@ window.onload = () => {
         }
     }).then(statesCells => {
 
-        //calculate rows and columns of small multiples
-        const maxRow = d3.max(statesCells, d => parseInt(d.row)) + 1;
-        const maxCol = d3.max(statesCells, d => parseInt(d.col)) + 1;
-
-        //create scales
-        const rowScale = d3.scaleBand()
-            .domain(d3.range(maxRow))
-            .range([0, height])
-            .paddingInner(innerPadding);
-
-        const colScale = d3.scaleBand()
-            .domain(d3.range(maxCol))
-            .range([0, width])
-            .paddingInner(innerPadding);
-
-        //create svg
-        const svg = d3.select("#svg-div")
-            .append("svg")
-            .attr("width", width + margin.right + margin.left)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-        //create small multiples
-        const states = svg.selectAll(".state")
-            .data(statesCells)
-            .enter()
-            .append("g")
-            .attr("transform", d => "translate(" + colScale(d.col) + "," + rowScale(d.row) + ")");
-
-        // small multiples size
-        const colBandwidth = colScale.bandwidth();
-        const rowBandwidth = rowScale.bandwidth();
-
-        //create background
-        states.append("rect")
-            .attr("height", rowBandwidth)
-            .attr("width", colBandwidth)
-            .attr("class", "small-multiples-background")
-            .attr("id", d => d.code + "-background");
+        
 
         d3.json("./data/transformed.json")
             .then(stateData => { //Read in data file
@@ -121,6 +95,7 @@ window.onload = () => {
                     stateCell.years = data.years.map(year => {
                         return {
                             year: year.year,
+                            state: stateCell.code,
                             Biomass: year.Biomass / year.Total,
                             Geothermal: year.Geothermal / year.Total,
                             Hydropower: year.Hydropower / year.Total,
@@ -174,6 +149,48 @@ window.onload = () => {
                     Nuclear: "#b797cf"
                 };
 
+                //calculate rows and columns of small multiples
+        const maxRow = d3.max(statesCells, d => parseInt(d.row)) + 1;
+        const maxCol = d3.max(statesCells, d => parseInt(d.col)) + 1;
+
+        //create scales
+        const rowScale = d3.scaleBand()
+            .domain(d3.range(maxRow))
+            .range([0, height])
+            .paddingInner(innerPadding);
+
+        const colScale = d3.scaleBand()
+            .domain(d3.range(maxCol))
+            .range([0, width])
+            .paddingInner(innerPadding);
+
+        //create svg
+        const svg = d3.select("#svg-div")
+            .append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+        //create small multiples
+        const states = svg.selectAll(".state")
+            .data(statesCells)
+            .enter()
+            .append("g")
+            .attr("transform", d => "translate(" + colScale(d.col) + "," + rowScale(d.row) + ")");
+
+        // small multiples size
+        const colBandwidth = colScale.bandwidth();
+        const rowBandwidth = rowScale.bandwidth();
+
+        //create background
+        states.append("rect")
+            .attr("height", rowBandwidth)
+            .attr("width", colBandwidth)
+            .attr("class", "small-multiples-background")
+            .attr("id", d => d.code + "-background");
+
 
 
                 const xScale = d3.scaleBand()
@@ -213,14 +230,14 @@ window.onload = () => {
 
 
                 //create the stacked bar charts
-                var groups = states.selectAll("g.stacked-group")
+                const groups = states.selectAll("g.stacked-group")
                     .data(d => stack(d.years))
                     .enter()
                     .append("g")
-                    .attr("class", "stacked-group")
-                    .style("fill", (d) => color[d.key]);
+                    .attr("class", "stacked-group");
 
-                groups.selectAll("rect.state-data")
+                groups.style("fill", (d) => color[d.key])
+                    .selectAll("rect.state-data")
                     .data(d => d)
                     .enter()
                     .append("rect")
@@ -231,7 +248,13 @@ window.onload = () => {
                     .attr("class", "state-data")
                     .on("mouseover", onDataMouseOver)
                     .on("mousemove", onDataMouseMove)
-                    .on("mouseleave", onDataMouseLeave);
+                    .on("mouseleave", onDataMouseLeave)
+                    .on("click", (e, d) => {
+                        const dstate = d.data.state;
+                        const dyear = d.data.year;
+                        SANKEYMAIN.state(dstate).year(dyear).draw();
+                    })
+                    ;
 
                 //create the state names
                 states.append("text")
@@ -407,7 +430,7 @@ window.onload = () => {
                         .attr("y", textMargin);
                 }
             })
-    })
+    })});
 }
 
 function autocomplete(inp, input_arr) {

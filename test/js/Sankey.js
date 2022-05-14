@@ -3,34 +3,34 @@
 
 "use strict";
 
-// load data and draw sankey
+// // load data and draw sankey
 
-Promise.all([
-    d3.json("./data/sankey/attr.json"),
-    d3.json("./data/sankey/groups.json"),
-    d3.json("./data/sankey/values.json"),
-]).then(function (files) {
-    const jsondata = {
-        attr: files[0],
-        groups: files[1],
-        data: files[2]
-    }
+// Promise.all([
+//     d3.json("./data/sankey/attr.json"),
+//     d3.json("./data/sankey/groups.json"),
+//     d3.json("./data/sankey/values.json"),
+// ]).then(function (files) {
+//     const jsondata = {
+//         attr: files[0],
+//         groups: files[1],
+//         data: files[2]
+//     }
 
-    SANKEYMAIN(jsondata).state("CA").year(2018).draw();
+//     SANKEYMAIN(jsondata).state("CA").year(2018).draw();
 
-}).catch(function (err) {
-    console.error(err);
-})
+// }).catch(function (err) {
+//     console.error(err);
+// })
 
-// d3.json("./data/sankey/data.json")
-//     .then(function (jsondata) {
+// // d3.json("./data/sankey/data.json")
+// //     .then(function (jsondata) {
 
-//         let s = SANKEY(jsondata).state("CA").year(2018)
-//         s.draw();
+// //         let s = SANKEY(jsondata).state("CA").year(2018)
+// //         s.draw();
 
-//     });
+// //     });
 
-
+export default SANKEYMAIN;
 
 function SANKEYMAIN(JSONDATA) {
 
@@ -73,6 +73,8 @@ function SANKEYMAIN(JSONDATA) {
     SANKEYMAIN.draw = () => {
 
         let sankeydata = INPUTCREATOR.create(STATE, YEAR, NEEDEDNODES);
+
+        SANKEYDRAWER.reset();
 
         SANKEYDRAWER.drawsankey(sankeydata);
 
@@ -122,7 +124,11 @@ function D3SankeyInputCreator(JSONDATA) {
 
         for (const node of NEEDEDNODES) {
 
-            if (GROUPS.descendants_of[node] != undefined) {
+            if(GROUPS.descendants_of[node] == undefined) {
+                continue;
+            }
+
+            else {
 
                 neededGroups.push(node);
 
@@ -370,8 +376,6 @@ function D3SankeyInputCreator(JSONDATA) {
 
         sankeyinputdata.nasa = 10;
 
-        console.log(sankeyinputdata);
-
         return sankeyinputdata;
     }
 
@@ -552,6 +556,10 @@ function D3SankeyDrawer() {
         }
         
         return graph;
+    }
+
+    D3SankeyDrawer.reset = () => {
+        sankeyarea.html("");
     }
 
     D3SankeyDrawer.drawsankey = (sankeydata) => {

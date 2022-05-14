@@ -167,6 +167,6 @@ writejson(DATAVALUES, "values.json")
 
 writejson({
     "attr": ATTR_DETAILS,
-    "groups": GROUPS_DETAILS,
+    "groups": GROUPSUM_DICT,
     "data": DATAVALUES
 }, "data.json")
