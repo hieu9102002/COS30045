@@ -646,3 +646,7 @@ function createHighlightChart(data, color, keys, tooltip, stateData) {
 
     return svg;
 }
+
+function GridTileMap() {
+    return this;
+}

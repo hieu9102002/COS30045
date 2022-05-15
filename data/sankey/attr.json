@@ -361,7 +361,7 @@
 		"order": 12,
 		"id": "Coal",
 		"column": 2,
-		"color": "grey"
+		"color": "darkgrey"
 	},
 	"NaturalGas": {
 		"name": "Natural gas",

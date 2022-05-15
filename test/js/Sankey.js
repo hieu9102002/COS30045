@@ -5,6 +5,33 @@
 
 import Treemap from "./Treemap.js";
 
+let Main = {
+    TreemapSource: new Treemap("#treemap-source"),
+    TreemapTarget: new Treemap("#treemap-target"),
+    Sankey: new Sankey(),
+}
+
+
+Promise.all([
+    d3.json("./data/sankey/attr.json"),
+    d3.json("./data/sankey/groups.json"),
+    d3.json("./data/sankey/values.json"),
+]).then(function (files) {
+    const jsondata = {
+        ATTR: files[0],
+        GROUPS: files[1],
+        VALUES: files[2]
+    }
+
+    Main.TreemapSource.setData(jsondata.ATTR);
+    Main.TreemapTarget.setData(jsondata.ATTR);
+
+    Main.Sankey.setData(jsondata).draw();
+
+}).catch(function (err) {
+    console.error(err);
+})
+
 function SankeyInput() {
 
     let ATTR, GROUPS, VALUES, STATEVALUES,
@@ -12,17 +39,17 @@ function SankeyInput() {
         STRICT = true,
         ALLOW_DUPLICATES = false;
 
-    SankeyInput.setData = (attr, groups, values) => {
+    this.setData = (attr, groups, values) => {
 
         ATTR = attr;
         GROUPS = groups;
         VALUES = values;
 
-        return SankeyInput;
+        return this;
 
     }
 
-    SankeyInput.create = (state, year, neededNodes) => {
+    this.createInput = (state, year, neededNodes) => {
 
         STATE = state;
 
@@ -408,11 +435,11 @@ function SankeyInput() {
         return sankeyinputdata;
     }
 
-    return SankeyInput;
+    return this;
 
 }
 
-function SankeyDrawer() {
+function SankeyDrawer(ID = "#sankey-chart") {
 
     const minVisibleLink = 0;
     const minVisibleNode = 0;
@@ -421,21 +448,21 @@ function SankeyDrawer() {
     const svgHeight = 500;
 
     // set the dimensions and margins of the graph
-    const sankeyMargin = { top: 20, right: 20, bottom: 20, left: 20 },
-        sankeyareaWidth = svgWidth - sankeyMargin.left - sankeyMargin.right,
-        sankeyareaHeight = svgHeight - sankeyMargin.top - sankeyMargin.bottom,
-        sankeyNodeWidth = 100,
-        sankeyNodePadding = 50,
+    const margin = { top: 20, right: 20, bottom: 20, left: 20 },
+        width = svgWidth - margin.left - margin.right,
+        height = svgHeight - margin.top - margin.bottom,
+        nodeWidth = 10,
+        nodePadding = 50,
         nodeTextPadding = 6;
 
     // Set the sankey diagram properties
     const d3sankeygraph = d3.sankey()
-        .nodeWidth(sankeyNodeWidth)
+        .nodeWidth(nodeWidth)
         // .nodePadding(sankeyNodePadding)
-        .size([sankeyareaWidth, sankeyareaHeight]);
+        .size([width, height]);
 
     // select svg chart
-    const CHARTAREA = d3.select("#sankey-chart")
+    const CHARTAREA = d3.select(ID)
         .style("width", `${svgWidth} px`);
 
     // add svg
@@ -445,12 +472,8 @@ function SankeyDrawer() {
 
     // append (create) sankey
     const svgsankey = svg.append("g")
-        .attr("transform", "translate(" + sankeyMargin.left + "," + sankeyMargin.top + ")")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .attr("id", "sankey");
-
-    // add treemap
-    let TreemapSource = new Treemap("#treemap-source");
-    let TreemapTarget = new Treemap("#treemap-target");
 
     // add tooltip
     const tooltip = CHARTAREA
@@ -529,6 +552,19 @@ function SankeyDrawer() {
         return graph;
     }
 
+    // draw default treemap
+    function drawDefaultTreemap(graph) {
+
+        let firstNodes = []
+
+        for (const node of graph.nodes) {
+            if (node.sourceLinks.length == 0) {
+
+            }
+        }
+
+    }
+
     // the function for reordering the links when a node is dragged
     function reorderLinks(graph) {
 
@@ -560,13 +596,16 @@ function SankeyDrawer() {
         return graph;
     }
 
-    SankeyDrawer.reset = () => {
+    this.reset = () => {
         svgsankey.html("");
+        return this;
     }
 
-    SankeyDrawer.drawsankey = (sankeydata) => {
+    this.drawsankey = (sankeydata) => {
 
         let graph = initialize_graph(sankeydata);
+
+        drawDefaultTreemap(graph);
 
         // add links
         const links = svgsankey.append("g")
@@ -637,20 +676,12 @@ function SankeyDrawer() {
                 return d.name + "\n";
                 // + d.data.value.toLocaleString('en-US') + " BBtu";
             })
-            .attr("y", function (d) {
-                return (d.y0) - nodeTextPadding;
-            })
-            // .attr("dy", "0.35em")
-            .attr("x", function (d) {
-                return d.x1 - nodeTextPadding;
-            })
+            .attr("y", d => (d.y1 + d.y0) / 2 - nodeTextPadding)
+            .attr("dy", "0.5em")
+            .attr("x", d => d.x0 - nodeTextPadding)
             .attr("text-anchor", "end")
-            .filter(function (d) {
-                return d.x0 < sankeyareaWidth / 2;
-            })
-            .attr("x", function (d) {
-                return d.x0 + nodeTextPadding;
-            })
+            .filter(d => d.x0 < width / 2)
+            .attr("x", d => d.x1 + nodeTextPadding)
             .attr("text-anchor", "start");
 
         // add onclick event
@@ -663,6 +694,7 @@ function SankeyDrawer() {
                 // onstart interfering with onclick
                 // .on("start", function () { this.parentNode.appendChild(this); })
                 .on("drag", onDragNode)
+                .on("end", onDragEndNode)
         );
 
         // add node mouse hover events
@@ -677,69 +709,90 @@ function SankeyDrawer() {
 
 
         // the function for moving the nodes
-        function onDragNode(mouse) {
+        function onDragNode(mouse, d) {
 
-            // node
-            const node = d3.select(this);
+            // prevent node from going outside of svg area
+            d.y0 = Math.max(
+                0,
+                Math.min(
+                    d.y0 + mouse.dy,
+                    height - d.rectHeight
+                )
+            );
 
-            // change position of rect, and the datum values follow suit
-            node.select("rect")
-                .attr("y", function (d) {
+            // update y1
+            d.y1 = d.y0 + d.rectHeight;
 
-                    // prevent node from going outside of svg area
-                    d.y0 = Math.max(
-                        0,
-                        Math.min(
-                            d.y0 + mouse.dy,
-                            sankeyareaHeight - d.rectHeight
-                        )
-                    );
 
-                    // update y1
-                    d.y1 = d.y0 + d.rectHeight;
+            // prevent node from going outside of svg area
+            d.x0 = Math.max(
+                0,
+                Math.min(
+                    d.x0 + mouse.dx,
+                    width - d3sankeygraph.nodeWidth()
+                )
+            );
 
-                    return d.y0;
-                })
-                .attr("x", function (d) {
-
-                    // prevent node from going outside of svg area
-                    d.x0 = Math.max(
-                        0,
-                        Math.min(
-                            d.x0 + mouse.dx,
-                            sankeyareaWidth - d3sankeygraph.nodeWidth()
-                        )
-                    );
-
-                    // update x1
-                    d.x1 = d.x0 + d3sankeygraph.nodeWidth();
-
-                    return d.x0;
-                });
-
-            // redraw text
-            node.select("text")
-                .attr("y", function (d) {
-                    return (d.y0) - nodeTextPadding;
-                })
-                // .attr("dy", "0.35em")
-                .attr("x", function (d) {
-                    return d.x1 - nodeTextPadding;
-                })
-                .attr("text-anchor", "end")
-                .filter(function (d) {
-                    return d.x0 < sankeyareaWidth / 2;
-                })
-                .attr("x", function (d) {
-                    return d.x0 + nodeTextPadding;
-                })
-                .attr("text-anchor", "start");
+            // update x1
+            d.x1 = d.x0 + d3sankeygraph.nodeWidth();
 
             // update graph data
 
             graph = reorderLinks(graph);
 
             d3sankeygraph.update(graph);
+
+
+            tooltip.style("visibility", "hidden");
+
+            // node
+            const node = d3.select(this);
+
+            // change position of rect, and the datum values follow suit
+            node.select("rect")
+                .attr("y", d => d.y0)
+                .attr("x", d => d.x0);
+
+            // redraw text
+            node.select("text")
+                .attr("y", d => (d.y1 + d.y0) / 2 - nodeTextPadding)
+                .attr("x", d => d.x1 - nodeTextPadding)
+                .attr("text-anchor", "end")
+                .filter(d => d.x0 < width / 2)
+                .attr("x", d => d.x0 + nodeTextPadding)
+                .attr("text-anchor", "start");
+
+            // redraw links
+
+            links.selectAll("path")
+                .attr("d", d3.sankeyLinkHorizontal());
+
+            links.selectAll("linearGradient")
+                .attr("x1", d => d.source.x1)
+                .attr("x2", d => d.target.x0);
+
+        };
+
+        function onDragEndNode() {
+
+            tooltip.style("visibility", "hidden");
+
+            // node
+            const node = d3.select(this);
+
+            // change position of rect, and the datum values follow suit
+            node.select("rect")
+                .attr("y", d => d.y0)
+                .attr("x", d => d.x0);
+
+            // redraw text
+            node.select("text")
+                .attr("y", d => (d.y1 + d.y0) / 2 - nodeTextPadding)
+                .attr("x", d => d.x1 - nodeTextPadding)
+                .attr("text-anchor", "end")
+                .filter(d => d.x0 < width / 2)
+                .attr("x", d => d.x0 + nodeTextPadding)
+                .attr("text-anchor", "start");
 
             // redraw links
 
@@ -794,17 +847,17 @@ function SankeyDrawer() {
 
                 const nodesdata = onClickFormatSankeyNode(d);
 
-                const treedatasource = TreemapSource.formatToTree(nodesdata.sources, "Sources of " + d.name);
+                const treedatasource = Main.TreemapSource.formatToTree(nodesdata.sources, d.data.id, d.value, d.data.id);
 
-                const treedatatarget = TreemapTarget.formatToTree(nodesdata.targets, "Consumptions of " + d.name);
+                const treedatatarget = Main.TreemapSource.formatToTree(nodesdata.targets, d.data.id, d.value, d.data.id);
 
-                TreemapSource = TreemapSource.reset();
+                Main.TreemapSource = Main.TreemapSource.reset();
 
-                TreemapTarget = TreemapTarget.reset();
+                Main.TreemapTarget = Main.TreemapTarget.reset();
 
-                TreemapSource.setTreedata(treedatasource).draw();
+                Main.TreemapSource.setTreedata(treedatasource).draw();
 
-                TreemapTarget.setTreedata(treedatatarget).draw();
+                Main.TreemapTarget.setTreedata(treedatatarget).draw();
             }
 
             else {
@@ -857,9 +910,10 @@ function SankeyDrawer() {
 
         }
 
+        return this;
     }
 
-    return SankeyDrawer;
+    return this;
 }
 
 export default function Sankey() {
@@ -886,11 +940,11 @@ export default function Sankey() {
             "NetInterstateExport",
         ]
 
-    let SankeyInputs = SankeyInput();
+    let SankeyInputs = new SankeyInput();
 
-    let SankeyDrawers = SankeyDrawer();
+    let SankeyDrawers = new SankeyDrawer();
 
-    Sankey.setData = (data) => {
+    this.setData = (data) => {
 
         ATTR = data.ATTR;
         GROUPS = data.GROUPS;
@@ -902,19 +956,19 @@ export default function Sankey() {
             VALUES
         );
 
-        return Sankey;
+        return this;
 
     }
 
-    Sankey.state = (state) => { STATE = state; return Sankey; }
+    this.state = (state) => { STATE = state; return this; }
 
-    Sankey.year = (year) => { YEAR = year; return Sankey; }
+    this.year = (year) => { YEAR = year; return this; }
 
-    Sankey.neededNodes = (neededNodes) => { NEEDEDNODES = neededNodes; return Sankey; }
+    this.neededNodes = (neededNodes) => { NEEDEDNODES = neededNodes; return this; }
 
-    Sankey.draw = () => {
+    this.draw = () => {
 
-        let sankeydata = SankeyInputs.create(
+        let sankeydata = SankeyInputs.createInput(
             STATE,
             YEAR,
             NEEDEDNODES,
@@ -924,26 +978,8 @@ export default function Sankey() {
 
         SankeyDrawers.drawsankey(sankeydata);
 
-        return Sankey;
+        return this;
     }
 
-    return Sankey;
+    return this;
 }
-
-
-Promise.all([
-    d3.json("./data/sankey/attr.json"),
-    d3.json("./data/sankey/groups.json"),
-    d3.json("./data/sankey/values.json"),
-]).then(function (files) {
-    const jsondata = {
-        ATTR: files[0],
-        GROUPS: files[1],
-        VALUES: files[2]
-    }
-
-    Sankey().setData(jsondata).draw();
-
-}).catch(function (err) {
-    console.error(err);
-})
