@@ -10,8 +10,8 @@ export default function Treemap(ID = "#treemap") {
 
     // set the dimensions and margins of the graph
     const margin = { top: 10, right: 10, bottom: 10, left: 10 },
-        width = 445 - margin.left - margin.right,
-        height = 445 - margin.top - margin.bottom;
+        width = 400 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
     // set the paddings of the text labels
     const textPadding = 5,
@@ -225,99 +225,7 @@ export default function Treemap(ID = "#treemap") {
         }
 
         labels.attr("y", d => d.y)
-            .attr("visibility", (d) => d.visible ? "visible" : "hidden")
-
-
-        // tiles.append("text")
-        //     .attr("font-size", textSize + "px")
-        //     .attr("fill", "white")
-        //     .attr("x", function (d) { return d.x0 + textPadding })    // +10 to adjust position (more right)
-        //     .attr("y", function (d) { return d.y0 + textSize + textPadding })    // +20 to adjust position (lower)
-        //     .text(function (d) {
-        //         return ATTR[d.data.name] == undefined ? d.data.name : ATTR[d.data.name].name;
-        //     })
-        //     .each(function (d) {
-        //         d.textWidth1 = this.getBBox().width;
-        //     })
-        //     .style("visibility", (d) => {
-        //         if (d.rectWidth <= d.textWidth1 + textPadding) {
-        //             d.textShown1 = false;
-        //             return "hidden";
-        //         }
-        //         else {
-        //             d.textShown1 = true;
-        //             return "visible";
-        //         }
-        //     });
-
-
-        // tiles.append("text")
-        //     .attr("font-size", textSize + "px")
-        //     .attr("fill", "white")
-        //     .attr("x", function (d) { return d.x0 + textPadding })    // +10 to adjust position (more right)
-        //     .attr("y", function (d) { return d.y0 + (textSize + textPadding) * 2 })    // +20 to adjust position (lower)
-        //     .text(function (d) {
-        //         if (d.value == undefined) {
-        //             if (d.data.value == undefined) {
-        //                 return "";
-        //             }
-        //             d.value = d.data.value;
-        //             return d.data.value.toLocaleString('en-US') + " BBtu";
-        //         }
-        //         return d.value.toLocaleString('en-US') + " BBtu";
-
-        //     })
-        //     .each(function (d) {
-        //         d.textWidth2 = this.getBBox().width;
-        //     })
-        //     .style("visibility", (d) => {
-        //         if (!d.textShown1) {
-        //             d.textShown2 = false;
-        //             return "hidden";
-        //         }
-        //         else {
-        //             if (d.rectWidth <= d.textWidth2 + textPadding) {
-        //                 d.textShown2 = false;
-        //                 return "hidden";
-        //             }
-        //             else {
-        //                 d.textShown2 = true;
-        //                 return "visible";
-        //             }
-        //         }
-        //     });
-
-        // // tiles.append("br");
-
-        // tiles.append("text")
-        //     .attr("font-size", textSize + "px")
-        //     .attr("fill", "white")
-        //     .attr("x", function (d) { return d.x0 + textPadding })    // +10 to adjust position (more right)
-        //     .attr("y", function (d) { return d.y0 + (textSize + textPadding) * 3 })    // +20 to adjust position (lower)
-        //     .text(function (d) {
-        //         return `${Math.round(d.data.percent * 100 * 100) / 100} %`;
-
-        //     })
-        //     .each(function (d) {
-        //         d.textWidth3 = this.getBBox().width;
-        //     })
-        //     .style("visibility", (d) => {
-        //         if (!d.textShown2) {
-        //             d.textShown3 = false;
-        //             return "hidden";
-        //         }
-        //         else {
-        //             if (d.rectWidth <= d.textWidth3 + textPadding) {
-        //                 d.textShown3 = false;
-        //                 return "hidden";
-        //             }
-        //             else {
-        //                 d.textShown3 = true;
-        //                 return "visible";
-        //             }
-        //         }
-        //     });
-
+            .attr("visibility", (d) => d.visible ? "visible" : "hidden");
 
         return this;
 

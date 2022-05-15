@@ -98,3 +98,9 @@ body {
 #sankey-chart .link:hover {
     stroke-opacity: 1;
 }
+
+#treemap-source, 
+#ankey-chart,
+#treemap-target {
+    display: inline;
+}

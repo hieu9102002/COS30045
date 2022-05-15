@@ -1,3 +1,7 @@
+import Sankey from "./Sankey.js";
+
+const s = new Sankey();
+
 //US states dictionary
 const USStates = {
     "Alabama": "AL",
@@ -221,7 +225,12 @@ window.onload = () => {
                 .attr("class", "state-data")
                 .on("mouseover", onDataMouseOver)
                 .on("mousemove", onDataMouseMove)
-                .on("mouseleave", onDataMouseLeave);
+                .on("mouseleave", onDataMouseLeave)
+                .on("click", (e, d) => {
+                    console.log(d)
+                    // s.state(d)
+                })
+                ;
 
             //create the state names
             state.append("text")

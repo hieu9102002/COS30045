@@ -5,6 +5,8 @@
 
 import Treemap from "./Treemap.js";
 
+import {Scatter, Scatter2} from "./Scatter.js"
+
 let Main = {
     TreemapSource: new Treemap("#treemap-source"),
     TreemapTarget: new Treemap("#treemap-target"),
@@ -16,12 +18,21 @@ Promise.all([
     d3.json("./data/sankey/attr.json"),
     d3.json("./data/sankey/groups.json"),
     d3.json("./data/sankey/values.json"),
+    d3.json("./data/sankey/owid-energy-data.json"),
 ]).then(function (files) {
     const jsondata = {
         ATTR: files[0],
         GROUPS: files[1],
-        VALUES: files[2]
+        VALUES: files[2],
     }
+
+    const OWID = files[3];
+
+    console.log(OWID)
+
+    Scatter(jsondata);
+
+    Scatter2(OWID);
 
     Main.TreemapSource.setData(jsondata.ATTR);
     Main.TreemapTarget.setData(jsondata.ATTR);
@@ -444,11 +455,11 @@ function SankeyDrawer(ID = "#sankey-chart") {
     const minVisibleLink = 0;
     const minVisibleNode = 0;
 
-    const svgWidth = 900;
-    const svgHeight = 500;
+    const svgWidth = 700;
+    const svgHeight = 400;
 
     // set the dimensions and margins of the graph
-    const margin = { top: 20, right: 20, bottom: 20, left: 20 },
+    const margin = { top: 20, right: 200, bottom: 20, left: 160 },
         width = svgWidth - margin.left - margin.right,
         height = svgHeight - margin.top - margin.bottom,
         nodeWidth = 10,
@@ -540,7 +551,7 @@ function SankeyDrawer(ID = "#sankey-chart") {
 
         for (let d of graph.links) {
 
-            d.tooltip = `${d.source.data.name} to ${d.target.data.name}
+            d.tooltip = `Energy consumption by ${d.target.data.name} from ${d.source.data.name}
                 <br>${d.data.value.toLocaleString('en-US')} BBtu
                 <br>${d.data.state}, ${d.data.year}`;
 
@@ -678,11 +689,15 @@ function SankeyDrawer(ID = "#sankey-chart") {
             })
             .attr("y", d => (d.y1 + d.y0) / 2 - nodeTextPadding)
             .attr("dy", "0.5em")
-            .attr("x", d => d.x0 - nodeTextPadding)
-            .attr("text-anchor", "end")
-            .filter(d => d.x0 < width / 2)
+
+            .attr("text-anchor", "start")
             .attr("x", d => d.x1 + nodeTextPadding)
-            .attr("text-anchor", "start");
+
+            .filter(d => d.x0 < width / 2)
+
+            .attr("text-anchor", "end")
+            .attr("x", d => d.x0 - nodeTextPadding)
+            ;
 
         // add onclick event
         nodes.on("click", onClickNode);
@@ -694,7 +709,6 @@ function SankeyDrawer(ID = "#sankey-chart") {
                 // onstart interfering with onclick
                 // .on("start", function () { this.parentNode.appendChild(this); })
                 .on("drag", onDragNode)
-                .on("end", onDragEndNode)
         );
 
         // add node mouse hover events
@@ -756,11 +770,13 @@ function SankeyDrawer(ID = "#sankey-chart") {
             // redraw text
             node.select("text")
                 .attr("y", d => (d.y1 + d.y0) / 2 - nodeTextPadding)
-                .attr("x", d => d.x1 - nodeTextPadding)
-                .attr("text-anchor", "end")
+                .attr("text-anchor", "start")
+                .attr("x", d => d.x1 + nodeTextPadding)
+
                 .filter(d => d.x0 < width / 2)
-                .attr("x", d => d.x0 + nodeTextPadding)
-                .attr("text-anchor", "start");
+
+                .attr("text-anchor", "end")
+                .attr("x", d => d.x0 - nodeTextPadding);
 
             // redraw links
 
@@ -770,39 +786,6 @@ function SankeyDrawer(ID = "#sankey-chart") {
             links.selectAll("linearGradient")
                 .attr("x1", d => d.source.x1)
                 .attr("x2", d => d.target.x0);
-
-        };
-
-        function onDragEndNode() {
-
-            tooltip.style("visibility", "hidden");
-
-            // node
-            const node = d3.select(this);
-
-            // change position of rect, and the datum values follow suit
-            node.select("rect")
-                .attr("y", d => d.y0)
-                .attr("x", d => d.x0);
-
-            // redraw text
-            node.select("text")
-                .attr("y", d => (d.y1 + d.y0) / 2 - nodeTextPadding)
-                .attr("x", d => d.x1 - nodeTextPadding)
-                .attr("text-anchor", "end")
-                .filter(d => d.x0 < width / 2)
-                .attr("x", d => d.x0 + nodeTextPadding)
-                .attr("text-anchor", "start");
-
-            // redraw links
-
-            links.selectAll("path")
-                .attr("d", d3.sankeyLinkHorizontal());
-
-            links.selectAll("linearGradient")
-                .attr("x1", d => d.source.x1)
-                .attr("x2", d => d.target.x0);
-
 
         };
 
@@ -926,18 +909,18 @@ export default function Sankey() {
             "Geothermal",
             "Hydropower",
             "Biomass",
-            "Coal", "Petroleum", "NaturalGas",
-            "Nuclear",
+            // "Coal", "Petroleum", "NaturalGas",
+            // "Nuclear",
             "ElectricPower",
             "ElectricLoss",
             "Transportation",
             "Industrial",
             "Commercial",
             "Residential",
-            "ElectricImport",
-            "ElectricExport",
-            "NetInterstateImport",
-            "NetInterstateExport",
+            // "ElectricImport",
+            // "ElectricExport",
+            // "NetInterstateImport",
+            // "NetInterstateExport",
         ]
 
     let SankeyInputs = new SankeyInput();
