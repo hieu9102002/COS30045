@@ -82,6 +82,7 @@ window.onload = () => {
                 const data = stateData.data.find(state => state.code == stateCell.code);
                 stateCell.years = data.years.map(year => {
                     return {
+                        state: stateCell.code,
                         year: year.year,
                         Biomass: year.Biomass / year.Total,
                         Geothermal: year.Geothermal / year.Total,
@@ -228,7 +229,7 @@ window.onload = () => {
                 .on("mouseleave", onDataMouseLeave)
                 .on("click", (e, d) => {
                     console.log(d)
-                    // s.state(d)
+                    s.state(d.data.state).year(d.data.year).draw();
                 })
                 ;
 
