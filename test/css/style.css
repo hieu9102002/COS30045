@@ -104,3 +104,11 @@ body {
 #treemap-target {
     display: inline;
 }
+
+.scatter-circle {
+    fill-opacity: 0.6;
+}
+
+.scatter-point:hover {
+    fill-opacity: 1;
+}
