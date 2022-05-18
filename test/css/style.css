@@ -109,6 +109,6 @@ body {
     fill-opacity: 0.6;
 }
 
-.scatter-point:hover {
+.scatter-circle:hover {
     fill-opacity: 1;
 }

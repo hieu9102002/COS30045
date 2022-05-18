@@ -279,52 +279,6 @@ class _ScatterPlot {
         return this;
     }
 
-    initScatterPLot() {
-
-        this.initSVG()
-            .initXAxis()
-            .initYAxis()
-            .initPoints();
-
-        return this;
-    }
-
-    initSVG() {
-        this.SVG = this.CHART.append("svg")
-            .attr("width", this.param.svgWidth)
-            .attr("height", this.param.svgHeight)
-            .append("g")
-            .attr("transform", "translate(" + this.param.margin.left + "," + this.param.margin.top + ")");
-
-        return this;
-    }
-
-    initXAxis() {
-
-        this.initXAxisLine()
-            .initXAxisLabel();
-
-        return this;
-    }
-
-    initYAxis() {
-        this.initYAxisLine()
-            .initYAxisLabel();
-
-        return this;
-    }
-
-    initPoints() {
-
-        this.initPointInit()
-            .initPointCircle()
-            .initPointText()
-            .initPointOnClick();
-
-        return this;
-
-    }
-
     initXAxisLabel() {
 
         this.xLabel = this.SVG.append("text")
@@ -386,6 +340,7 @@ class _ScatterPlot {
     initPointCircle() {
         // For each point, add a circle
         this.points.append("circle")
+            .attr("class", "scatter-circle")
             .attr("cx", d => d.render.x)
             .attr("cy", d => d.render.y)
             .attr("r", d => d.render.radius)
@@ -407,31 +362,31 @@ class _ScatterPlot {
         return this;
     }
 
-    initPointOnClick() {
+    // initPointOnClick() {
 
-        this.points.on("click", pointOnClick);
+    //     this.points.on("click", pointOnClick);
 
-        function pointOnClick(e, d) {
+    //     function pointOnClick(e, d) {
 
-            d.render.selected = !d.render.selected;
+    //         d.render.selected = !d.render.selected;
 
-            const point = d3.select(this);
+    //         const point = d3.select(this);
 
-            // bring element to forth
-            this.parentNode.appendChild(this);
+    //         // bring element to forth
+    //         this.parentNode.appendChild(this);
 
-            if (d.render.selected) {
-                point.select("circle").style("fill", "blue");
-            }
+    //         if (d.render.selected) {
+    //             point.select("circle").style("fill", "blue");
+    //         }
 
-            else {
-                point.select("circle").style("fill", "#69b3a2");
-            }
+    //         else {
+    //             point.select("circle").style("fill", "#69b3a2");
+    //         }
 
-        };
+    //     };
 
-        return this;
-    }
+    //     return this;
+    // }
 
 }
 
@@ -518,7 +473,7 @@ class _ScatterPlotData extends _ScatterPlotReset {
     constructor(selection) {
         super(selection);
 
-        this.accessor = {
+        this.valueAccessor = {
             text: d => d,
             x: d => d,
             y: d => d,
@@ -537,9 +492,9 @@ class _ScatterPlotData extends _ScatterPlotReset {
 
     initData(data) {
         this.data = data;
-        this.xAxis.domain([0, d3.max(this.data, d => this.accessor.x(d))])
+        this.xAxis.domain([0, d3.max(this.data, d => this.valueAccessor.x(d))])
             .paddingStart(0);
-        this.yAxis.domain([0, d3.max(this.data, d => this.accessor.y(d))])
+        this.yAxis.domain([0, d3.max(this.data, d => this.valueAccessor.y(d))])
             .paddingStart(0);
         this.initRender();
 
@@ -553,17 +508,18 @@ class _ScatterPlotData extends _ScatterPlotReset {
             if (d.render == undefined) {
                 d.render = {}
             }
-            d.render.text = this.accessor.text(d);
-            d.render.x = this.xAxis.Scale(this.accessor.x(d));
-            d.render.y = this.yAxis.Scale(this.accessor.y(d));
-            d.render.radius = this.scaleCircle(this.accessor.circle(d));
+            d.render.selected = false;
+            d.render.text = this.valueAccessor.text(d);
+            d.render.x = this.xAxis.Scale(this.valueAccessor.x(d));
+            d.render.y = this.yAxis.Scale(this.valueAccessor.y(d));
+            d.render.radius = this.scaleCircle(this.valueAccessor.circle(d));
         }
 
         return this;
     }
 
     resetAccessorText(accessor) {
-        this.accessor.text = accessor;
+        this.valueAccessor.text = accessor;
         this.resetRender()
             .resetPointCircle()
             .resetPointText();
@@ -571,8 +527,8 @@ class _ScatterPlotData extends _ScatterPlotReset {
     }
 
     resetAccessorX(accessor) {
-        this.accessor.x = accessor;
-        this.xAxis.domain([0, d3.max(this.data, d => this.accessor.x(d))]);
+        this.valueAccessor.x = accessor;
+        this.xAxis.domain([0, d3.max(this.data, d => this.valueAccessor.x(d))]);
         this.resetRender()
             .resetPointCircle()
             .resetPointText()
@@ -581,8 +537,8 @@ class _ScatterPlotData extends _ScatterPlotReset {
     }
 
     resetAccessorY(accessor) {
-        this.accessor.y = accessor;
-        this.yAxis.domain([0, d3.max(this.data, d => this.accessor.y(d))]);
+        this.valueAccessor.y = accessor;
+        this.yAxis.domain([0, d3.max(this.data, d => this.valueAccessor.y(d))]);
 
         this.resetRender()
             .resetPointCircle()
@@ -592,7 +548,7 @@ class _ScatterPlotData extends _ScatterPlotReset {
     }
 
     resetAccessorCircle(accessor) {
-        this.accessor.circle = accessor;
+        this.valueAccessor.circle = accessor;
         this.resetRender()
             .resetPointCircle()
             .resetPointText();
@@ -610,24 +566,137 @@ class _ScatterPlotData extends _ScatterPlotReset {
     resetRender() {
 
         for (let d of this.data) {
-            d.render.text = this.accessor.text(d);
-            d.render.x = this.xAxis.Scale(this.accessor.x(d));
-            d.render.y = this.yAxis.Scale(this.accessor.y(d));
-            d.render.radius = this.scaleCircle(this.accessor.circle(d));
+            d.render.text = this.valueAccessor.text(d);
+            d.render.x = this.xAxis.Scale(this.valueAccessor.x(d));
+            d.render.y = this.yAxis.Scale(this.valueAccessor.y(d));
+            d.render.radius = this.scaleCircle(this.valueAccessor.circle(d));
 
         }
 
         return this;
     }
+
+    initScatterPLot() {
+
+        this.initSVG()
+            .initXAxis()
+            .initYAxis()
+            .initPoints();
+
+        return this;
+    }
+
+    initSVG() {
+        this.SVG = this.CHART.append("svg")
+            .attr("width", this.param.svgWidth)
+            .attr("height", this.param.svgHeight)
+            .append("g")
+            .attr("transform", "translate(" + this.param.margin.left + "," + this.param.margin.top + ")");
+
+        return this;
+    }
+
+    initXAxis() {
+
+        this.initXAxisLine()
+            .initXAxisLabel();
+
+        return this;
+    }
+
+    initYAxis() {
+        this.initYAxisLine()
+            .initYAxisLabel();
+
+        return this;
+    }
+
+    initPoints() {
+
+        this.initPointInit()
+            .initPointCircle()
+            .initPointText()
+            .initPointAnnotationLines()
+            .initPointOnClick()
+
+        return this;
+
+    }
+
+    initPointAnnotationLines() {
+        // add annotation line
+        this.points
+            .append("line")
+            .attr("class", "scatter-line")
+            .attr("stroke-width", 0)
+            .attr("stroke", "black")
+            .attr("stroke-dasharray", "4")
+            // start of line
+            .attr("x1", 0)
+            .attr("y1", d => d.render.y)
+            // end of line
+            .attr("x2", d => d.render.x)
+            .attr("y2", d => d.render.y)
+
+        this.points
+            .append("line")
+            .attr("class", "scatter-line")
+            .attr("stroke-width", 0)
+            .attr("stroke", "black")
+            .attr("stroke-dasharray", "4")
+            // start of line
+            .attr("x1", d => d.render.x)
+            .attr("y1", this.param.height)
+            // end of line
+            .attr("x2", d => d.render.x)
+            .attr("y2", d => d.render.y)
+
+        return this;
+    }
+
+    initPointOnClick() {
+        // super.initPointOnClick();
+
+        let self = this;
+
+        self.points.on("click", function (e, d) {
+            d.render.selected = !d.render.selected;
+
+            console.log(d);
+
+            let point = d3.select(this);
+
+            // bring element to forth
+            this.parentNode.appendChild(this);
+
+            if (d.render.selected) {
+                console.log(d.render.selected, point.select("circle"));
+                point.select("circle")
+                    .style("fill", "blue");
+                console.log(d.render);
+                point.selectAll("line").attr("stroke-width", 1).style("fill", "#69b3a2");
+            }
+
+            else {
+                point.select("circle").style("fill", "#69b3a2");
+                console.log(d.render);
+                point.selectAll("line").attr("stroke-width", 0).style("fill", "#69b3a2");
+            }
+        });
+
+        return self;
+    }
+
+
 }
 
 class ScatterPlot extends _ScatterPlotData {
     constructor(selection) {
         super(selection);
 
-        this.accessor.text = d => d.data.x;
-        this.accessor.x = d => d.data.x;
-        this.accessor.y = d => d.data.y;
+        this.valueAccessor.text = d => d.data.x;
+        this.valueAccessor.x = d => d.data.x;
+        this.valueAccessor.y = d => d.data.y;
 
         this.scaleCircle = d => d;
 
