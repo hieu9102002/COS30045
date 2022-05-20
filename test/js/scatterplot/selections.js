@@ -6,6 +6,12 @@ export class Selections {
     constructor(selectionarea) {
 
         this.SELECTIONAREA = selectionarea;
+
+        this.optionsarray
+        this.Selection
+        this.Options
+        this.defaultvalue
+
         this.valueOnSelect = function (option) {
 
         }
@@ -20,65 +26,62 @@ export class Selections {
 
     }
 
-    initOptions(data) {
+    OptionsData(array) {
 
-        this.options = data;
+        this.optionsarray = array;
 
-        return this;
-
-    }
-
-    initDefault(option) {
-        this.options.sort((a, b) => {
-            if (a.value == option) {
-                return -1;
-            }
-            else if (b.value == option) {
-                return 1;
-            }
-            else return 0;
-        })
+        this.defaultvalue = this.optionsarray[0].value;
 
         return this;
     }
 
-    initSelection() {
+    DefaultValue(value, sort=false) {
 
-        this.initSelectionSelection()
-            .initSelectionOptions()
-            .initSelectionOnSelect();
-    }
+        this.defaultvalue = value;
 
-    initSelectionSelection() {
+        if(sort) {
 
-        this.selection = this.SELECTIONAREA.append("select");
+            this.optionsarray.sort((a, b) => {
+                if (a.value == value) {
+                    return -1;
+                }
+                else if (b.value == value) {
+                    return 1;
+                }
+                else return 0;
+            })
+
+        }
+
+        try {
+            this.Options.property("selected", d => d.value == self.defaultvalue);
+        }
+        catch {}
 
         return this;
     }
 
-    initSelectionOptions() {
+    DrawSelection() {
 
-        this.selection.selectAll("option")
-            .data(this.options)
+        const self = this;
+
+        self.Selection = self.SELECTIONAREA.append("select");
+
+        self.Options = self.Selection.selectAll("option")
+            .data(self.optionsarray)
             .enter()
             .append("option")
-            .text(function (d) { return d.name; })
-            .attr("value", function (d) { return d.value; });
+            .text(d => d.name)
+            .property("value", d => d.value)
+            .property("selected", d => d.value == self.defaultvalue);
 
-        return this;
-    }
+            self.Selection.on("change", function (d) {
 
-    initSelectionOnSelect() {
+                const selectedValue = d3.select(this).property("value");
+    
+                self.valueOnSelect(selectedValue);
+            });
 
-        let self = this;
-
-        this.selection.on("change", function (d) {
-
-            const selectedOption = d3.select(this).property("value");
-
-            self.valueOnSelect(selectedOption);
-        });
-
-        return this;
+        return self;
     }
 }
