@@ -128,8 +128,8 @@ class BubbleScale extends BubbleDomain {
 
         super(data, x, y, z, t);
 
-        this.scaleX = d3.scale("log")
-        this.scaleY = d3.scale("log")
+        this.scaleX = d3.scale("symlog")
+        this.scaleY = d3.scale("symlog")
         this.scaleZ = d3.scale("sqrt")
         this.scaleT = d3.scale("ordinal")
 
@@ -173,7 +173,7 @@ class BubbleDraw extends BubbleScale {
         const self = this;
 
         const width = 500, height = 500,
-            margin = { left: 150, top: 60, bottom: 60, right: 450 },
+            margin = { left: 150, top: 60, bottom: 100, right: 450 },
             padding = {
                 inner: { left: 10, top: 10, bottom: 10, right: 10 },
                 outer: { y: 20, x: 20 }
@@ -202,9 +202,10 @@ class BubbleDraw extends BubbleScale {
 
         // Add X axis label:
         self.draw.xLabel = self.draw.svg.append("text")
-            .attr("text-anchor", "end")
-            .attr("x", width)
-            .attr("y", height + 50)
+            .attr("text-anchor", "start")
+            .attr("dominant-baseline", "middle")
+            .attr("x", width + 20)
+            .attr("y", height + padding.outer.x)
             .text(self.x);
 
         // Add Y axis
@@ -285,16 +286,21 @@ class BubbleDraw extends BubbleScale {
             .selectAll("point")
             .data(self.data)
             .enter()
-            .filter(d => {
+            .append("g")
+            .attr("class", d => "bubbles " + self.dataT(d).replace(/ /g, "_"))
+
+        self.draw.Points
+            .style("visibility", d => {
                 if (isNaN(parseInt(self.dataX(d)))
                     || isNaN(parseInt(self.dataY(d)))
                     || isNaN(parseInt(self.dataZ(d)))
                 ) d.render.appear = false;
                 else d.render.appear = true;
-                return d.render.appear;
+
+                if (d.render.appear) return "visible";
+
+                else return "hidden";
             })
-            .append("g")
-            .attr("class", d => "bubbles " + self.dataT(d).replace(/ /g, "_"))
 
 
         self.draw.Points.append("circle")
@@ -393,10 +399,12 @@ class BubbleDraw extends BubbleScale {
         }
 
         function pointOnClick(e, d) {
-            
+
+            const point = d3.select(this);
+
             d.render.selected = !d.render.selected;
-            
-            if(d.render.selected) {
+
+            if (d.render.selected) {
                 addAnnotations(point);
             }
 
@@ -416,7 +424,7 @@ class BubbleDraw extends BubbleScale {
 
             point.style("opacity", 1)
 
-            if(!d.render.selected) {
+            if (!d.render.selected) {
                 addAnnotations(point);
             }
         }
@@ -440,7 +448,7 @@ class BubbleDraw extends BubbleScale {
 
             self.draw.svg.selectAll(".bubbles").style("opacity", 1)
 
-            if(!d.render.selected) {
+            if (!d.render.selected) {
                 removeAnnotations(point);
             }
         }
@@ -450,45 +458,76 @@ class BubbleDraw extends BubbleScale {
         // ---------------------------//
 
         // Add legend: circles
-        const valuesToShow = [10000000, 100000000, 1000000000]
-        const xCircle = width + margin.left + 40
-        const yCircle = height - 100
-        const xLabel = width + margin.left + 90
+        self.draw.legendCircleValues = [
+            { name: "Min", value: d3.min(self.data, self.dataZ) },
+            { name: "Mean", value: d3.mean(self.data, self.dataZ) },
+            { name: "Median", value: d3.median(self.data, self.dataZ) },
+            { name: "Max", value: d3.max(self.data, self.dataZ) }
+        ].sort((a, b) => (a.value - b.value))
+
+        const zCircleX = width + margin.left + 40
+        const zCircleY = height - 100
+        const zLabelX = zCircleX + 50
 
         self.draw.legendCircle = self.draw.svg
             .selectAll("legend")
-            .data(valuesToShow)
+            .data(self.draw.legendCircleValues)
             .enter()
             .append("g")
 
         self.draw.legendCircle.append("circle")
-            .attr("cx", xCircle)
-            .attr("cy", d => yCircle - Z(d))
-            .attr("r", d => Z(d))
+            .attr("cx", zCircleX)
+            .attr("cy", d => zCircleY - Z(d.value))
+            .attr("r", d => Z(d.value))
             .style("fill", "none")
             .attr("stroke", "black")
 
-        // Add legend: segments
-        self.draw.legendCircle.append("line")
-            .attr('x1', d => xCircle + Z(d))
-            .attr('x2', xLabel)
-            .attr('y1', d => yCircle - Z(d))
-            .attr('y2', d => yCircle - Z(d))
-            .attr('stroke', 'black')
-            .style('stroke-dasharray', ('2,2'))
+        let zLabelHeight = 0;
+        let potentialY = zCircleY - Z(self.draw.legendCircleValues[0].value);
 
         // Add legend: labels
         self.draw.legendCircle.append("text")
-            .attr('x', xLabel)
-            .attr('y', d => yCircle - Z(d))
-            .text(d => d.toLocaleString("en-US"))
-            .style("font-size", 10)
-            .attr('alignment-baseline', 'middle')
+            .text(d => `${d.name}: ${d.value.toLocaleString("en-US")}`)
+            .attr("font-size", 12)
+            .attr('x', zLabelX)
+            .attr('dominant-baseline', 'middle')
+            .each(function (d, i) {
+                const label = d3.select(this);
+                if (zLabelHeight < label.node().getBBox().height)
+                    zLabelHeight = label.node().getBBox().height
+            })
+            .attr('y', function (d) {
+                d.y2 = Math.min(zCircleY - Z(d.value), potentialY);
+                potentialY = d.y2 - zLabelHeight;
+                return d.y2;
+            })
+
+        for (const d of self.draw.legendCircleValues) {
+            d.r = Z(d.value)
+            d.x1 = zCircleX
+            d.y1 = zCircleY - d.r;
+            d.x2 = zLabelX;
+            d.y2 = d.y2;
+            let dd = Math.sqrt((d.y2 - d.y1) ** 2 + (d.x2 - d.x1) ** 2)
+            dd = d.r / dd;
+
+            d.x1 = d.x1 + (d.x2 - d.x1) * dd
+            d.y1 = d.y1 - (d.y1 - d.y2) * dd
+        }
+
+        // Add legend: segments
+        self.draw.legendCircle.append("line")
+            .attr('x1', d => d.x1)
+            .attr('x2', d => d.x2)
+            .attr('y1', d => d.y1)
+            .attr('y2', d => d.y2)
+            .attr('stroke', 'black')
+            .style('stroke-dasharray', ('2,2'))
 
         // Legend title
-        self.draw.svg.append("text")
-            .attr('x', xCircle)
-            .attr("y", yCircle + 20)
+        self.draw.legendCircleTitle = self.draw.svg.append("text")
+            .attr('x', zCircleX)
+            .attr("y", zCircleY + 20)
             .text(self.z)
             .attr("text-anchor", "middle")
 
@@ -502,6 +541,8 @@ class BubbleDraw extends BubbleScale {
         const allgroups = self.domainT(self.data)
 
         self.draw.legendGroups = self.draw.svg
+            .append("g")
+            .attr("class", ".legendGroupss")
             .selectAll(".legendGroups")
             .data(allgroups)
             .enter()
@@ -510,7 +551,7 @@ class BubbleDraw extends BubbleScale {
             .style("cursor", "move")
 
         self.draw.legendGroups.append("circle")
-            .attr("cx", xCircle)
+            .attr("cx", zCircleX)
             .attr("cy", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
             .attr("r", 7)
             .style("fill", d => T(d))
@@ -519,7 +560,7 @@ class BubbleDraw extends BubbleScale {
 
         // Add labels beside legend dots
         self.draw.legendGroups.append("text")
-            .attr("x", xCircle + size * .8)
+            .attr("x", zCircleX + size * .8)
             .attr("y", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
             .style("fill", d => T(d))
             .text(d => d)
@@ -527,8 +568,6 @@ class BubbleDraw extends BubbleScale {
             .style("dominant-baseline", "middle")
             .on("mouseover", highlight)
             .on("mouseleave", noHighlight)
-
-        console.log(self.draw.legendGroups)
 
         // ---------------------------//
         //       HIGHLIGHT GROUP      //
@@ -562,6 +601,455 @@ class BubbleDraw extends BubbleScale {
 
         return self;
     }
+
+    updateDrawPlot() {
+
+        const self = this;
+
+        const width = 500, height = 500,
+            margin = { left: 150, top: 60, bottom: 100, right: 450 },
+            padding = {
+                inner: { left: 10, top: 10, bottom: 10, right: 10 },
+                outer: { y: 20, x: 20 }
+            }
+
+        // ---------------------------//
+        //       AXIS  AND SCALE      //
+        // ---------------------------//
+
+        console.log(self)
+        // Add X axis
+        const X = self.scaleX
+            .domain(self.domainX(self.data))
+            .rangeRound([0, width]);
+
+        self.draw.xAxis
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .call(d3.axisBottom(X).ticks(5));
+
+        // Add X axis label:
+        self.draw.xLabel
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .text(self.x);
+
+        // Add Y axis
+        const Y = self.scaleY
+            .domain(self.domainY(self.data))
+            .rangeRound([height, 0]);
+
+        self.draw.yAxis
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .call(d3.axisLeft(Y).ticks(5));
+
+        // Add Y axis label:
+        self.draw.yLabel
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .text(self.y)
+
+        // Add a scale for bubble size
+        const Z = self.scaleZ
+            .domain(self.domainZ(self.data))
+            .rangeRound([10, 30]);
+
+        // Add a scale for bubble color
+        const T = self.scaleT
+            .domain(self.domainT(self.data))
+            .range(["#1f77b4",
+                "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+            ]);
+
+        // ---------------------------//
+        //       CIRCLES              //
+        // ---------------------------//
+
+        // reset visibility
+        self.draw.Points
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .style("visibility", d => {
+                if (isNaN(parseInt(self.dataX(d)))
+                    || isNaN(parseInt(self.dataY(d)))
+                    || isNaN(parseInt(self.dataZ(d)))
+                ) d.render.appear = false;
+                else d.render.appear = true;
+
+                if (d.render.appear) return "visible";
+
+                else return "hidden";
+            })
+
+
+        self.draw.Points.select(".bubble-circle")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("cx", d => X(self.dataX(d)))
+            .attr("cy", d => Y(self.dataY(d)))
+            .attr("r", d => Z(self.dataZ(d)))
+            .attr("fill", d => T(self.dataT(d)))
+
+
+
+        // ---------------------------//
+        //    CIRCLES ANNOTATIONS     //
+        // ---------------------------//
+
+        self.draw.Points.select(".bubble-line-x").select("line")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("x1", d => X(self.dataX(d)))
+            .attr("x2", d => X(self.dataX(d)))
+            .attr("y1", height + padding.outer.x + 20)
+            .attr("y2", d => Y(self.dataY(d)))
+
+        self.draw.Points.select(".bubble-line-x").select("text")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("x", d => X(self.dataX(d)))
+            .attr("y", height + padding.outer.x + 20)
+            .text(d => self.dataX(d).toLocaleString("en-US"))
+
+        self.draw.Points.select(".bubble-line-y").select("line")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("x1", -padding.outer.y - 10)
+            .attr("x2", d => X(self.dataX(d)))
+            .attr("y1", d => Y(self.dataY(d)))
+            .attr("y2", d => Y(self.dataY(d)))
+
+        self.draw.Points.select(".bubble-line-y").select("text")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("x", -padding.outer.y - 10)
+            .attr("y", d => Y(self.dataY(d)))
+            .text(d => self.dataY(d).toLocaleString("en-US"))
+
+        // ---------------------------//
+        //       LEGEND CIRCLES       //
+        // ---------------------------//
+
+        // update data
+
+        for (const d of self.draw.legendCircleValues) {
+            switch (d.name) {
+                case "Min":
+                    d.value = d3.min(self.data, self.dataZ)
+                    break;
+                case "Mean":
+                    d.value = d3.mean(self.data, self.dataZ)
+                    break;
+                case "Median":
+                    d.value = d3.median(self.data, self.dataZ)
+                    break;
+                case "Max":
+                    d.value = d3.max(self.data, self.dataZ)
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        self.draw.legendCircleValues.sort((a, b) => (a.value - b.value))
+
+        const zCircleX = width + margin.left + 40
+        const zCircleY = height - 100
+        const zLabelX = zCircleX + 50
+
+        self.draw.legendCircle.select("circle")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("cx", zCircleX)
+            .attr("cy", d => zCircleY - Z(d.value))
+            .attr("r", d => Z(d.value))
+            .style("fill", "none")
+            .attr("stroke", "black")
+
+        let zLabelHeight = 0;
+        let potentialY = zCircleY - Z(self.draw.legendCircleValues[0].value);
+
+        // Add legend: labels
+        self.draw.legendCircle.select("text")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .text(d => `${d.name}: ${d.value.toLocaleString("en-US")}`)
+            .attr("font-size", 12)
+            .attr('x', zLabelX)
+            .attr('dominant-baseline', 'middle')
+            .each(function (d, i) {
+                const label = d3.select(this);
+                if (zLabelHeight < label.node().getBBox().height)
+                    zLabelHeight = label.node().getBBox().height
+            })
+            .attr('y', function (d) {
+                d.y2 = Math.min(zCircleY - Z(d.value), potentialY);
+                potentialY = d.y2 - zLabelHeight;
+                return d.y2;
+            })
+
+        for (const d of self.draw.legendCircleValues) {
+            d.r = Z(d.value)
+            d.x1 = zCircleX
+            d.y1 = zCircleY - d.r;
+            d.x2 = zLabelX;
+            d.y2 = d.y2;
+            let dd = Math.sqrt((d.y2 - d.y1) ** 2 + (d.x2 - d.x1) ** 2)
+            dd = d.r / dd;
+
+            d.x1 = d.x1 + (d.x2 - d.x1) * dd
+            d.y1 = d.y1 - (d.y1 - d.y2) * dd
+        }
+
+        // Add legend: segments
+        self.draw.legendCircle.select("line")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr('x1', d => d.x1)
+            .attr('x2', d => d.x2)
+            .attr('y1', d => d.y1)
+            .attr('y2', d => d.y2)
+
+        // Legend title
+        self.draw.legendCircleTitle
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .text(self.z)
+
+        // ---------------------------//
+        //       LEGEND FOR GROUPS    //
+        // ---------------------------//
+
+        // Add one dot in the legend for each name.
+        const size = 20
+
+        const allgroups = self.domainT(self.data)
+
+        self.draw.legendGroups.remove()
+
+        self.draw.legendGroups = self.draw.svg
+            .append("g")
+            .attr("class", ".legendGroupss")
+            .selectAll(".legendGroups")
+            .data(allgroups)
+            .enter()
+            .append("g")
+            .attr("class", "legendGroups")
+            .style("cursor", "move")
+
+        self.draw.legendGroups.append("circle")
+            .on("mouseover", highlight)
+            .on("mouseleave", noHighlight)
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("cx", zCircleX)
+            .attr("cy", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("r", 7)
+            .style("fill", d => T(d))
+
+        // Add labels beside legend dots
+        self.draw.legendGroups.append("text")
+            .on("mouseover", highlight)
+            .on("mouseleave", noHighlight)
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .attr("x", zCircleX + size * .8)
+            .attr("y", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", d => T(d))
+            .text(d => d)
+            .attr("text-anchor", "left")
+            .style("dominant-baseline", "middle")
+
+
+        // ---------------------------//
+        //       HIGHLIGHT GROUP      //
+        // ---------------------------//
+
+        // What to do when one group is hovered
+        function highlight(event, d) {
+            // reduce opacity of all groups
+            self.draw.svg.selectAll(".bubbles").style("opacity", .05)
+            // expect the one that is hovered
+            self.draw.svg
+                .selectAll("." + d.replace(/ /g, "_"))
+                .style("opacity", 1)
+            // .each(function () {
+            //     const point = d3.select(this);
+            //     addAnnotations(point);
+            // })
+        }
+
+        // And when it is not hovered anymore
+        function noHighlight(event, d) {
+            self.draw.svg
+                .selectAll(".bubbles")
+                .style("opacity", 1)
+
+        }
+
+        return self;
+    }
+}
+
+class Selections {
+
+    constructor(selectionarea) {
+
+        this.SELECTIONAREA = selectionarea;
+
+        this.optionsarray
+        this.Selection
+        this.Options
+        this.defaultvalue
+        this.onSelect
+
+    }
+
+    OnSelect(callback) {
+
+        const self = this;
+
+        self.onSelect = callback;
+
+        try {
+            self.Selection.on("change", function () {
+
+                const value = d3.select(this).property("value");
+
+                self.onSelect(value);
+            });
+        }
+
+        catch { }
+
+        return this;
+
+    }
+
+    OptionsData(array) {
+
+        this.optionsarray = array;
+
+        this.defaultvalue = this.optionsarray[0].value;
+
+        return this;
+    }
+
+    DefaultValue(value, sort = false) {
+
+        this.defaultvalue = value;
+
+        if (sort) {
+
+            this.optionsarray.sort((a, b) => {
+                if (a.value == value) {
+                    return -1;
+                }
+                else if (b.value == value) {
+                    return 1;
+                }
+                else return 0;
+            })
+
+        }
+
+        try {
+            this.Options.property("selected", d => d.value == self.defaultvalue);
+        }
+        catch { }
+
+        return this;
+    }
+
+    DrawSelection() {
+
+        const self = this;
+
+        self.Selection = self.SELECTIONAREA.append("select");
+
+        self.Options = self.Selection.selectAll("option")
+            .data(self.optionsarray)
+            .enter()
+            .append("option")
+            .text(d => d.name)
+            .property("value", d => d.value)
+            .property("selected", d => d.value == self.defaultvalue);
+
+        self.Selection.on("change", function (d) {
+
+            const selectedValue = d3.select(this).property("value");
+
+            self.onSelect(selectedValue);
+        });
+
+        return self;
+    }
+}
+
+class BubbleSelection extends BubbleDraw {
+    constructor(namevalues, data, x, y, z, t, id = "#scatter-plot") {
+
+        super(data, x, y, z, t, id);
+
+        this.namevalues = namevalues;
+
+        this.SELECTIONS = d3.select(id)
+            .append("div")
+            .attr("id", "scatter-plot-selections");
+
+        this.DrawSelections()
+
+        return this;
+    }
+
+    DrawSelections() {
+
+        let self = this;
+
+        self.selectVarX = new Selections(self.SELECTIONS)
+        self.selectVarX
+            .OptionsData(self.namevalues)
+            .DefaultValue(self.x)
+            .OnSelect(function (option) {
+                self.updateX(option).updateDrawPlot()
+            });
+
+
+        self.selectVarY = new Selections(self.SELECTIONS);
+        self.selectVarY
+            .OptionsData(self.namevalues)
+            .DefaultValue(self.y)
+            .OnSelect(function (option) {
+
+                self.updateY(option).updateDrawPlot()
+            });
+
+
+
+        self.selectVarY.DrawSelection();
+        self.selectVarX.DrawSelection();
+
+        return self;
+
+    }
 }
 
 
@@ -575,7 +1063,8 @@ Promise.all([
 
     console.log("DATA", DATA)
 
-    let x = new BubbleDraw(DATA, "population", "gdp", "population", "country")
+    let x = new BubbleSelection(namedata, DATA, "population", "gdp", "population", "iso_code")
+    // x.updateZ("gdp").updateX("gdp").updateY("population").updateT("country").updateDrawPlot()
 
 }).catch(function (err) {
     console.error(err);
