@@ -108,6 +108,8 @@ Promise.all([
     const namedata = files[1]
     let DATA = jsondata.map(d => ({ data: d }));
 
+    console.log(DATA)
+
     let x = new BubbleSelection(namedata, DATA, "gdp", "renewables_share_energy", "population", "country")
 
 }).catch(function (err) {

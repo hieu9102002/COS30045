@@ -487,7 +487,7 @@ export class BubbleDraw extends BubbleScale {
         const size = 20
         const zCircleX = self.DRAW.param.zCircleX
 
-        self.DRAW.legendGroups = d3.select(self.DRAW.id)
+        const div = d3.select(self.DRAW.id)
             .append("div")
             .style("overflow", "auto")
             .style("position", "absolute")
@@ -495,11 +495,15 @@ export class BubbleDraw extends BubbleScale {
             .style("top", "60px")
             .style("width", "200px")
             .style("height", "200px")
+
+        const svg = div
             .append("svg")
             .attr("x", zCircleX)
             .attr("y", 10)
             .attr("width", 150)
-            .attr("height", 200)
+            // notice that svg height is not updated yet
+
+        self.DRAW.legendGroups = svg
             .selectAll(".legendGroups")
             .data(self.domainT(self.data))
             .enter()
@@ -509,7 +513,13 @@ export class BubbleDraw extends BubbleScale {
 
         self.DRAW.legendGroups.append("circle")
             .attr("cx", 7)
-            .attr("cy", (d, i) => 10 + i * (size + 5))
+            .attr("cy", (d, i) => {
+                const y = 10 + i * (size + 5)
+                if(y+20 >= svg.attr("height")) {
+                    svg.attr("height", y+20) // modify svg height so that svg contains all g
+                }
+                return y;
+            })
             .attr("r", 7)
             .style("fill", d => T(d))
             .on("mouseover", highlight)
