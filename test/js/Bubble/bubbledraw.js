@@ -101,7 +101,12 @@ export class BubbleDraw extends BubbleScale {
         // Add X axis
         self.DRAW.xAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(0, ${self.DRAW.param.height + self.DRAW.param.padding.outer.x})`)
-            .call(d3.axisBottom(self.Scale.X).ticks(5));
+            .call(d3.axisBottom(self.Scale.X).tickValues([
+                d3.min(self.data, self.dataX),
+                d3.mean(self.data, self.dataX),
+                d3.median(self.data, self.dataX),
+                d3.max(self.data, self.dataX)
+            ]));
 
         console.log(d3.axisBottom(self.Scale.X).scale().ticks())
 
@@ -122,7 +127,12 @@ export class BubbleDraw extends BubbleScale {
         // Add Y axis
         self.DRAW.yAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(${-self.DRAW.param.padding.outer.y}, 0)`)
-            .call(d3.axisLeft(self.Scale.Y).ticks(5));
+            .call(d3.axisLeft(self.Scale.Y).tickValues([
+                d3.min(self.data, self.dataY),
+                d3.mean(self.data, self.dataY),
+                d3.median(self.data, self.dataY),
+                d3.max(self.data, self.dataY)
+            ]));
 
         // Add Y axis label:
         self.DRAW.yLabel = self.DRAW.svg.append("text")
@@ -600,7 +610,12 @@ export class BubbleDraw extends BubbleScale {
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .call(d3.axisBottom(self.Scale.X).ticks(5));
+            .call(d3.axisBottom(self.Scale.X).tickValues([
+                d3.min(self.data, self.dataX),
+                d3.mean(self.data, self.dataX),
+                d3.median(self.data, self.dataX),
+                d3.max(self.data, self.dataX)
+            ]));
 
         console.log(d3.axisBottom(self.Scale.X).scale().ticks())
 
@@ -622,7 +637,12 @@ export class BubbleDraw extends BubbleScale {
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .call(d3.axisLeft(self.Scale.Y).ticks(5));
+            .call(d3.axisLeft(self.Scale.Y).tickValues([
+                d3.min(self.data, self.dataY),
+                d3.mean(self.data, self.dataY),
+                d3.median(self.data, self.dataY),
+                d3.max(self.data, self.dataY)
+            ]));
 
         // Update Y axis label:
         self.DRAW.yLabel
