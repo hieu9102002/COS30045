@@ -52,7 +52,7 @@ export class BubbleDraw extends BubbleScale {
         this.DRAW.param.margin = { left: 150, top: 60, bottom: 100, right: 450 }
         this.DRAW.param.padding = {
             inner: { left: 10, top: 10, bottom: 10, right: 10 },
-            outer: { y: 20, x: 20 }
+            outer: { y: 0, x: 0 }
         }
         this.DRAW.param.zCircleX = this.DRAW.param.width + this.DRAW.param.margin.left + 40
         this.DRAW.param.zCircleY = this.DRAW.param.height - 100
@@ -103,6 +103,8 @@ export class BubbleDraw extends BubbleScale {
             .attr("transform", `translate(0, ${self.DRAW.param.height + self.DRAW.param.padding.outer.x})`)
             .call(d3.axisBottom(self.Scale.X).ticks(5));
 
+        console.log(d3.axisBottom(self.Scale.X).scale().ticks())
+
         // Add X axis label:
         self.DRAW.xLabel = self.DRAW.svg.append("text")
             .attr("text-anchor", "start")
@@ -133,7 +135,8 @@ export class BubbleDraw extends BubbleScale {
         // Add a scale for bubble size
         self.Scale.Z = self.scaleZ
             .domain(self.domainZ(self.data))
-            .rangeRound([10, 30])
+            .rangeRound([0, 30])
+            .clamp(true)
             .unknown(0);
 
         // Add a scale for bubble color
@@ -589,7 +592,8 @@ export class BubbleDraw extends BubbleScale {
         // Update X Axis scale
         self.Scale.X = self.scaleX
             .domain(self.domainX(self.data))
-            .rangeRound([0, self.DRAW.param.width]);
+            .rangeRound([0, self.DRAW.param.width])
+            .unknown(0);
 
         // Update X Axis
         self.DRAW.xAxis
@@ -597,6 +601,8 @@ export class BubbleDraw extends BubbleScale {
             .duration(500)
             .ease(d3.easeLinear)
             .call(d3.axisBottom(self.Scale.X).ticks(5));
+
+        console.log(d3.axisBottom(self.Scale.X).scale().ticks())
 
         // Update X axis label:
         self.DRAW.xLabel
@@ -608,7 +614,8 @@ export class BubbleDraw extends BubbleScale {
         // Update Y axis scale
         self.Scale.Y = self.scaleY
             .domain(self.domainY(self.data))
-            .rangeRound([self.DRAW.param.height, 0]);
+            .rangeRound([self.DRAW.param.height, 0])
+            .unknown(0);
 
         // Update Y Axis
         self.DRAW.yAxis
@@ -627,7 +634,9 @@ export class BubbleDraw extends BubbleScale {
         // Update scale for bubble size
         self.Scale.Z = self.scaleZ
             .domain(self.domainZ(self.data))
-            .rangeRound([10, 30]);
+            .rangeRound([0, 30])
+            .unknown(0)
+            .clamp(true);
 
         // Update scale for bubble color
         self.Scale.T = self.scaleT
