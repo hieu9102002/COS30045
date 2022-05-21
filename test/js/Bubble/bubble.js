@@ -51,11 +51,49 @@ class BubbleSelection extends BubbleDraw {
                 self.updateZ(option).updateDrawPlot()
             });
 
+        self.selectScaleX = new Selections(self.SELECTIONS);
+        self.selectScaleX
+            .OptionsData([
+                {
+                    name: "X Linear",
+                    value: "linear"
+                },
+                {
+                    name: "X Log",
+                    value: "symlog"
+                }
+            ])
+            .DefaultValue("symlog")
+            .OnSelect(function (option) {
+
+                self.updateScaleX(d3.scale(option)).updateDrawPlot()
+            });
+
+        self.selectScaleY = new Selections(self.SELECTIONS);
+        self.selectScaleY
+            .OptionsData([
+                {
+                    name: "Y Linear",
+                    value: "linear"
+                },
+                {
+                    name: "Y Log",
+                    value: "symlog"
+                }
+            ])
+            .DefaultValue("symlog")
+            .OnSelect(function (option) {
+
+                self.updateScaleY(d3.scale(option)).updateDrawPlot()
+            });
+
 
 
         self.selectVarY.DrawSelection();
         self.selectVarX.DrawSelection();
         self.selectVarZ.DrawSelection();
+        self.selectScaleX.DrawSelection();
+        self.selectScaleY.DrawSelection();
 
         return self;
 

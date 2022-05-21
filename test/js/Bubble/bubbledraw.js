@@ -15,12 +15,12 @@ function format(d) {
 function formatid(d) {
 
     d = String(d);
-    
+
     try {
         return d.replace(/\s/g, "_");
     }
 
-    catch{
+    catch {
         return d;
     }
 }
@@ -54,12 +54,9 @@ export class BubbleDraw extends BubbleScale {
             inner: { left: 10, top: 10, bottom: 10, right: 10 },
             outer: { y: 20, x: 20 }
         }
-
         this.DRAW.param.zCircleX = this.DRAW.param.width + this.DRAW.param.margin.left + 40
         this.DRAW.param.zCircleY = this.DRAW.param.height - 100
         this.DRAW.param.zLabelX = this.DRAW.param.zCircleX + 50
-
-
 
         this.drawPlot();
 
@@ -69,6 +66,12 @@ export class BubbleDraw extends BubbleScale {
     drawPlot() {
 
         const self = this;
+
+        d3.select(self.DRAW.id)
+            .style("position", "relative")
+            .style("width", `${100 + self.DRAW.param.width + self.DRAW.param.margin.left + self.DRAW.param.margin.right}px`)
+            .style("height", `${100 + self.DRAW.param.height + self.DRAW.param.margin.top + self.DRAW.param.margin.bottom}px`)
+            .style("overflow", "hidden")
 
         // append the svg object to the body of the page
         self.DRAW.svg = d3.select(self.DRAW.id)
@@ -287,6 +290,10 @@ export class BubbleDraw extends BubbleScale {
             }
         }
 
+        // ---------------------------//
+        //    CIRCLES EVENTS          //
+        // ---------------------------//
+
         function pointOnClick(e, d) {
 
             const point = d3.select(this);
@@ -300,6 +307,44 @@ export class BubbleDraw extends BubbleScale {
             else {
                 removeAnnotations(point);
             }
+        }
+
+        function showBubbleInLegends(point) {
+
+            const d = point.datum()
+
+            const pointLegend = point.append("g")
+                .attr("class", "bubble-circle-legend")
+
+            pointLegend.append("circle")
+                .attr("cx", zCircleX)
+                .attr("cy", zCircleY - Z(self.dataZ(d)))
+                .attr("r", Z(self.dataZ(d)))
+                .attr("fill", T(self.dataT(d)))
+
+            pointLegend.append("line")
+                .attr('x1', zCircleX)
+                .attr('x2', zCircleX)
+                .attr('y1', zCircleY - Z(self.dataZ(d)) - 80)
+                .attr('y2', zCircleY - Z(self.dataZ(d)))
+                .attr('stroke', 'black')
+                .style('stroke-dasharray', ('2,2'))
+
+            pointLegend.append("text")
+                .text(`${self.z}: ${format(self.dataZ(d))}`)
+                .attr("font-size", 12)
+                .attr('text-anchor', 'middle')
+                .attr('x', zCircleX)
+                .attr('y', zCircleY - Z(self.dataZ(d)) - 80)
+
+
+        }
+
+        function hideBubbleInLegends(point) {
+
+            const d = point.datum()
+
+            point.selectAll(".bubble-circle-legend").remove()
         }
 
 
@@ -316,6 +361,8 @@ export class BubbleDraw extends BubbleScale {
             if (!d.render.selected) {
                 addAnnotations(point);
             }
+
+            showBubbleInLegends(point)
         }
 
         function pointOnMouseMove(e, d) {
@@ -340,10 +387,12 @@ export class BubbleDraw extends BubbleScale {
             if (!d.render.selected) {
                 removeAnnotations(point);
             }
+
+            hideBubbleInLegends(point)
         }
 
         // ---------------------------//
-        //       LEGEND CIRCLES       //
+        //       LEGEND BUBBLES       //
         // ---------------------------//
 
         // Add legend: circles
@@ -391,6 +440,7 @@ export class BubbleDraw extends BubbleScale {
                 return d.y2;
             })
 
+        // reset values to draw line that points to center of circle
         for (const d of self.DRAW.legendCircleValues) {
             d.r = Z(d.value)
             d.x1 = zCircleX
@@ -420,26 +470,46 @@ export class BubbleDraw extends BubbleScale {
             .text(self.z)
             .attr("text-anchor", "middle")
 
+        self.addLegendsGroup(T);
+
+        return self;
+    }
+
+    addLegendsGroup(T) {
+
         // ---------------------------//
         //       LEGEND FOR GROUPS    //
         // ---------------------------//
 
+        const self = this;
+
         // Add one dot in the legend for each name.
         const size = 20
+        const zCircleX = self.DRAW.param.zCircleX
 
-        const allgroups = self.domainT(self.data)
-
-        self.DRAW.legendGroups = self.DRAW.svg
+        self.DRAW.legendGroups = d3.select(self.DRAW.id)
+            .append("div")
+            .style("overflow", "auto")
+            .style("position", "absolute")
+            .style("right", "200px")
+            .style("top", "60px")
+            .style("width", "200px")
+            .style("height", "200px")
+            .append("svg")
+            .attr("x", zCircleX)
+            .attr("y", 10)
+            .attr("width", 150)
+            .attr("height", 200)
             .selectAll(".legendGroups")
-            .data(allgroups)
+            .data(self.domainT(self.data))
             .enter()
             .append("g")
             .attr("class", "legendGroups")
             .style("cursor", "move")
 
         self.DRAW.legendGroups.append("circle")
-            .attr("cx", zCircleX)
-            .attr("cy", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("cx", 7)
+            .attr("cy", (d, i) => 10 + i * (size + 5))
             .attr("r", 7)
             .style("fill", d => T(d))
             .on("mouseover", highlight)
@@ -447,7 +517,7 @@ export class BubbleDraw extends BubbleScale {
 
         // Add labels beside legend dots
         self.DRAW.legendGroups.append("text")
-            .attr("x", zCircleX + size * .8)
+            .attr("x", 7 + size * .8)
             .attr("y", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
             .style("fill", d => T(d))
             .text(d => d)
@@ -461,22 +531,21 @@ export class BubbleDraw extends BubbleScale {
         // ---------------------------//
 
         // What to do when one group is hovered
-        function highlight(event, d) {
+        function highlight(e, d) {
             // reduce opacity of all groups
             self.DRAW.svg.selectAll(".bubbles").style("opacity", .05)
             // expect the one that is hovered
             self.DRAW.svg
                 .selectAll("." + formatid(d))
-                .style("opacity", 1)
+                .style("opacity", 0.8)
         }
 
         // And when it is not hovered anymore
-        function noHighlight(event, d) {
+        function noHighlight(e, d) {
             self.DRAW.svg
                 .selectAll(".bubbles")
-                .style("opacity", 1)
+                .style("opacity", 0.8)
         }
-
 
         return self;
     }
@@ -494,7 +563,7 @@ export class BubbleDraw extends BubbleScale {
             .domain(self.domainX(self.data))
             .rangeRound([0, self.DRAW.param.width]);
 
-            // Update X Axis
+        // Update X Axis
         self.DRAW.xAxis
             .transition("update")
             .duration(500)
@@ -513,7 +582,7 @@ export class BubbleDraw extends BubbleScale {
             .domain(self.domainY(self.data))
             .rangeRound([self.DRAW.param.height, 0]);
 
-            // Update Y Axis
+        // Update Y Axis
         self.DRAW.yAxis
             .transition("update")
             .duration(500)
@@ -709,65 +778,9 @@ export class BubbleDraw extends BubbleScale {
         //       LEGEND FOR GROUPS    //
         // ---------------------------//
 
-        // Add one dot in the legend for each name.
-        const size = 20
-
-        const allgroups = self.domainT(self.data)
-
         self.DRAW.legendGroups.remove()
 
-        self.DRAW.legendGroups = self.DRAW.svg
-            .selectAll(".legendGroups")
-            .data(allgroups)
-            .enter()
-            .append("g")
-            .attr("class", "legendGroups")
-            .style("cursor", "move")
-
-        self.DRAW.legendGroups.append("circle")
-            .on("mouseover", highlight)
-            .on("mouseleave", noHighlight)
-            .attr("cx", zCircleX)
-            .attr("cy", (d, i) => 10 + i * (size + 5))
-            .attr("r", 7)
-            .style("fill", d => T(d))
-
-        // Add labels beside legend dots
-        self.DRAW.legendGroups.append("text")
-            .on("mouseover", highlight)
-            .on("mouseleave", noHighlight)
-            .attr("x", zCircleX + size * .8)
-            .attr("y", (d, i) => 10 + i * (size + 5))
-            .style("fill", d => T(d))
-            .attr("text-anchor", "left")
-            .style("dominant-baseline", "middle")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
-            .text(d => d)
-
-
-        // ---------------------------//
-        //       HIGHLIGHT GROUP      //
-        // ---------------------------//
-
-        // What to do when one group is hovered
-        function highlight(event, d) {
-            // reduce opacity of all groups
-            self.DRAW.svg.selectAll(".bubbles").style("opacity", .05)
-            // expect the one that is hovered
-            self.DRAW.svg
-                .selectAll("." + formatid(d))
-                .style("opacity", 0.8)
-        }
-
-        // And when it is not hovered anymore
-        function noHighlight(event, d) {
-            self.DRAW.svg
-                .selectAll(".bubbles")
-                .style("opacity", 0.8)
-
-        }
+        self.addLegendsGroup(T);
 
         return self;
     }
