@@ -116,7 +116,7 @@ body {
 .bubbles {
     stroke-width: 1px;
     stroke: black;
-    opacity: .8;
+    opacity: 0.8;
     cursor: move;
 }
 
