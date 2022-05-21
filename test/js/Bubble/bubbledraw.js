@@ -14,7 +14,7 @@ function format(d) {
 
 function formatid(d) {
 
-    d = String(d);
+    d = "_" + String(d);
 
     try {
         return d.replace(/\s/g, "_");
@@ -40,7 +40,7 @@ export class BubbleDraw extends BubbleScale {
             }
         }));
 
-        this.updateDomainT((data) => data.filter(d => d.render.appear).map(this.dataT))
+        this.updateDomainT((data) => [...new Set(data.filter(d => d.render.appear).map(this.dataT))])
 
         this.DRAW = {
             id: id,
@@ -57,6 +57,13 @@ export class BubbleDraw extends BubbleScale {
         this.DRAW.param.zCircleX = this.DRAW.param.width + this.DRAW.param.margin.left + 40
         this.DRAW.param.zCircleY = this.DRAW.param.height - 100
         this.DRAW.param.zLabelX = this.DRAW.param.zCircleX + 50
+
+        this.Scale = {
+            X: this.scaleX.domain(this.domainX),
+            Y: this.scaleY.domain(this.domainY),
+            Z: this.scaleZ.domain(this.domainZ),
+            T: this.scaleT,
+        }
 
         this.drawPlot();
 
@@ -86,14 +93,15 @@ export class BubbleDraw extends BubbleScale {
         // ---------------------------//
 
         // Add X axis scale
-        const X = self.scaleX
+        self.Scale.X = self.scaleX
             .domain(self.domainX(self.data))
-            .rangeRound([0, self.DRAW.param.width]);
+            .rangeRound([0, self.DRAW.param.width])
+            .unknown(0);
 
         // Add X axis
         self.DRAW.xAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(0, ${self.DRAW.param.height + self.DRAW.param.padding.outer.x})`)
-            .call(d3.axisBottom(X).ticks(5));
+            .call(d3.axisBottom(self.Scale.X).ticks(5));
 
         // Add X axis label:
         self.DRAW.xLabel = self.DRAW.svg.append("text")
@@ -104,14 +112,15 @@ export class BubbleDraw extends BubbleScale {
             .text(self.x);
 
         // Add Y axis scale
-        const Y = self.scaleY
+        self.Scale.Y = self.scaleY
             .domain(self.domainY(self.data))
-            .rangeRound([self.DRAW.param.height, 0]);
+            .rangeRound([self.DRAW.param.height, 0])
+            .unknown(self.DRAW.param.height);
 
         // Add Y axis
         self.DRAW.yAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(${-self.DRAW.param.padding.outer.y}, 0)`)
-            .call(d3.axisLeft(Y).ticks(5));
+            .call(d3.axisLeft(self.Scale.Y).ticks(5));
 
         // Add Y axis label:
         self.DRAW.yLabel = self.DRAW.svg.append("text")
@@ -122,12 +131,13 @@ export class BubbleDraw extends BubbleScale {
             .attr("text-anchor", "start")
 
         // Add a scale for bubble size
-        const Z = self.scaleZ
+        self.Scale.Z = self.scaleZ
             .domain(self.domainZ(self.data))
-            .rangeRound([10, 30]);
+            .rangeRound([10, 30])
+            .unknown(0);
 
         // Add a scale for bubble color
-        const T = self.scaleT
+        self.Scale.T = self.scaleT
             .domain(self.domainT(self.data))
             .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]);
 
@@ -151,8 +161,8 @@ export class BubbleDraw extends BubbleScale {
             const html = `Country: ${d.data["country"]}` +
                 `<br>Year: ${d.data["year"]}` +
                 `<br>${self.t}: ${self.dataT(d)}` +
-                `<br>${self.x}: ${format(self.dataX(d))}` +
-                `<br>${self.y}: ${format(self.dataY(d))}` +
+                `<br>Y axis: ${format(self.dataY(d))} (${self.y})` +
+                `<br>X axis: ${format(self.dataX(d))} (${self.x})` +
                 `<br>${self.z}: ${format(self.dataZ(d))}`
 
             self.DRAW.tooltip
@@ -198,13 +208,19 @@ export class BubbleDraw extends BubbleScale {
                 else return "hidden";
             })
 
-
         self.DRAW.Points.append("circle")
             .attr("class", "bubble-circle")
-            .attr("cx", d => X(self.dataX(d)))
-            .attr("cy", d => Y(self.dataY(d)))
-            .attr("r", d => Z(self.dataZ(d)))
-            .attr("fill", d => T(self.dataT(d)))
+            .attr("cx", d => self.Scale.X(self.dataX(d)))
+            .attr("cy", d => self.Scale.Y(self.dataY(d)))
+            .attr("r", d => self.Scale.Z(self.dataZ(d)))
+            .attr("fill", d => self.Scale.T(self.dataT(d)))
+
+        self.DRAW.Points.append("text")
+            .attr("class", "bubble-text")
+            .text(d => d.data["country"])
+            .attr("x", d => self.Scale.X(self.dataX(d)) + self.Scale.Z(self.dataZ(d)))
+            .attr("y", d => self.Scale.Y(self.dataY(d)) - self.Scale.Z(self.dataZ(d)))
+            .attr("fill", d => self.Scale.T(self.dataT(d)))
 
         self.DRAW.Points
             .on("click", pointOnClick)
@@ -228,10 +244,10 @@ export class BubbleDraw extends BubbleScale {
                 xLine.append("line")
                     .attr("stroke", "black")
                     .attr("stroke-dasharray", "4")
-                    .attr("x1", X(self.dataX(d)))
-                    .attr("x2", X(self.dataX(d)))
+                    .attr("x1", self.Scale.X(self.dataX(d)))
+                    .attr("x2", self.Scale.X(self.dataX(d)))
                     .attr("y1", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 20)
-                    .attr("y2", Y(self.dataY(d)))
+                    .attr("y2", self.Scale.Y(self.dataY(d)))
 
                 xLine.append("text")
                     .attr("font-family", "sans-serif")
@@ -239,7 +255,7 @@ export class BubbleDraw extends BubbleScale {
                     .attr("text-anchor", "middle")
                     .attr("dominant-baseline", "text-before-edge")
                     .attr("font-size", "10px")
-                    .attr("x", X(self.dataX(d)))
+                    .attr("x", self.Scale.X(self.dataX(d)))
                     .attr("y", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 20)
                     .text(format(self.dataX(d)))
 
@@ -257,9 +273,9 @@ export class BubbleDraw extends BubbleScale {
                     .attr("stroke", "black")
                     .attr("stroke-dasharray", "4")
                     .attr("x1", -self.DRAW.param.padding.outer.y - 10)
-                    .attr("x2", X(self.dataX(d)))
-                    .attr("y1", Y(self.dataY(d)))
-                    .attr("y2", Y(self.dataY(d)))
+                    .attr("x2", self.Scale.X(self.dataX(d)))
+                    .attr("y1", self.Scale.Y(self.dataY(d)))
+                    .attr("y2", self.Scale.Y(self.dataY(d)))
 
                 yLine.append("text")
                     .attr("font-family", "sans-serif")
@@ -269,7 +285,7 @@ export class BubbleDraw extends BubbleScale {
                     .attr("dominant-baseline", "middle")
                     .attr("text-anchor", "end")
                     .attr("x", -self.DRAW.param.padding.outer.y - 10)
-                    .attr("y", Y(self.dataY(d)))
+                    .attr("y", self.Scale.Y(self.dataY(d)))
                     .text(format(self.dataY(d)))
 
                 point.raise()
@@ -318,15 +334,15 @@ export class BubbleDraw extends BubbleScale {
 
             pointLegend.append("circle")
                 .attr("cx", zCircleX)
-                .attr("cy", zCircleY - Z(self.dataZ(d)))
-                .attr("r", Z(self.dataZ(d)))
-                .attr("fill", T(self.dataT(d)))
+                .attr("cy", zCircleY - self.Scale.Z(self.dataZ(d)))
+                .attr("r", self.Scale.Z(self.dataZ(d)))
+                .attr("fill", self.Scale.T(self.dataT(d)))
 
             pointLegend.append("line")
                 .attr('x1', zCircleX)
                 .attr('x2', zCircleX)
-                .attr('y1', zCircleY - Z(self.dataZ(d)) - 80)
-                .attr('y2', zCircleY - Z(self.dataZ(d)))
+                .attr('y1', zCircleY - self.Scale.Z(self.dataZ(d)) - 80)
+                .attr('y2', zCircleY - self.Scale.Z(self.dataZ(d)))
                 .attr('stroke', 'black')
                 .style('stroke-dasharray', ('2,2'))
 
@@ -335,14 +351,12 @@ export class BubbleDraw extends BubbleScale {
                 .attr("font-size", 12)
                 .attr('text-anchor', 'middle')
                 .attr('x', zCircleX)
-                .attr('y', zCircleY - Z(self.dataZ(d)) - 80)
+                .attr('y', zCircleY - self.Scale.Z(self.dataZ(d)) - 80)
 
 
         }
 
         function hideBubbleInLegends(point) {
-
-            const d = point.datum()
 
             point.selectAll(".bubble-circle-legend").remove()
         }
@@ -353,6 +367,8 @@ export class BubbleDraw extends BubbleScale {
             showTooltip(e, d);
 
             const point = d3.select(this);
+
+            point.raise()
 
             self.DRAW.svg.selectAll(".bubbles").style("opacity", .05)
 
@@ -370,6 +386,8 @@ export class BubbleDraw extends BubbleScale {
             moveTooltip(e, d);
 
             const point = d3.select(this);
+
+            point.raise()
 
             self.DRAW.svg.selectAll(".bubbles").style("opacity", .05)
 
@@ -415,13 +433,13 @@ export class BubbleDraw extends BubbleScale {
 
         self.DRAW.legendCircle.append("circle")
             .attr("cx", zCircleX)
-            .attr("cy", d => zCircleY - Z(d.value))
-            .attr("r", d => Z(d.value))
+            .attr("cy", d => zCircleY - self.Scale.Z(d.value))
+            .attr("r", d => self.Scale.Z(d.value))
             .style("fill", "none")
             .attr("stroke", "black")
 
         let zLabelHeight = 0;
-        let potentialY = zCircleY - Z(self.DRAW.legendCircleValues[0].value);
+        let potentialY = zCircleY - self.Scale.Z(self.DRAW.legendCircleValues[0].value);
 
         // Add legend: labels
         self.DRAW.legendCircle.append("text")
@@ -435,14 +453,14 @@ export class BubbleDraw extends BubbleScale {
                     zLabelHeight = label.node().getBBox().height
             })
             .attr('y', function (d) {
-                d.y2 = Math.min(zCircleY - Z(d.value), potentialY);
+                d.y2 = Math.min(zCircleY - self.Scale.Z(d.value), potentialY);
                 potentialY = d.y2 - zLabelHeight;
                 return d.y2;
             })
 
         // reset values to draw line that points to center of circle
         for (const d of self.DRAW.legendCircleValues) {
-            d.r = Z(d.value)
+            d.r = self.Scale.Z(d.value)
             d.x1 = zCircleX
             d.y1 = zCircleY - d.r;
             d.x2 = zLabelX;
@@ -470,12 +488,12 @@ export class BubbleDraw extends BubbleScale {
             .text(self.z)
             .attr("text-anchor", "middle")
 
-        self.addLegendsGroup(T);
+        self.addLegendsGroup();
 
         return self;
     }
 
-    addLegendsGroup(T) {
+    addLegendsGroup() {
 
         // ---------------------------//
         //       LEGEND FOR GROUPS    //
@@ -501,7 +519,7 @@ export class BubbleDraw extends BubbleScale {
             .attr("x", zCircleX)
             .attr("y", 10)
             .attr("width", 150)
-            // notice that svg height is not updated yet
+        // notice that svg height is not updated yet
 
         self.DRAW.legendGroups = svg
             .selectAll(".legendGroups")
@@ -515,13 +533,13 @@ export class BubbleDraw extends BubbleScale {
             .attr("cx", 7)
             .attr("cy", (d, i) => {
                 const y = 10 + i * (size + 5)
-                if(y+20 >= svg.attr("height")) {
-                    svg.attr("height", y+20) // modify svg height so that svg contains all g
+                if (y + 20 >= svg.attr("height")) {
+                    svg.attr("height", y + 20) // modify svg height so that svg contains all g
                 }
                 return y;
             })
             .attr("r", 7)
-            .style("fill", d => T(d))
+            .style("fill", d => self.Scale.T(d))
             .on("mouseover", highlight)
             .on("mouseleave", noHighlight)
 
@@ -529,7 +547,7 @@ export class BubbleDraw extends BubbleScale {
         self.DRAW.legendGroups.append("text")
             .attr("x", 7 + size * .8)
             .attr("y", (d, i) => 10 + i * (size + 5)) // 100 is where the first dot appears. 25 is the distance between dots
-            .style("fill", d => T(d))
+            .style("fill", d => self.Scale.T(d))
             .text(d => d)
             .attr("text-anchor", "left")
             .style("dominant-baseline", "middle")
@@ -547,14 +565,14 @@ export class BubbleDraw extends BubbleScale {
             // expect the one that is hovered
             self.DRAW.svg
                 .selectAll("." + formatid(d))
-                .style("opacity", 0.8)
+                .style("opacity", 1)
         }
 
         // And when it is not hovered anymore
         function noHighlight(e, d) {
             self.DRAW.svg
                 .selectAll(".bubbles")
-                .style("opacity", 0.8)
+                .style("opacity", 1)
         }
 
         return self;
@@ -569,7 +587,7 @@ export class BubbleDraw extends BubbleScale {
         // ---------------------------//
 
         // Update X Axis scale
-        const X = self.scaleX
+        self.Scale.X = self.scaleX
             .domain(self.domainX(self.data))
             .rangeRound([0, self.DRAW.param.width]);
 
@@ -578,7 +596,7 @@ export class BubbleDraw extends BubbleScale {
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .call(d3.axisBottom(X).ticks(5));
+            .call(d3.axisBottom(self.Scale.X).ticks(5));
 
         // Update X axis label:
         self.DRAW.xLabel
@@ -588,7 +606,7 @@ export class BubbleDraw extends BubbleScale {
             .text(self.x);
 
         // Update Y axis scale
-        const Y = self.scaleY
+        self.Scale.Y = self.scaleY
             .domain(self.domainY(self.data))
             .rangeRound([self.DRAW.param.height, 0]);
 
@@ -597,7 +615,7 @@ export class BubbleDraw extends BubbleScale {
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .call(d3.axisLeft(Y).ticks(5));
+            .call(d3.axisLeft(self.Scale.Y).ticks(5));
 
         // Update Y axis label:
         self.DRAW.yLabel
@@ -607,12 +625,12 @@ export class BubbleDraw extends BubbleScale {
             .text(self.y)
 
         // Update scale for bubble size
-        const Z = self.scaleZ
+        self.Scale.Z = self.scaleZ
             .domain(self.domainZ(self.data))
             .rangeRound([10, 30]);
 
         // Update scale for bubble color
-        const T = self.scaleT
+        self.Scale.T = self.scaleT
             .domain(self.domainT(self.data))
             .range(["#1f77b4",
                 "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
@@ -644,10 +662,19 @@ export class BubbleDraw extends BubbleScale {
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .attr("cx", d => X(self.dataX(d)))
-            .attr("cy", d => Y(self.dataY(d)))
-            .attr("r", d => Z(self.dataZ(d)))
-            .attr("fill", d => T(self.dataT(d)))
+            .attr("cx", d => self.Scale.X(self.dataX(d)))
+            .attr("cy", d => self.Scale.Y(self.dataY(d)))
+            .attr("r", d => self.Scale.Z(self.dataZ(d)))
+            .attr("fill", d => self.Scale.T(self.dataT(d)))
+
+        self.DRAW.Points.select(".bubble-text")
+            .transition("update")
+            .duration(500)
+            .ease(d3.easeLinear)
+            .text(d => d.data["country"])
+            .attr("x", d => self.Scale.X(self.dataX(d)) + self.Scale.Z(self.dataZ(d)))
+            .attr("y", d => self.Scale.Y(self.dataY(d)) - self.Scale.Z(self.dataZ(d)))
+            .attr("fill", d => self.Scale.T(self.dataT(d)))
 
 
 
@@ -659,16 +686,16 @@ export class BubbleDraw extends BubbleScale {
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .attr("x1", d => X(self.dataX(d)))
-            .attr("x2", d => X(self.dataX(d)))
+            .attr("x1", d => self.Scale.X(self.dataX(d)))
+            .attr("x2", d => self.Scale.X(self.dataX(d)))
             .attr("y1", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 20)
-            .attr("y2", d => Y(self.dataY(d)))
+            .attr("y2", d => self.Scale.Y(self.dataY(d)))
 
         self.DRAW.Points.select(".bubble-line-x").select("text")
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .attr("x", d => X(self.dataX(d)))
+            .attr("x", d => self.Scale.X(self.dataX(d)))
             .attr("y", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 20)
             .text(d => format(self.dataX(d)))
 
@@ -677,16 +704,16 @@ export class BubbleDraw extends BubbleScale {
             .duration(500)
             .ease(d3.easeLinear)
             .attr("x1", -self.DRAW.param.padding.outer.y - 10)
-            .attr("x2", d => X(self.dataX(d)))
-            .attr("y1", d => Y(self.dataY(d)))
-            .attr("y2", d => Y(self.dataY(d)))
+            .attr("x2", d => self.Scale.X(self.dataX(d)))
+            .attr("y1", d => self.Scale.Y(self.dataY(d)))
+            .attr("y2", d => self.Scale.Y(self.dataY(d)))
 
         self.DRAW.Points.select(".bubble-line-y").select("text")
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
             .attr("x", -self.DRAW.param.padding.outer.y - 10)
-            .attr("y", d => Y(self.dataY(d)))
+            .attr("y", d => self.Scale.Y(self.dataY(d)))
             .text(d => format(self.dataY(d)))
 
         // ---------------------------//
@@ -726,13 +753,13 @@ export class BubbleDraw extends BubbleScale {
             .duration(500)
             .ease(d3.easeLinear)
             .attr("cx", zCircleX)
-            .attr("cy", d => zCircleY - Z(d.value))
-            .attr("r", d => Z(d.value))
+            .attr("cy", d => zCircleY - self.Scale.Z(d.value))
+            .attr("r", d => self.Scale.Z(d.value))
             .style("fill", "none")
             .attr("stroke", "black")
 
         let zLabelHeight = 0;
-        let potentialY = zCircleY - Z(self.DRAW.legendCircleValues[0].value);
+        let potentialY = zCircleY - self.Scale.Z(self.DRAW.legendCircleValues[0].value);
 
         // Add legend: labels
         self.DRAW.legendCircle.select("text")
@@ -749,13 +776,13 @@ export class BubbleDraw extends BubbleScale {
                     zLabelHeight = label.node().getBBox().height
             })
             .attr('y', function (d) {
-                d.y2 = Math.min(zCircleY - Z(d.value), potentialY);
+                d.y2 = Math.min(zCircleY - self.Scale.Z(d.value), potentialY);
                 potentialY = d.y2 - zLabelHeight;
                 return d.y2;
             })
 
         for (const d of self.DRAW.legendCircleValues) {
-            d.r = Z(d.value)
+            d.r = self.Scale.Z(d.value)
             d.x1 = zCircleX
             d.y1 = zCircleY - d.r;
             d.x2 = zLabelX;
@@ -790,7 +817,7 @@ export class BubbleDraw extends BubbleScale {
 
         self.DRAW.legendGroups.remove()
 
-        self.addLegendsGroup(T);
+        self.addLegendsGroup();
 
         return self;
     }

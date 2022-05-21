@@ -111,7 +111,7 @@ class BubbleDomain extends BubbleData {
         this.domainX = (data) => [d3.min(data, this.dataX), d3.max(data, this.dataX)];
         this.domainY = (data) => [d3.min(data, this.dataY), d3.max(data, this.dataY)];
         this.domainZ = (data) => [d3.min(data, this.dataZ), d3.max(data, this.dataZ)];
-        this.domainT = (data) => data.map(this.dataT);
+        this.domainT = (data) => [...new Set(data.map(this.dataT))];
 
         return this;
     }

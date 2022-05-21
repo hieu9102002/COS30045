@@ -110,7 +110,7 @@ Promise.all([
 
     console.log(DATA)
 
-    let x = new BubbleSelection(namedata, DATA, "gdp", "renewables_share_energy", "population", "country")
+    let x = new BubbleSelection(namedata, DATA, "gdp", "renewables_share_energy", "population", "year")
 
 }).catch(function (err) {
     console.error(err);
