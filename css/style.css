@@ -69,3 +69,26 @@ body {background-color: lightgrey;}
     border-radius: 5px;
     padding: 10px;
 }
+
+#sankey-chart .node {
+    cursor: move;
+}
+
+#sankey-chart .node rect {
+    fill-opacity: 1;
+    /* stroke: none; */
+    shape-rendering: crispEdges;
+}
+
+#sankey-chart .node text {
+    text-shadow: 0 1px 0 #fff;
+}
+
+#sankey-chart .link {
+    fill: none;
+    stroke-opacity: 0.6;
+}
+
+#sankey-chart .link:hover {
+    stroke-opacity: 1;
+}
