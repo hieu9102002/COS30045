@@ -604,18 +604,21 @@ export class BubbleDraw extends BubbleScale {
             .domain(self.domainX(self.data))
             .rangeRound([0, self.DRAW.param.width])
             .unknown(0);
+        
+            console.log(self.domainX(self.data), self.Scale.X)
 
         // Update X Axis
         self.DRAW.xAxis
             .transition("update")
             .duration(500)
             .ease(d3.easeLinear)
-            .call(d3.axisBottom(self.Scale.X).tickValues([
-                d3.min(self.data, self.dataX),
-                d3.mean(self.data, self.dataX),
-                d3.median(self.data, self.dataX),
-                d3.max(self.data, self.dataX)
-            ]));
+            .call(d3.axisBottom(self.Scale.X))
+            // .tickValues([
+            //     d3.min(self.data, self.dataX),
+            //     d3.mean(self.data, self.dataX),
+            //     d3.median(self.data, self.dataX),
+            //     d3.max(self.data, self.dataX)
+            // ]));
 
         console.log(d3.axisBottom(self.Scale.X).scale().ticks())
 

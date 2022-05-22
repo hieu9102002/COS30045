@@ -5,11 +5,11 @@ import { BubbleDraw } from "./bubbledraw.js"
 import { Selections } from "./selections.js"
 
 class BubbleSelection extends BubbleDraw {
-    constructor(namevalues, data, x, y, z, t, id = "#scatter-plot") {
+    constructor(info, data, x, y, z, t, id = "#scatter-plot") {
 
         super(data, x, y, z, t, id);
 
-        this.namevalues = namevalues;
+        this.info = info;
 
         this.SELECTIONS = d3.select(id)
             .append("div")
@@ -26,7 +26,7 @@ class BubbleSelection extends BubbleDraw {
 
         self.selectVarX = new Selections(self.SELECTIONS)
         self.selectVarX
-            .OptionsData(self.namevalues)
+            .OptionsData(self.info)
             .DefaultValue(self.x)
             .OnSelect(function (option) {
                 self.updateX(option).updateDrawPlot()
@@ -35,7 +35,7 @@ class BubbleSelection extends BubbleDraw {
 
         self.selectVarY = new Selections(self.SELECTIONS);
         self.selectVarY
-            .OptionsData(self.namevalues)
+            .OptionsData(self.info)
             .DefaultValue(self.y)
             .OnSelect(function (option) {
 
@@ -44,7 +44,7 @@ class BubbleSelection extends BubbleDraw {
 
         self.selectVarZ = new Selections(self.SELECTIONS);
         self.selectVarZ
-            .OptionsData(self.namevalues)
+            .OptionsData(self.info)
             .DefaultValue(self.z)
             .OnSelect(function (option) {
 
@@ -87,6 +87,60 @@ class BubbleSelection extends BubbleDraw {
                 self.updateScaleY(d3.scale(option)).updateDrawPlot()
             });
 
+        self.selectLowerX = new Selections(self.SELECTIONS);
+        self.selectLowerX
+            .OptionsData([
+                {
+                    name: "X Lower",
+                    value: "lower"
+                },
+                {
+                    name: "X Min",
+                    value: "min"
+                }
+            ])
+            .DefaultValue("min")
+            .OnSelect(function (option) {
+
+                if(option == "lower") {
+                    self.domainXMin = (data) => 0;
+                }
+
+                else {
+                    self.domainXMin = (data) => d3.min(data, self.dataX);
+                }
+
+                self.updateDomainX((data) => [self.domainXMin(data), self.domainXMax(data)])
+                        .updateDrawPlot()
+            });
+
+            self.selectUpperX = new Selections(self.SELECTIONS);
+            self.selectUpperX
+                .OptionsData([
+                    {
+                        name: "X Upper",
+                        value: "upper"
+                    },
+                    {
+                        name: "X Max",
+                        value: "max"
+                    }
+                ])
+                .DefaultValue("max")
+                .OnSelect(function (option) {
+    
+                    if(option == "upper") {
+                        self.domainXMax = (data) => 100;
+                    }
+    
+                    else {
+                        self.domainXMax = (data) => d3.max(data, self.dataX);
+                    }
+
+                    self.updateDomainX((data) => [self.domainXMin(data), self.domainXMax(data)])
+                        .updateDrawPlot()
+                });
+
 
 
         self.selectVarY.DrawSelection();
@@ -94,6 +148,8 @@ class BubbleSelection extends BubbleDraw {
         self.selectVarZ.DrawSelection();
         self.selectScaleX.DrawSelection();
         self.selectScaleY.DrawSelection();
+        self.selectLowerX.DrawSelection();
+        self.selectUpperX.DrawSelection();
 
         return self;
 

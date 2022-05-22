@@ -108,9 +108,16 @@ class BubbleDomain extends BubbleData {
 
         super(data, x, y, z, t);
 
-        this.domainX = (data) => [d3.min(data, this.dataX), d3.max(data, this.dataX)];
-        this.domainY = (data) => [d3.min(data, this.dataY), d3.max(data, this.dataY)];
-        this.domainZ = (data) => [0, d3.max(data, this.dataZ)];
+        this.domainXMax = (data) => d3.max(data, this.dataX);
+        this.domainYMax = (data) => d3.max(data, this.dataY);
+        this.domainZMax = (data) => d3.max(data, this.dataZ);
+
+        this.domainXMin = (data) => d3.min(data, this.dataX);
+        this.domainYMin = (data) => d3.min(data, this.dataY);
+
+        this.domainX = (data) => [this.domainXMin(data), this.domainXMax(data)];
+        this.domainY = (data) => [this.domainYMin(data), this.domainYMax(data)];
+        this.domainZ = (data) => [0, this.domainZMax(data)];
         this.domainT = (data) => [...new Set(data.map(this.dataT))];
 
         return this;
@@ -128,8 +135,8 @@ export class BubbleScale extends BubbleDomain {
 
         super(data, x, y, z, t);
 
-        this.scaleX = d3.scale("symlog")
-        this.scaleY = d3.scale("symlog")
+        this.scaleX = d3.scale("linear")
+        this.scaleY = d3.scale("linear")
         this.scaleZ = d3.scale("sqrt")
         this.scaleT = d3.scale("ordinal")
 
