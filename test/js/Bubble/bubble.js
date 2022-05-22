@@ -9,7 +9,7 @@ class BubbleSelection extends BubbleDraw {
 
         super(data, x, y, z, t, id);
 
-        this.info = info;
+        this.info = Object.values(info);
 
         this.SELECTIONS = d3.select(id)
             .append("div")
@@ -63,7 +63,7 @@ class BubbleSelection extends BubbleDraw {
                     value: "symlog"
                 }
             ])
-            .DefaultValue("symlog")
+            .DefaultValue("linear")
             .OnSelect(function (option) {
 
                 self.updateScaleX(d3.scale(option)).updateDrawPlot()
@@ -81,7 +81,7 @@ class BubbleSelection extends BubbleDraw {
                     value: "symlog"
                 }
             ])
-            .DefaultValue("symlog")
+            .DefaultValue("linear")
             .OnSelect(function (option) {
 
                 self.updateScaleY(d3.scale(option)).updateDrawPlot()
@@ -158,15 +158,15 @@ class BubbleSelection extends BubbleDraw {
 
 Promise.all([
     d3.json("./data/owid/owid.json"),
-    d3.json("./data/owid/owidname.json"),
+    d3.json("./data/owid/info.json"),
 ]).then(function (files) {
     const jsondata = files[0]
-    const namedata = files[1]
+    const infodata = files[1]
     let DATA = jsondata.map(d => ({ data: d }));
 
     console.log(DATA)
 
-    let x = new BubbleSelection(namedata, DATA, "gdp", "renewables_share_energy", "population", "country")
+    let x = new BubbleSelection(infodata, DATA, "gdp", "renewables_share_energy", "population", "region_WB")
 
 }).catch(function (err) {
     console.error(err);

@@ -1,289 +1,286 @@
-,Entity,Code,Year,Continent,Entity3,Year3,world-regions-according-to-the-united-nations,Entity2,Year2,WHO region,Entity1,Year1,World Region according to the World Bank
-0,Abkhazia,OWID_ABK,2015.0,Asia,,,,,,,,,
-1,Afghanistan,AFG,2015.0,Asia,Afghanistan,2021.0,Central and Southern Asia,Afghanistan,2020.0,Eastern Mediterranean,Afghanistan,2017.0,South Asia
-2,Akrotiri and Dhekelia,OWID_AKD,2015.0,Asia,,,,,,,,,
-3,Albania,ALB,2015.0,Europe,Albania,2021.0,Europe and Northern America,Albania,2020.0,Europe,Albania,2017.0,Europe and Central Asia
-4,Algeria,DZA,2015.0,Africa,Algeria,2021.0,Northern Africa and Western Asia,Algeria,2020.0,Africa,Algeria,2017.0,Middle East and North Africa
-5,American Samoa,ASM,2015.0,Oceania,American Samoa,2021.0,Oceania,,,,American Samoa,2017.0,East Asia and Pacific
-6,Andorra,AND,2015.0,Europe,Andorra,2021.0,Europe and Northern America,Andorra,2020.0,Europe,Andorra,2017.0,Europe and Central Asia
-7,Angola,AGO,2015.0,Africa,Angola,2021.0,Sub-Saharan Africa,Angola,2020.0,Africa,Angola,2017.0,Sub-Saharan Africa
-8,Anguilla,AIA,2015.0,North America,Anguilla,2021.0,Latin America and Caribbean,,,,,,
-9,Antarctica,ATA,2015.0,Antarctica,,,,,,,,,
-10,Antigua and Barbuda,ATG,2015.0,North America,Antigua and Barbuda,2021.0,Latin America and Caribbean,Antigua and Barbuda,2020.0,Americas,Antigua and Barbuda,2017.0,Latin America and Caribbean
-11,Argentina,ARG,2015.0,South America,Argentina,2021.0,Latin America and Caribbean,Argentina,2020.0,Americas,Argentina,2017.0,Latin America and Caribbean
-12,Armenia,ARM,2015.0,Asia,Armenia,2021.0,Northern Africa and Western Asia,Armenia,2020.0,Europe,Armenia,2017.0,Europe and Central Asia
-13,Aruba,ABW,2015.0,North America,Aruba,2021.0,Latin America and Caribbean,,,,Aruba,2017.0,Latin America and Caribbean
-14,Australia,AUS,2015.0,Oceania,Australia,2021.0,Oceania,Australia,2020.0,Western Pacific,Australia,2017.0,East Asia and Pacific
-15,Austria,AUT,2015.0,Europe,Austria,2021.0,Europe and Northern America,Austria,2020.0,Europe,Austria,2017.0,Europe and Central Asia
-16,Austria-Hungary,OWID_AUH,2015.0,Europe,,,,,,,,,
-17,Azerbaijan,AZE,2015.0,Asia,Azerbaijan,2021.0,Northern Africa and Western Asia,Azerbaijan,2020.0,Europe,Azerbaijan,2017.0,Europe and Central Asia
-18,Baden,OWID_BAD,2015.0,Europe,,,,,,,,,
-19,Bahamas,BHS,2015.0,North America,Bahamas,2021.0,Latin America and Caribbean,Bahamas,2020.0,Americas,Bahamas,2017.0,Latin America and Caribbean
-20,Bahrain,BHR,2015.0,Asia,Bahrain,2021.0,Northern Africa and Western Asia,Bahrain,2020.0,Eastern Mediterranean,Bahrain,2017.0,Middle East and North Africa
-21,Bangladesh,BGD,2015.0,Asia,Bangladesh,2021.0,Central and Southern Asia,Bangladesh,2020.0,South-East Asia,Bangladesh,2017.0,South Asia
-22,Barbados,BRB,2015.0,North America,Barbados,2021.0,Latin America and Caribbean,Barbados,2020.0,Americas,Barbados,2017.0,Latin America and Caribbean
-23,Bavaria,OWID_BAV,2015.0,Europe,,,,,,,,,
-24,Belarus,BLR,2015.0,Europe,Belarus,2021.0,Europe and Northern America,Belarus,2020.0,Europe,Belarus,2017.0,Europe and Central Asia
-25,Belgium,BEL,2015.0,Europe,Belgium,2021.0,Europe and Northern America,Belgium,2020.0,Europe,Belgium,2017.0,Europe and Central Asia
-26,Belize,BLZ,2015.0,North America,Belize,2021.0,Latin America and Caribbean,Belize,2020.0,Americas,Belize,2017.0,Latin America and Caribbean
-27,Benin,BEN,2015.0,Africa,Benin,2021.0,Sub-Saharan Africa,Benin,2020.0,Africa,Benin,2017.0,Sub-Saharan Africa
-28,Bermuda,BMU,2015.0,North America,Bermuda,2021.0,Europe and Northern America,,,,Bermuda,2017.0,North America
-29,Bhutan,BTN,2015.0,Asia,Bhutan,2021.0,Central and Southern Asia,Bhutan,2020.0,South-East Asia,Bhutan,2017.0,South Asia
-30,Bolivia,BOL,2015.0,South America,Bolivia,2021.0,Latin America and Caribbean,Bolivia,2020.0,Americas,Bolivia,2017.0,Latin America and Caribbean
-31,Bonaire Sint Eustatius and Saba,BES,2015.0,North America,Bonaire Sint Eustatius and Saba,2021.0,Latin America and Caribbean,,,,,,
-32,Bosnia and Herzegovina,BIH,2015.0,Europe,Bosnia and Herzegovina,2021.0,Europe and Northern America,Bosnia and Herzegovina,2020.0,Europe,Bosnia and Herzegovina,2017.0,Europe and Central Asia
-33,Botswana,BWA,2015.0,Africa,Botswana,2021.0,Sub-Saharan Africa,Botswana,2020.0,Africa,Botswana,2017.0,Sub-Saharan Africa
-34,Bouvet Island,BVT,2015.0,Antarctica,,,,,,,,,
-35,Brazil,BRA,2015.0,South America,Brazil,2021.0,Latin America and Caribbean,Brazil,2020.0,Americas,Brazil,2017.0,Latin America and Caribbean
-36,British Indian Ocean Territory,IOT,2015.0,Asia,,,,,,,,,
-37,British Virgin Islands,VGB,2015.0,North America,British Virgin Islands,2021.0,Latin America and Caribbean,,,,British Virgin Islands,2017.0,Latin America and Caribbean
-38,Brunei,BRN,2015.0,Asia,Brunei,2021.0,Eastern and South-Eastern Asia,Brunei,2020.0,Western Pacific,Brunei,2017.0,East Asia and Pacific
-39,Bulgaria,BGR,2015.0,Europe,Bulgaria,2021.0,Europe and Northern America,Bulgaria,2020.0,Europe,Bulgaria,2017.0,Europe and Central Asia
-40,Burkina Faso,BFA,2015.0,Africa,Burkina Faso,2021.0,Sub-Saharan Africa,Burkina Faso,2020.0,Africa,Burkina Faso,2017.0,Sub-Saharan Africa
-41,Burundi,BDI,2015.0,Africa,Burundi,2021.0,Sub-Saharan Africa,Burundi,2020.0,Africa,Burundi,2017.0,Sub-Saharan Africa
-42,Cambodia,KHM,2015.0,Asia,Cambodia,2021.0,Eastern and South-Eastern Asia,Cambodia,2020.0,Western Pacific,Cambodia,2017.0,East Asia and Pacific
-43,Cameroon,CMR,2015.0,Africa,Cameroon,2021.0,Sub-Saharan Africa,Cameroon,2020.0,Africa,Cameroon,2017.0,Sub-Saharan Africa
-44,Canada,CAN,2015.0,North America,Canada,2021.0,Europe and Northern America,Canada,2020.0,Americas,Canada,2017.0,North America
-45,Cape Verde,CPV,2015.0,Africa,Cape Verde,2021.0,Sub-Saharan Africa,Cape Verde,2020.0,Africa,Cape Verde,2017.0,Sub-Saharan Africa
-46,Cayman Islands,CYM,2015.0,North America,Cayman Islands,2021.0,Latin America and Caribbean,,,,Cayman Islands,2017.0,Latin America and Caribbean
-47,Central African Republic,CAF,2015.0,Africa,Central African Republic,2021.0,Sub-Saharan Africa,Central African Republic,2020.0,Africa,Central African Republic,2017.0,Sub-Saharan Africa
-48,Chad,TCD,2015.0,Africa,Chad,2021.0,Sub-Saharan Africa,Chad,2020.0,Africa,Chad,2017.0,Sub-Saharan Africa
-49,Channel Islands,OWID_CIS,2015.0,Europe,Channel Islands,2021.0,Europe and Northern America,,,,Channel Islands,2017.0,Europe and Central Asia
-50,Chile,CHL,2015.0,South America,Chile,2021.0,Latin America and Caribbean,Chile,2020.0,Americas,Chile,2017.0,Latin America and Caribbean
-51,China,CHN,2015.0,Asia,China,2021.0,Eastern and South-Eastern Asia,China,2020.0,Western Pacific,China,2017.0,East Asia and Pacific
-52,Christmas Island,CXR,2015.0,Asia,Christmas Island,2021.0,Oceania,,,,,,
-53,Cocos Islands,CCK,2015.0,Asia,,,,,,,,,
-54,Colombia,COL,2015.0,South America,Colombia,2021.0,Latin America and Caribbean,Colombia,2020.0,Americas,Colombia,2017.0,Latin America and Caribbean
-55,Comoros,COM,2015.0,Africa,Comoros,2021.0,Sub-Saharan Africa,Comoros,2020.0,Africa,Comoros,2017.0,Sub-Saharan Africa
-56,Congo,COG,2015.0,Africa,Congo,2021.0,Sub-Saharan Africa,Congo,2020.0,Africa,Congo,2017.0,Sub-Saharan Africa
-57,Cook Islands,COK,2015.0,Oceania,Cook Islands,2021.0,Oceania,Cook Islands,2020.0,Western Pacific,,,
-58,Costa Rica,CRI,2015.0,North America,Costa Rica,2021.0,Latin America and Caribbean,Costa Rica,2020.0,Americas,Costa Rica,2017.0,Latin America and Caribbean
-59,Cote d'Ivoire,CIV,2015.0,Africa,Cote d'Ivoire,2021.0,Sub-Saharan Africa,Cote d'Ivoire,2020.0,Africa,Cote d'Ivoire,2017.0,Sub-Saharan Africa
-60,Croatia,HRV,2015.0,Europe,Croatia,2021.0,Europe and Northern America,Croatia,2020.0,Europe,Croatia,2017.0,Europe and Central Asia
-61,Cuba,CUB,2015.0,North America,Cuba,2021.0,Latin America and Caribbean,Cuba,2020.0,Americas,Cuba,2017.0,Latin America and Caribbean
-62,Curacao,CUW,2015.0,North America,Curacao,2021.0,Latin America and Caribbean,,,,Curacao,2017.0,Latin America and Caribbean
-63,Cyprus,CYP,2015.0,Europe,Cyprus,2021.0,Northern Africa and Western Asia,Cyprus,2020.0,Europe,Cyprus,2017.0,Europe and Central Asia
-64,Czechia,CZE,2015.0,Europe,Czechia,2021.0,Europe and Northern America,Czechia,2020.0,Europe,Czechia,2017.0,Europe and Central Asia
-65,Czechoslovakia,OWID_CZS,2015.0,Europe,,,,,,,,,
-66,Democratic Republic of Congo,COD,2015.0,Africa,Democratic Republic of Congo,2021.0,Sub-Saharan Africa,Democratic Republic of Congo,2020.0,Africa,Democratic Republic of Congo,2017.0,Sub-Saharan Africa
-67,Denmark,DNK,2015.0,Europe,Denmark,2021.0,Europe and Northern America,Denmark,2020.0,Europe,Denmark,2017.0,Europe and Central Asia
-68,Djibouti,DJI,2015.0,Africa,Djibouti,2021.0,Middle East and North Africa,Djibouti,2020.0,Eastern Mediterranean,Djibouti,2017.0,Middle East and North Africa
-69,Dominica,DMA,2015.0,North America,Dominica,2021.0,Latin America and Caribbean,Dominica,2020.0,Americas,Dominica,2017.0,Latin America and Caribbean
-70,Dominican Republic,DOM,2015.0,North America,Dominican Republic,2021.0,Latin America and Caribbean,Dominican Republic,2020.0,Americas,Dominican Republic,2017.0,Latin America and Caribbean
-71,East Germany,OWID_GDR,2015.0,Europe,,,,,,,,,
-72,Ecuador,ECU,2015.0,South America,Ecuador,2021.0,Latin America and Caribbean,Ecuador,2020.0,Americas,Ecuador,2017.0,Latin America and Caribbean
-73,Egypt,EGY,2015.0,Africa,Egypt,2021.0,Northern Africa and Western Asia,Egypt,2020.0,Eastern Mediterranean,Egypt,2017.0,Middle East and North Africa
-74,El Salvador,SLV,2015.0,North America,El Salvador,2021.0,Latin America and Caribbean,El Salvador,2020.0,Americas,El Salvador,2017.0,Latin America and Caribbean
-75,Equatorial Guinea,GNQ,2015.0,Africa,Equatorial Guinea,2021.0,Sub-Saharan Africa,Equatorial Guinea,2020.0,Africa,Equatorial Guinea,2017.0,Sub-Saharan Africa
-76,Eritrea,ERI,2015.0,Africa,Eritrea,2021.0,Sub-Saharan Africa,Eritrea,2020.0,Africa,Eritrea,2017.0,Sub-Saharan Africa
-77,Eritrea and Ethiopia,OWID_ERE,2015.0,Africa,,,,,,,,,
-78,Estonia,EST,2015.0,Europe,Estonia,2021.0,Europe and Northern America,Estonia,2020.0,Europe,Estonia,2017.0,Europe and Central Asia
-79,Eswatini,SWZ,2015.0,Africa,Eswatini,2021.0,Sub-Saharan Africa,Eswatini,2020.0,Africa,Eswatini,2017.0,Sub-Saharan Africa
-80,Ethiopia,ETH,2015.0,Africa,Ethiopia,2021.0,Sub-Saharan Africa,Ethiopia,2020.0,Africa,Ethiopia,2017.0,Sub-Saharan Africa
-81,Faeroe Islands,FRO,2015.0,Europe,Faeroe Islands,2021.0,Europe and Northern America,,,,Faeroe Islands,2017.0,Europe and Central Asia
-82,Falkland Islands,FLK,2015.0,South America,Falkland Islands,2021.0,Latin America and Caribbean,,,,,,
-83,Fiji,FJI,2015.0,Oceania,Fiji,2021.0,Oceania,Fiji,2020.0,Western Pacific,Fiji,2017.0,East Asia and Pacific
-84,Finland,FIN,2015.0,Europe,Finland,2021.0,Europe and Northern America,Finland,2020.0,Europe,Finland,2017.0,Europe and Central Asia
-85,France,FRA,2015.0,Europe,France,2021.0,Europe and Northern America,France,2020.0,Europe,France,2017.0,Europe and Central Asia
-86,French Guiana,GUF,2015.0,South America,French Guiana,2021.0,Latin America and Caribbean,,,,,,
-87,French Polynesia,PYF,2015.0,Oceania,French Polynesia,2021.0,Oceania,,,,French Polynesia,2017.0,East Asia and Pacific
-88,French Southern Territories,ATF,2015.0,Antarctica,,,,,,,,,
-89,Gabon,GAB,2015.0,Africa,Gabon,2021.0,Sub-Saharan Africa,Gabon,2020.0,Africa,Gabon,2017.0,Sub-Saharan Africa
-90,Gambia,GMB,2015.0,Africa,Gambia,2021.0,Sub-Saharan Africa,Gambia,2020.0,Africa,Gambia,2017.0,Sub-Saharan Africa
-91,Georgia,GEO,2015.0,Asia,Georgia,2021.0,Northern Africa and Western Asia,Georgia,2020.0,Europe,Georgia,2017.0,Europe and Central Asia
-92,Germany,DEU,2015.0,Europe,Germany,2021.0,Europe and Northern America,Germany,2020.0,Europe,Germany,2017.0,Europe and Central Asia
-93,Ghana,GHA,2015.0,Africa,Ghana,2021.0,Sub-Saharan Africa,Ghana,2020.0,Africa,Ghana,2017.0,Sub-Saharan Africa
-94,Gibraltar,GIB,2015.0,Europe,Gibraltar,2021.0,Europe and Northern America,,,,Gibraltar,2017.0,Europe and Central Asia
-95,Greece,GRC,2015.0,Europe,Greece,2021.0,Europe and Northern America,Greece,2020.0,Europe,Greece,2017.0,Europe and Central Asia
-96,Greenland,GRL,2015.0,North America,Greenland,2021.0,Europe and Northern America,,,,Greenland,2017.0,Europe and Central Asia
-97,Grenada,GRD,2015.0,North America,Grenada,2021.0,Latin America and Caribbean,Grenada,2020.0,Americas,Grenada,2017.0,Latin America and Caribbean
-98,Guadeloupe,GLP,2015.0,North America,Guadeloupe,2021.0,Latin America and Caribbean,,,,,,
-99,Guam,GUM,2015.0,Oceania,Guam,2021.0,Oceania,,,,Guam,2017.0,East Asia and Pacific
-100,Guatemala,GTM,2015.0,North America,Guatemala,2021.0,Latin America and Caribbean,Guatemala,2020.0,Americas,Guatemala,2017.0,Latin America and Caribbean
-101,Guernsey,GGY,2015.0,Europe,,,,,,,,,
-102,Guinea,GIN,2015.0,Africa,Guinea,2021.0,Sub-Saharan Africa,Guinea,2020.0,Africa,Guinea,2017.0,Sub-Saharan Africa
-103,Guinea-Bissau,GNB,2015.0,Africa,Guinea-Bissau,2021.0,Sub-Saharan Africa,Guinea-Bissau,2020.0,Africa,Guinea-Bissau,2017.0,Sub-Saharan Africa
-104,Guyana,GUY,2015.0,South America,Guyana,2021.0,Latin America and Caribbean,Guyana,2020.0,Americas,Guyana,2017.0,Latin America and Caribbean
-105,Haiti,HTI,2015.0,North America,Haiti,2021.0,Latin America and Caribbean,Haiti,2020.0,Americas,Haiti,2017.0,Latin America and Caribbean
-106,Hanover,OWID_HAN,2015.0,Europe,,,,,,,,,
-107,Heard Island and McDonald Islands,HMD,2015.0,Antarctica,Heard Island and McDonald Islands,2021.0,Oceania,,,,,,
-108,Hesse Electoral,OWID_HSE,2015.0,Europe,,,,,,,,,
-109,Hesse Grand Ducal,OWID_HSG,2015.0,Europe,,,,,,,,,
-110,Honduras,HND,2015.0,North America,Honduras,2021.0,Latin America and Caribbean,Honduras,2020.0,Americas,Honduras,2017.0,Latin America and Caribbean
-111,Hong Kong,HKG,2015.0,Asia,Hong Kong,2021.0,Eastern and South-Eastern Asia,,,,Hong Kong,2017.0,East Asia and Pacific
-112,Hungary,HUN,2015.0,Europe,Hungary,2021.0,Europe and Northern America,Hungary,2020.0,Europe,Hungary,2017.0,Europe and Central Asia
-113,Iceland,ISL,2015.0,Europe,Iceland,2021.0,Europe and Northern America,Iceland,2020.0,Europe,Iceland,2017.0,Europe and Central Asia
-114,India,IND,2015.0,Asia,India,2021.0,Central and Southern Asia,India,2020.0,South-East Asia,India,2017.0,South Asia
-115,Indonesia,IDN,2015.0,Asia,Indonesia,2021.0,Eastern and South-Eastern Asia,Indonesia,2020.0,South-East Asia,Indonesia,2017.0,East Asia and Pacific
-116,Iran,IRN,2015.0,Asia,Iran,2021.0,Central and Southern Asia,Iran,2020.0,Eastern Mediterranean,Iran,2017.0,Middle East and North Africa
-117,Iraq,IRQ,2015.0,Asia,Iraq,2021.0,Northern Africa and Western Asia,Iraq,2020.0,Eastern Mediterranean,Iraq,2017.0,Middle East and North Africa
-118,Ireland,IRL,2015.0,Europe,Ireland,2021.0,Europe and Northern America,Ireland,2020.0,Europe,Ireland,2017.0,Europe and Central Asia
-119,Isle of Man,IMN,2015.0,Europe,Isle of Man,2021.0,Europe and Northern America,,,,Isle of Man,2017.0,Europe and Central Asia
-120,Israel,ISR,2015.0,Asia,Israel,2021.0,Northern Africa and Western Asia,Israel,2020.0,Europe,Israel,2017.0,Middle East and North Africa
-121,Italy,ITA,2015.0,Europe,Italy,2021.0,Europe and Northern America,Italy,2020.0,Europe,Italy,2017.0,Europe and Central Asia
-122,Jamaica,JAM,2015.0,North America,Jamaica,2021.0,Latin America and Caribbean,Jamaica,2020.0,Americas,Jamaica,2017.0,Latin America and Caribbean
-123,Japan,JPN,2015.0,Asia,Japan,2021.0,Eastern and South-Eastern Asia,Japan,2020.0,Western Pacific,Japan,2017.0,East Asia and Pacific
-124,Jersey,JEY,2015.0,Europe,,,,,,,,,
-125,Jordan,JOR,2015.0,Asia,Jordan,2021.0,Northern Africa and Western Asia,Jordan,2020.0,Eastern Mediterranean,Jordan,2017.0,Middle East and North Africa
-126,Kazakhstan,KAZ,2015.0,Asia,Kazakhstan,2021.0,Central and Southern Asia,Kazakhstan,2020.0,Europe,Kazakhstan,2017.0,Europe and Central Asia
-127,Kenya,KEN,2015.0,Africa,Kenya,2021.0,Sub-Saharan Africa,Kenya,2020.0,Africa,Kenya,2017.0,Sub-Saharan Africa
-128,Kiribati,KIR,2015.0,Oceania,Kiribati,2021.0,Oceania,Kiribati,2020.0,Western Pacific,Kiribati,2017.0,East Asia and Pacific
-129,Kosovo,OWID_KOS,2015.0,Europe,Kosovo,2021.0,Europe and Northern America,,,,Kosovo,2017.0,Europe and Central Asia
-130,Kuwait,KWT,2015.0,Asia,Kuwait,2021.0,Northern Africa and Western Asia,Kuwait,2020.0,Eastern Mediterranean,Kuwait,2017.0,Middle East and North Africa
-131,Kyrgyzstan,KGZ,2015.0,Asia,Kyrgyzstan,2021.0,Central and Southern Asia,Kyrgyzstan,2020.0,Europe,Kyrgyzstan,2017.0,Europe and Central Asia
-132,Laos,LAO,2015.0,Asia,Laos,2021.0,Eastern and South-Eastern Asia,Laos,2020.0,Western Pacific,Laos,2017.0,East Asia and Pacific
-133,Latvia,LVA,2015.0,Europe,Latvia,2021.0,Europe and Northern America,Latvia,2020.0,Europe,Latvia,2017.0,Europe and Central Asia
-134,Lebanon,LBN,2015.0,Asia,Lebanon,2021.0,Northern Africa and Western Asia,Lebanon,2020.0,Eastern Mediterranean,Lebanon,2017.0,Middle East and North Africa
-135,Lesotho,LSO,2015.0,Africa,Lesotho,2021.0,Sub-Saharan Africa,Lesotho,2020.0,Africa,Lesotho,2017.0,Sub-Saharan Africa
-136,Liberia,LBR,2015.0,Africa,Liberia,2021.0,Sub-Saharan Africa,Liberia,2020.0,Africa,Liberia,2017.0,Sub-Saharan Africa
-137,Libya,LBY,2015.0,Africa,Libya,2021.0,Northern Africa and Western Asia,Libya,2020.0,Eastern Mediterranean,Libya,2017.0,Middle East and North Africa
-138,Liechtenstein,LIE,2015.0,Europe,Liechtenstein,2021.0,Europe and Northern America,,,,Liechtenstein,2017.0,Europe and Central Asia
-139,Lithuania,LTU,2015.0,Europe,Lithuania,2021.0,Europe and Northern America,Lithuania,2020.0,Europe,Lithuania,2017.0,Europe and Central Asia
-140,Luxembourg,LUX,2015.0,Europe,Luxembourg,2021.0,Europe and Northern America,Luxembourg,2020.0,Europe,Luxembourg,2017.0,Europe and Central Asia
-141,Macao,MAC,2015.0,Asia,Macao,2021.0,Eastern and South-Eastern Asia,,,,Macao,2017.0,East Asia and Pacific
-142,Madagascar,MDG,2015.0,Africa,Madagascar,2021.0,Sub-Saharan Africa,Madagascar,2020.0,Africa,Madagascar,2017.0,Sub-Saharan Africa
-143,Malawi,MWI,2015.0,Africa,Malawi,2021.0,Sub-Saharan Africa,Malawi,2020.0,Africa,Malawi,2017.0,Sub-Saharan Africa
-144,Malaysia,MYS,2015.0,Asia,Malaysia,2021.0,Eastern and South-Eastern Asia,Malaysia,2020.0,Western Pacific,Malaysia,2017.0,East Asia and Pacific
-145,Maldives,MDV,2015.0,Asia,Maldives,2021.0,Central and Southern Asia,Maldives,2020.0,South-East Asia,Maldives,2017.0,South Asia
-146,Mali,MLI,2015.0,Africa,Mali,2021.0,Sub-Saharan Africa,Mali,2020.0,Africa,Mali,2017.0,Sub-Saharan Africa
-147,Malta,MLT,2015.0,Europe,Malta,2021.0,Europe and Northern America,Malta,2020.0,Europe,Malta,2017.0,Middle East and North Africa
-148,Marshall Islands,MHL,2015.0,Oceania,Marshall Islands,2021.0,Oceania,Marshall Islands,2020.0,Western Pacific,Marshall Islands,2017.0,East Asia and Pacific
-149,Martinique,MTQ,2015.0,North America,Martinique,2021.0,Latin America and Caribbean,,,,,,
-150,Mauritania,MRT,2015.0,Africa,Mauritania,2021.0,Sub-Saharan Africa,Mauritania,2020.0,Africa,Mauritania,2017.0,Sub-Saharan Africa
-151,Mauritius,MUS,2015.0,Africa,Mauritius,2021.0,Sub-Saharan Africa,Mauritius,2020.0,Africa,Mauritius,2017.0,Sub-Saharan Africa
-152,Mayotte,MYT,2015.0,Africa,Mayotte,2021.0,Sub-Saharan Africa,,,,,,
-153,Mecklenburg Schwerin,OWID_MEC,2015.0,Europe,,,,,,,,,
-154,Mexico,MEX,2015.0,North America,Mexico,2021.0,Latin America and Caribbean,Mexico,2020.0,Americas,Mexico,2017.0,Latin America and Caribbean
-155,Micronesia (country),FSM,2015.0,Oceania,,,,Micronesia (country),2020.0,Western Pacific,,,
-156,Modena,OWID_MOD,2015.0,Europe,,,,,,,,,
-157,Moldova,MDA,2015.0,Europe,Moldova,2021.0,Europe and Northern America,Moldova,2020.0,Europe,Moldova,2017.0,Europe and Central Asia
-158,Monaco,MCO,2015.0,Europe,Monaco,2021.0,Europe and Northern America,Monaco,2020.0,Europe,Monaco,2017.0,Europe and Central Asia
-159,Mongolia,MNG,2015.0,Asia,Mongolia,2021.0,Eastern and South-Eastern Asia,Mongolia,2020.0,Western Pacific,Mongolia,2017.0,East Asia and Pacific
-160,Montenegro,MNE,2015.0,Europe,Montenegro,2021.0,Europe and Northern America,Montenegro,2020.0,Europe,Montenegro,2017.0,Europe and Central Asia
-161,Montserrat,MSR,2015.0,North America,Montserrat,2021.0,Latin America and Caribbean,,,,,,
-162,Morocco,MAR,2015.0,Africa,Morocco,2021.0,Northern Africa and Western Asia,Morocco,2020.0,Eastern Mediterranean,Morocco,2017.0,Middle East and North Africa
-163,Mozambique,MOZ,2015.0,Africa,Mozambique,2021.0,Sub-Saharan Africa,Mozambique,2020.0,Africa,Mozambique,2017.0,Sub-Saharan Africa
-164,Myanmar,MMR,2015.0,Asia,Myanmar,2021.0,Eastern and South-Eastern Asia,Myanmar,2020.0,South-East Asia,Myanmar,2017.0,East Asia and Pacific
-165,Nagorno-Karabakh,OWID_NAG,2015.0,Asia,,,,,,,,,
-166,Namibia,NAM,2015.0,Africa,Namibia,2021.0,Sub-Saharan Africa,Namibia,2020.0,Africa,Namibia,2017.0,Sub-Saharan Africa
-167,Nauru,NRU,2015.0,Oceania,Nauru,2021.0,Oceania,Nauru,2020.0,Western Pacific,Nauru,2017.0,East Asia and Pacific
-168,Nepal,NPL,2015.0,Asia,Nepal,2021.0,Central and Southern Asia,Nepal,2020.0,South-East Asia,Nepal,2017.0,South Asia
-169,Netherlands,NLD,2015.0,Europe,Netherlands,2021.0,Europe and Northern America,Netherlands,2020.0,Europe,Netherlands,2017.0,Europe and Central Asia
-170,Netherlands Antilles,ANT,2015.0,North America,,,,,,,,,
-171,New Caledonia,NCL,2015.0,Oceania,New Caledonia,2021.0,Oceania,,,,New Caledonia,2017.0,East Asia and Pacific
-172,New Zealand,NZL,2015.0,Oceania,New Zealand,2021.0,Oceania,New Zealand,2020.0,Western Pacific,New Zealand,2017.0,East Asia and Pacific
-173,Nicaragua,NIC,2015.0,North America,Nicaragua,2021.0,Latin America and Caribbean,Nicaragua,2020.0,Americas,Nicaragua,2017.0,Latin America and Caribbean
-174,Niger,NER,2015.0,Africa,Niger,2021.0,Sub-Saharan Africa,Niger,2020.0,Africa,Niger,2017.0,Sub-Saharan Africa
-175,Nigeria,NGA,2015.0,Africa,Nigeria,2021.0,Sub-Saharan Africa,Nigeria,2020.0,Africa,Nigeria,2017.0,Sub-Saharan Africa
-176,Niue,NIU,2015.0,Oceania,Niue,2021.0,Oceania,Niue,2020.0,Western Pacific,,,
-177,Norfolk Island,NFK,2015.0,Oceania,Norfolk Island,2021.0,Oceania,,,,,,
-178,North Korea,PRK,2015.0,Asia,North Korea,2021.0,Eastern and South-Eastern Asia,North Korea,2020.0,South-East Asia,North Korea,2017.0,East Asia and Pacific
-179,North Macedonia,MKD,2015.0,Europe,North Macedonia,2021.0,Europe and Northern America,North Macedonia,2020.0,Europe,North Macedonia,2017.0,Europe and Central Asia
-180,Northern Cyprus,OWID_CYN,2015.0,Asia,,,,,,,,,
-181,Northern Mariana Islands,MNP,2015.0,Oceania,Northern Mariana Islands,2021.0,Oceania,,,,Northern Mariana Islands,2017.0,East Asia and Pacific
-182,Norway,NOR,2015.0,Europe,Norway,2021.0,Europe and Northern America,Norway,2020.0,Europe,Norway,2017.0,Europe and Central Asia
-183,Oman,OMN,2015.0,Asia,Oman,2021.0,Northern Africa and Western Asia,Oman,2020.0,Eastern Mediterranean,Oman,2017.0,Middle East and North Africa
-184,Pakistan,PAK,2015.0,Asia,Pakistan,2021.0,Central and Southern Asia,Pakistan,2020.0,Eastern Mediterranean,Pakistan,2017.0,South Asia
-185,Palau,PLW,2015.0,Oceania,Palau,2021.0,Oceania,Palau,2020.0,Western Pacific,Palau,2017.0,East Asia and Pacific
-186,Palestine,PSE,2015.0,Asia,Palestine,2021.0,Northern Africa and Western Asia,,,,Palestine,2017.0,Middle East and North Africa
-187,Panama,PAN,2015.0,North America,Panama,2021.0,Latin America and Caribbean,Panama,2020.0,Americas,Panama,2017.0,Latin America and Caribbean
-188,Papua New Guinea,PNG,2015.0,Oceania,Papua New Guinea,2021.0,Oceania,Papua New Guinea,2020.0,Western Pacific,Papua New Guinea,2017.0,East Asia and Pacific
-189,Paraguay,PRY,2015.0,South America,Paraguay,2021.0,Latin America and Caribbean,Paraguay,2020.0,Americas,Paraguay,2017.0,Latin America and Caribbean
-190,Parma,OWID_PMA,2015.0,Europe,,,,,,,,,
-191,Peru,PER,2015.0,South America,Peru,2021.0,Latin America and Caribbean,Peru,2020.0,Americas,Peru,2017.0,Latin America and Caribbean
-192,Philippines,PHL,2015.0,Asia,Philippines,2021.0,Eastern and South-Eastern Asia,Philippines,2020.0,Western Pacific,Philippines,2017.0,East Asia and Pacific
-193,Pitcairn,PCN,2015.0,Oceania,Pitcairn,2021.0,Oceania,,,,,,
-194,Poland,POL,2015.0,Europe,Poland,2021.0,Europe and Northern America,Poland,2020.0,Europe,Poland,2017.0,Europe and Central Asia
-195,Portugal,PRT,2015.0,Europe,Portugal,2021.0,Europe and Northern America,Portugal,2020.0,Europe,Portugal,2017.0,Europe and Central Asia
-196,Puerto Rico,PRI,2015.0,North America,Puerto Rico,2021.0,Latin America and Caribbean,,,,Puerto Rico,2017.0,Latin America and Caribbean
-197,Qatar,QAT,2015.0,Asia,Qatar,2021.0,Northern Africa and Western Asia,Qatar,2020.0,Eastern Mediterranean,Qatar,2017.0,Middle East and North Africa
-198,Republic of Vietnam,OWID_RVN,2015.0,Asia,,,,,,,,,
-199,Reunion,REU,2015.0,Africa,Reunion,2021.0,Sub-Saharan Africa,,,,,,
-200,Romania,ROU,2015.0,Europe,Romania,2021.0,Europe and Northern America,Romania,2020.0,Europe,Romania,2017.0,Europe and Central Asia
-201,Russia,RUS,2015.0,Europe,Russia,2021.0,Europe and Northern America,Russia,2020.0,Europe,Russia,2017.0,Europe and Central Asia
-202,Rwanda,RWA,2015.0,Africa,Rwanda,2021.0,Sub-Saharan Africa,Rwanda,2020.0,Africa,Rwanda,2017.0,Sub-Saharan Africa
-203,Saint Barthélemy,BLM,2015.0,North America,,,,,,,,,
-204,Saint Helena,SHN,2015.0,Africa,,,,,,,,,
-205,Saint Kitts and Nevis,KNA,2015.0,North America,Saint Kitts and Nevis,2021.0,Latin America and Caribbean,Saint Kitts and Nevis,2020.0,Americas,Saint Kitts and Nevis,2017.0,Latin America and Caribbean
-206,Saint Lucia,LCA,2015.0,North America,Saint Lucia,2021.0,Latin America and Caribbean,Saint Lucia,2020.0,Americas,Saint Lucia,2017.0,Latin America and Caribbean
-207,Saint Martin (French part),MAF,2015.0,North America,Saint Martin (French part),2021.0,Latin America and Caribbean,,,,Saint Martin (French part),2017.0,Latin America and Caribbean
-208,Saint Pierre and Miquelon,SPM,2015.0,North America,,,,,,,,,
-209,Saint Vincent and the Grenadines,VCT,2015.0,North America,Saint Vincent and the Grenadines,2021.0,Latin America and Caribbean,Saint Vincent and the Grenadines,2020.0,Americas,Saint Vincent and the Grenadines,2017.0,Latin America and Caribbean
-210,Samoa,WSM,2015.0,Oceania,Samoa,2021.0,Oceania,Samoa,2020.0,Western Pacific,Samoa,2017.0,East Asia and Pacific
-211,San Marino,SMR,2015.0,Europe,San Marino,2021.0,Europe and Northern America,San Marino,2020.0,Europe,San Marino,2017.0,Europe and Central Asia
-212,Sao Tome and Principe,STP,2015.0,Africa,Sao Tome and Principe,2021.0,Sub-Saharan Africa,Sao Tome and Principe,2020.0,Africa,Sao Tome and Principe,2017.0,Sub-Saharan Africa
-213,Saudi Arabia,SAU,2015.0,Asia,Saudi Arabia,2021.0,Northern Africa and Western Asia,Saudi Arabia,2020.0,Eastern Mediterranean,Saudi Arabia,2017.0,Middle East and North Africa
-214,Saxony,OWID_SAX,2015.0,Europe,,,,,,,,,
-215,Senegal,SEN,2015.0,Africa,Senegal,2021.0,Sub-Saharan Africa,Senegal,2020.0,Africa,Senegal,2017.0,Sub-Saharan Africa
-216,Serbia,SRB,2015.0,Europe,Serbia,2021.0,Europe and Northern America,Serbia,2020.0,Europe,Serbia,2017.0,Europe and Central Asia
-217,Serbia and Montenegro,OWID_SRM,2015.0,Europe,,,,,,,,,
-218,Serbia excluding Kosovo,OWID_SEK,2015.0,Europe,,,,,,,,,
-219,Seychelles,SYC,2015.0,Africa,Seychelles,2021.0,Sub-Saharan Africa,Seychelles,2020.0,Africa,Seychelles,2017.0,Sub-Saharan Africa
-220,Sierra Leone,SLE,2015.0,Africa,Sierra Leone,2021.0,Sub-Saharan Africa,Sierra Leone,2020.0,Africa,Sierra Leone,2017.0,Sub-Saharan Africa
-221,Singapore,SGP,2015.0,Asia,Singapore,2021.0,Eastern and South-Eastern Asia,Singapore,2020.0,Western Pacific,Singapore,2017.0,East Asia and Pacific
-222,Sint Maarten (Dutch part),SXM,2015.0,North America,Sint Maarten (Dutch part),2021.0,Latin America and Caribbean,,,,Sint Maarten (Dutch part),2017.0,Latin America and Caribbean
-223,Slovakia,SVK,2015.0,Europe,Slovakia,2021.0,Europe and Northern America,Slovakia,2020.0,Europe,Slovakia,2017.0,Europe and Central Asia
-224,Slovenia,SVN,2015.0,Europe,Slovenia,2021.0,Europe and Northern America,Slovenia,2020.0,Europe,Slovenia,2017.0,Europe and Central Asia
-225,Solomon Islands,SLB,2015.0,Oceania,Solomon Islands,2021.0,Oceania,Solomon Islands,2020.0,Western Pacific,Solomon Islands,2017.0,East Asia and Pacific
-226,Somalia,SOM,2015.0,Africa,Somalia,2021.0,Sub-Saharan Africa,Somalia,2020.0,Eastern Mediterranean,Somalia,2017.0,Sub-Saharan Africa
-227,Somaliland,OWID_SML,2015.0,Africa,,,,,,,,,
-228,South Africa,ZAF,2015.0,Africa,South Africa,2021.0,Sub-Saharan Africa,South Africa,2020.0,Africa,South Africa,2017.0,Sub-Saharan Africa
-229,South Georgia and the South Sandwich Islands,SGS,2015.0,South America,South Georgia and the South Sandwich Islands,2021.0,Latin America and Caribbean,,,,,,
-230,South Korea,KOR,2015.0,Asia,South Korea,2021.0,Eastern and South-Eastern Asia,South Korea,2020.0,Western Pacific,South Korea,2017.0,East Asia and Pacific
-231,South Ossetia,OWID_SOS,2015.0,Asia,,,,,,,,,
-232,South Sudan,SSD,2015.0,Africa,South Sudan,2021.0,Sub-Saharan Africa,South Sudan,2020.0,Africa,South Sudan,2017.0,Sub-Saharan Africa
-233,Spain,ESP,2015.0,Europe,Spain,2021.0,Europe and Northern America,Spain,2020.0,Europe,Spain,2017.0,Europe and Central Asia
-234,Sri Lanka,LKA,2015.0,Asia,Sri Lanka,2021.0,Central and Southern Asia,Sri Lanka,2020.0,South-East Asia,Sri Lanka,2017.0,South Asia
-235,Sudan,SDN,2015.0,Africa,Sudan,2021.0,Northern Africa and Western Asia,Sudan,2020.0,Eastern Mediterranean,Sudan,2017.0,Sub-Saharan Africa
-236,Suriname,SUR,2015.0,South America,Suriname,2021.0,Latin America and Caribbean,Suriname,2020.0,Americas,Suriname,2017.0,Latin America and Caribbean
-237,Svalbard and Jan Mayen,SJM,2015.0,Europe,,,,,,,,,
-238,Sweden,SWE,2015.0,Europe,Sweden,2021.0,Europe and Northern America,Sweden,2020.0,Europe,Sweden,2017.0,Europe and Central Asia
-239,Switzerland,CHE,2015.0,Europe,Switzerland,2021.0,Europe and Northern America,Switzerland,2020.0,Europe,Switzerland,2017.0,Europe and Central Asia
-240,Syria,SYR,2015.0,Asia,Syria,2021.0,Northern Africa and Western Asia,Syria,2020.0,Eastern Mediterranean,Syria,2017.0,Middle East and North Africa
-241,Taiwan,TWN,2015.0,Asia,,,,,,,,,
-242,Tajikistan,TJK,2015.0,Asia,Tajikistan,2021.0,Central and Southern Asia,Tajikistan,2020.0,Europe,Tajikistan,2017.0,Europe and Central Asia
-243,Tanzania,TZA,2015.0,Africa,Tanzania,2021.0,Sub-Saharan Africa,Tanzania,2020.0,Africa,Tanzania,2017.0,Sub-Saharan Africa
-244,Thailand,THA,2015.0,Asia,Thailand,2021.0,Eastern and South-Eastern Asia,Thailand,2020.0,South-East Asia,Thailand,2017.0,East Asia and Pacific
-245,Timor,TLS,2015.0,Asia,Timor,2021.0,Eastern and South-Eastern Asia,Timor,2020.0,South-East Asia,Timor,2017.0,East Asia and Pacific
-246,Togo,TGO,2015.0,Africa,Togo,2021.0,Sub-Saharan Africa,Togo,2020.0,Africa,Togo,2017.0,Sub-Saharan Africa
-247,Tokelau,TKL,2015.0,Oceania,Tokelau,2021.0,Oceania,,,,,,
-248,Tonga,TON,2015.0,Oceania,Tonga,2021.0,Oceania,Tonga,2020.0,Western Pacific,Tonga,2017.0,East Asia and Pacific
-249,Transnistria,OWID_TRS,2015.0,Europe,,,,,,,,,
-250,Trinidad and Tobago,TTO,2015.0,North America,Trinidad and Tobago,2021.0,Latin America and Caribbean,Trinidad and Tobago,2020.0,Americas,Trinidad and Tobago,2017.0,Latin America and Caribbean
-251,Tunisia,TUN,2015.0,Africa,Tunisia,2021.0,Northern Africa and Western Asia,Tunisia,2020.0,Eastern Mediterranean,Tunisia,2017.0,Middle East and North Africa
-252,Turkey,TUR,2015.0,Asia,Turkey,2021.0,Northern Africa and Western Asia,Turkey,2020.0,Europe,Turkey,2017.0,Europe and Central Asia
-253,Turkmenistan,TKM,2015.0,Asia,Turkmenistan,2021.0,Central and Southern Asia,Turkmenistan,2020.0,Europe,Turkmenistan,2017.0,Europe and Central Asia
-254,Turks and Caicos Islands,TCA,2015.0,North America,Turks and Caicos Islands,2021.0,Latin America and Caribbean,,,,Turks and Caicos Islands,2017.0,Latin America and Caribbean
-255,Tuscany,OWID_TUS,2015.0,Europe,,,,,,,,,
-256,Tuvalu,TUV,2015.0,Oceania,Tuvalu,2021.0,Oceania,Tuvalu,2020.0,Western Pacific,Tuvalu,2017.0,East Asia and Pacific
-257,Two Sicilies,OWID_SIC,2015.0,Europe,,,,,,,,,
-258,USSR,OWID_USS,2015.0,Europe,,,,,,,,,
-259,Uganda,UGA,2015.0,Africa,Uganda,2021.0,Sub-Saharan Africa,Uganda,2020.0,Africa,Uganda,2017.0,Sub-Saharan Africa
-260,Ukraine,UKR,2015.0,Europe,Ukraine,2021.0,Europe and Northern America,Ukraine,2020.0,Europe,Ukraine,2017.0,Europe and Central Asia
-261,United Arab Emirates,ARE,2015.0,Asia,United Arab Emirates,2021.0,Northern Africa and Western Asia,United Arab Emirates,2020.0,Eastern Mediterranean,United Arab Emirates,2017.0,Middle East and North Africa
-262,United Kingdom,GBR,2015.0,Europe,United Kingdom,2021.0,Europe and Northern America,United Kingdom,2020.0,Europe,United Kingdom,2017.0,Europe and Central Asia
-263,United Korea,OWID_KRU,2015.0,Asia,,,,,,,,,
-264,United States,USA,2015.0,North America,United States,2021.0,Europe and Northern America,United States,2020.0,Americas,United States,2017.0,North America
-265,United States Minor Outlying Islands,UMI,2015.0,Oceania,,,,,,,,,
-266,United States Virgin Islands,VIR,2015.0,North America,United States Virgin Islands,2021.0,Latin America and Caribbean,,,,United States Virgin Islands,2017.0,Latin America and Caribbean
-267,Uruguay,URY,2015.0,South America,Uruguay,2021.0,Latin America and Caribbean,Uruguay,2020.0,Americas,Uruguay,2017.0,Latin America and Caribbean
-268,Uzbekistan,UZB,2015.0,Asia,Uzbekistan,2021.0,Central and Southern Asia,Uzbekistan,2020.0,Europe,Uzbekistan,2017.0,Europe and Central Asia
-269,Vanuatu,VUT,2015.0,Oceania,Vanuatu,2021.0,Oceania,Vanuatu,2020.0,Western Pacific,Vanuatu,2017.0,East Asia and Pacific
-270,Vatican,VAT,2015.0,Europe,,,,,,,,,
-271,Venezuela,VEN,2015.0,South America,Venezuela,2021.0,Latin America and Caribbean,Venezuela,2020.0,Americas,Venezuela,2017.0,Latin America and Caribbean
-272,Vietnam,VNM,2015.0,Asia,Vietnam,2021.0,Eastern and South-Eastern Asia,Vietnam,2020.0,Western Pacific,Vietnam,2017.0,East Asia and Pacific
-273,Wallis and Futuna,WLF,2015.0,Oceania,Wallis and Futuna,2021.0,Oceania,,,,,,
-274,West Germany,OWID_GFR,2015.0,Europe,,,,,,,,,
-275,Western Sahara,ESH,2015.0,Africa,Western Sahara,2021.0,Northern Africa and Western Asia,,,,,,
-276,Wuerttemburg,OWID_WRT,2015.0,Europe,,,,,,,,,
-277,Yemen,YEM,2015.0,Asia,Yemen,2021.0,Northern Africa and Western Asia,Yemen,2020.0,Eastern Mediterranean,Yemen,2017.0,Middle East and North Africa
-278,Yemen Arab Republic,OWID_YAR,2015.0,Asia,,,,,,,,,
-279,Yemen People's Republic,OWID_YPR,2015.0,Asia,,,,,,,,,
-280,Yugoslavia,OWID_YGS,2015.0,Europe,,,,,,,,,
-281,Zambia,ZMB,2015.0,Africa,Zambia,2021.0,Sub-Saharan Africa,Zambia,2020.0,Africa,Zambia,2017.0,Sub-Saharan Africa
-282,Zanzibar,OWID_ZAN,2015.0,Africa,,,,,,,,,
-283,Zimbabwe,ZWE,2015.0,Africa,Zimbabwe,2021.0,Sub-Saharan Africa,Zimbabwe,2020.0,Africa,Zimbabwe,2017.0,Sub-Saharan Africa
-284,Åland Islands,ALA,2015.0,Europe,,,,,,,,,
-285,,,,,Aland Islands,2021.0,Europe and Northern America,,,,Micronesia,2017.0,East Asia and Pacific
-286,,,,,Cocos (Keeling) Islands,2021.0,Oceania,,,,Micronesia,2017.0,East Asia and Pacific
-287,,,,,Micronesia,2021.0,Oceania,,,,Micronesia,2017.0,East Asia and Pacific
+﻿iso_code,country,region_OWID,region_UN,region_WHO,region_WB
+ABW,Aruba,North America,Latin America and Caribbean,,Latin America and Caribbean
+AFG,Afghanistan,Asia,Central and Southern Asia,Eastern Mediterranean,South Asia
+AGO,Angola,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+AIA,Anguilla,North America,Latin America and Caribbean,,
+ALA,Aland Islands,Europe,Europe and Northern America,,
+ALB,Albania,Europe,Europe and Northern America,Europe,Europe and Central Asia
+AND,Andorra,Europe,Europe and Northern America,Europe,Europe and Central Asia
+ANT,Netherlands Antilles,North America,,,
+ARE,United Arab Emirates,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+ARG,Argentina,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+ARM,Armenia,Asia,Northern Africa and Western Asia,Europe,Europe and Central Asia
+ASM,American Samoa,Oceania,Oceania,,East Asia and Pacific
+ATA,Antarctica,Antarctica,,,
+ATF,French Southern Territories,Antarctica,,,
+ATG,Antigua and Barbuda,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+AUS,Australia,Oceania,Oceania,Western Pacific,East Asia and Pacific
+AUT,Austria,Europe,Europe and Northern America,Europe,Europe and Central Asia
+AZE,Azerbaijan,Asia,Northern Africa and Western Asia,Europe,Europe and Central Asia
+BDI,Burundi,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+BEL,Belgium,Europe,Europe and Northern America,Europe,Europe and Central Asia
+BEN,Benin,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+BES,Bonaire Sint Eustatius and Saba,North America,Latin America and Caribbean,,
+BFA,Burkina Faso,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+BGD,Bangladesh,Asia,Central and Southern Asia,South-East Asia,South Asia
+BGR,Bulgaria,Europe,Europe and Northern America,Europe,Europe and Central Asia
+BHR,Bahrain,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+BHS,Bahamas,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+BIH,Bosnia and Herzegovina,Europe,Europe and Northern America,Europe,Europe and Central Asia
+BLM,Saint BarthÃ©lemy,North America,,,
+BLR,Belarus,Europe,Europe and Northern America,Europe,Europe and Central Asia
+BLZ,Belize,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+BMU,Bermuda,North America,Europe and Northern America,,North America
+BOL,Bolivia,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+BRA,Brazil,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+BRB,Barbados,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+BRN,Brunei,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+BTN,Bhutan,Asia,Central and Southern Asia,South-East Asia,South Asia
+BVT,Bouvet Island,Antarctica,,,
+BWA,Botswana,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+CAF,Central African Republic,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+CAN,Canada,North America,Europe and Northern America,Americas,North America
+CCK,Cocos Islands,Asia,Oceania,,
+CHE,Switzerland,Europe,Europe and Northern America,Europe,Europe and Central Asia
+CHL,Chile,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+CHN,China,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+CIV,Cote d'Ivoire,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+CMR,Cameroon,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+COD,Democratic Republic of Congo,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+COG,Congo,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+COK,Cook Islands,Oceania,Oceania,Western Pacific,
+COL,Colombia,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+COM,Comoros,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+CPV,Cape Verde,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+CRI,Costa Rica,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+CUB,Cuba,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+CUW,Curacao,North America,Latin America and Caribbean,,Latin America and Caribbean
+CXR,Christmas Island,Asia,Oceania,,
+CYM,Cayman Islands,North America,Latin America and Caribbean,,Latin America and Caribbean
+CYP,Cyprus,Europe,Northern Africa and Western Asia,Europe,Europe and Central Asia
+CZE,Czechia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+DEU,Germany,Europe,Europe and Northern America,Europe,Europe and Central Asia
+DJI,Djibouti,Africa,Middle East and North Africa,Eastern Mediterranean,Middle East and North Africa
+DMA,Dominica,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+DNK,Denmark,Europe,Europe and Northern America,Europe,Europe and Central Asia
+DOM,Dominican Republic,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+DZA,Algeria,Africa,Northern Africa and Western Asia,Africa,Middle East and North Africa
+ECU,Ecuador,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+EGY,Egypt,Africa,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+ERI,Eritrea,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+ESH,Western Sahara,Africa,Northern Africa and Western Asia,,
+ESP,Spain,Europe,Europe and Northern America,Europe,Europe and Central Asia
+EST,Estonia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+ETH,Ethiopia,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+FIN,Finland,Europe,Europe and Northern America,Europe,Europe and Central Asia
+FJI,Fiji,Oceania,Oceania,Western Pacific,East Asia and Pacific
+FLK,Falkland Islands,South America,Latin America and Caribbean,,
+FRA,France,Europe,Europe and Northern America,Europe,Europe and Central Asia
+FRO,Faeroe Islands,Europe,Europe and Northern America,,Europe and Central Asia
+FSM,Micronesia (country),Oceania,Oceania,Western Pacific,East Asia and Pacific
+GAB,Gabon,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+GBR,United Kingdom,Europe,Europe and Northern America,Europe,Europe and Central Asia
+GEO,Georgia,Asia,Northern Africa and Western Asia,Europe,Europe and Central Asia
+GGY,Guernsey,Europe,,,
+GHA,Ghana,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+GIB,Gibraltar,Europe,Europe and Northern America,,Europe and Central Asia
+GIN,Guinea,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+GLP,Guadeloupe,North America,Latin America and Caribbean,,
+GMB,Gambia,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+GNB,Guinea-Bissau,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+GNQ,Equatorial Guinea,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+GRC,Greece,Europe,Europe and Northern America,Europe,Europe and Central Asia
+GRD,Grenada,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+GRL,Greenland,North America,Europe and Northern America,,Europe and Central Asia
+GTM,Guatemala,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+GUF,French Guiana,South America,Latin America and Caribbean,,
+GUM,Guam,Oceania,Oceania,,East Asia and Pacific
+GUY,Guyana,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+HKG,Hong Kong,Asia,Eastern and South-Eastern Asia,,East Asia and Pacific
+HMD,Heard Island and McDonald Islands,Antarctica,Oceania,,
+HND,Honduras,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+HRV,Croatia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+HTI,Haiti,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+HUN,Hungary,Europe,Europe and Northern America,Europe,Europe and Central Asia
+IDN,Indonesia,Asia,Eastern and South-Eastern Asia,South-East Asia,East Asia and Pacific
+IMN,Isle of Man,Europe,Europe and Northern America,,Europe and Central Asia
+IND,India,Asia,Central and Southern Asia,South-East Asia,South Asia
+IOT,British Indian Ocean Territory,Asia,,,
+IRL,Ireland,Europe,Europe and Northern America,Europe,Europe and Central Asia
+IRN,Iran,Asia,Central and Southern Asia,Eastern Mediterranean,Middle East and North Africa
+IRQ,Iraq,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+ISL,Iceland,Europe,Europe and Northern America,Europe,Europe and Central Asia
+ISR,Israel,Asia,Northern Africa and Western Asia,Europe,Middle East and North Africa
+ITA,Italy,Europe,Europe and Northern America,Europe,Europe and Central Asia
+JAM,Jamaica,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+JEY,Jersey,Europe,,,
+JOR,Jordan,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+JPN,Japan,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+KAZ,Kazakhstan,Asia,Central and Southern Asia,Europe,Europe and Central Asia
+KEN,Kenya,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+KGZ,Kyrgyzstan,Asia,Central and Southern Asia,Europe,Europe and Central Asia
+KHM,Cambodia,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+KIR,Kiribati,Oceania,Oceania,Western Pacific,East Asia and Pacific
+KNA,Saint Kitts and Nevis,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+KOR,South Korea,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+KWT,Kuwait,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+LAO,Laos,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+LBN,Lebanon,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+LBR,Liberia,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+LBY,Libya,Africa,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+LCA,Saint Lucia,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+LIE,Liechtenstein,Europe,Europe and Northern America,,Europe and Central Asia
+LKA,Sri Lanka,Asia,Central and Southern Asia,South-East Asia,South Asia
+LSO,Lesotho,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+LTU,Lithuania,Europe,Europe and Northern America,Europe,Europe and Central Asia
+LUX,Luxembourg,Europe,Europe and Northern America,Europe,Europe and Central Asia
+LVA,Latvia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+MAC,Macao,Asia,Eastern and South-Eastern Asia,,East Asia and Pacific
+MAF,Saint Martin (French part),North America,Latin America and Caribbean,,Latin America and Caribbean
+MAR,Morocco,Africa,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+MCO,Monaco,Europe,Europe and Northern America,Europe,Europe and Central Asia
+MDA,Moldova,Europe,Europe and Northern America,Europe,Europe and Central Asia
+MDG,Madagascar,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+MDV,Maldives,Asia,Central and Southern Asia,South-East Asia,South Asia
+MEX,Mexico,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+MHL,Marshall Islands,Oceania,Oceania,Western Pacific,East Asia and Pacific
+MKD,North Macedonia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+MLI,Mali,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+MLT,Malta,Europe,Europe and Northern America,Europe,Middle East and North Africa
+MMR,Myanmar,Asia,Eastern and South-Eastern Asia,South-East Asia,East Asia and Pacific
+MNE,Montenegro,Europe,Europe and Northern America,Europe,Europe and Central Asia
+MNG,Mongolia,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+MNP,Northern Mariana Islands,Oceania,Oceania,,East Asia and Pacific
+MOZ,Mozambique,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+MRT,Mauritania,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+MSR,Montserrat,North America,Latin America and Caribbean,,
+MTQ,Martinique,North America,Latin America and Caribbean,,
+MUS,Mauritius,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+MWI,Malawi,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+MYS,Malaysia,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+MYT,Mayotte,Africa,Sub-Saharan Africa,,
+NAM,Namibia,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+NCL,New Caledonia,Oceania,Oceania,,East Asia and Pacific
+NER,Niger,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+NFK,Norfolk Island,Oceania,Oceania,,
+NGA,Nigeria,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+NIC,Nicaragua,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+NIU,Niue,Oceania,Oceania,Western Pacific,
+NLD,Netherlands,Europe,Europe and Northern America,Europe,Europe and Central Asia
+NOR,Norway,Europe,Europe and Northern America,Europe,Europe and Central Asia
+NPL,Nepal,Asia,Central and Southern Asia,South-East Asia,South Asia
+NRU,Nauru,Oceania,Oceania,Western Pacific,East Asia and Pacific
+NZL,New Zealand,Oceania,Oceania,Western Pacific,East Asia and Pacific
+OMN,Oman,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+OWID_ABK,Abkhazia,Asia,,,
+OWID_AKD,Akrotiri and Dhekelia,Asia,,,
+OWID_AUH,Austria-Hungary,Europe,,,
+OWID_BAD,Baden,Europe,,,
+OWID_BAV,Bavaria,Europe,,,
+OWID_CIS,Channel Islands,Europe,Europe and Northern America,,Europe and Central Asia
+OWID_CYN,Northern Cyprus,Asia,,,
+OWID_CZS,Czechoslovakia,Europe,,,
+OWID_ERE,Eritrea and Ethiopia,Africa,,,
+OWID_GDR,East Germany,Europe,,,
+OWID_GFR,West Germany,Europe,,,
+OWID_HAN,Hanover,Europe,,,
+OWID_HSE,Hesse Electoral,Europe,,,
+OWID_HSG,Hesse Grand Ducal,Europe,,,
+OWID_KOS,Kosovo,Europe,Europe and Northern America,,Europe and Central Asia
+OWID_KRU,United Korea,Asia,,,
+OWID_MEC,Mecklenburg Schwerin,Europe,,,
+OWID_MOD,Modena,Europe,,,
+OWID_NAG,Nagorno-Karabakh,Asia,,,
+OWID_PMA,Parma,Europe,,,
+OWID_RVN,Republic of Vietnam,Asia,,,
+OWID_SAX,Saxony,Europe,,,
+OWID_SEK,Serbia excluding Kosovo,Europe,,,
+OWID_SIC,Two Sicilies,Europe,,,
+OWID_SML,Somaliland,Africa,,,
+OWID_SOS,South Ossetia,Asia,,,
+OWID_SRM,Serbia and Montenegro,Europe,,,
+OWID_TRS,Transnistria,Europe,,,
+OWID_TUS,Tuscany,Europe,,,
+OWID_USS,USSR,Europe,,,
+OWID_WRT,Wuerttemburg,Europe,,,
+OWID_YAR,Yemen Arab Republic,Asia,,,
+OWID_YGS,Yugoslavia,Europe,,,
+OWID_YPR,Yemen People's Republic,Asia,,,
+OWID_ZAN,Zanzibar,Africa,,,
+PAK,Pakistan,Asia,Central and Southern Asia,Eastern Mediterranean,South Asia
+PAN,Panama,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+PCN,Pitcairn,Oceania,Oceania,,
+PER,Peru,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+PHL,Philippines,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+PLW,Palau,Oceania,Oceania,Western Pacific,East Asia and Pacific
+PNG,Papua New Guinea,Oceania,Oceania,Western Pacific,East Asia and Pacific
+POL,Poland,Europe,Europe and Northern America,Europe,Europe and Central Asia
+PRI,Puerto Rico,North America,Latin America and Caribbean,,Latin America and Caribbean
+PRK,North Korea,Asia,Eastern and South-Eastern Asia,South-East Asia,East Asia and Pacific
+PRT,Portugal,Europe,Europe and Northern America,Europe,Europe and Central Asia
+PRY,Paraguay,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+PSE,Palestine,Asia,Northern Africa and Western Asia,,Middle East and North Africa
+PYF,French Polynesia,Oceania,Oceania,,East Asia and Pacific
+QAT,Qatar,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+REU,Reunion,Africa,Sub-Saharan Africa,,
+ROU,Romania,Europe,Europe and Northern America,Europe,Europe and Central Asia
+RUS,Russia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+RWA,Rwanda,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+SAU,Saudi Arabia,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+SDN,Sudan,Africa,Northern Africa and Western Asia,Eastern Mediterranean,Sub-Saharan Africa
+SEN,Senegal,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+SGP,Singapore,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+SGS,South Georgia and the South Sandwich Islands,South America,Latin America and Caribbean,,
+SHN,Saint Helena,Africa,,,
+SJM,Svalbard and Jan Mayen,Europe,,,
+SLB,Solomon Islands,Oceania,Oceania,Western Pacific,East Asia and Pacific
+SLE,Sierra Leone,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+SLV,El Salvador,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+SMR,San Marino,Europe,Europe and Northern America,Europe,Europe and Central Asia
+SOM,Somalia,Africa,Sub-Saharan Africa,Eastern Mediterranean,Sub-Saharan Africa
+SPM,Saint Pierre and Miquelon,North America,,,
+SRB,Serbia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+SSD,South Sudan,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+STP,Sao Tome and Principe,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+SUR,Suriname,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+SVK,Slovakia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+SVN,Slovenia,Europe,Europe and Northern America,Europe,Europe and Central Asia
+SWE,Sweden,Europe,Europe and Northern America,Europe,Europe and Central Asia
+SWZ,Eswatini,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+SXM,Sint Maarten (Dutch part),North America,Latin America and Caribbean,,Latin America and Caribbean
+SYC,Seychelles,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+SYR,Syria,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+TCA,Turks and Caicos Islands,North America,Latin America and Caribbean,,Latin America and Caribbean
+TCD,Chad,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+TGO,Togo,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+THA,Thailand,Asia,Eastern and South-Eastern Asia,South-East Asia,East Asia and Pacific
+TJK,Tajikistan,Asia,Central and Southern Asia,Europe,Europe and Central Asia
+TKL,Tokelau,Oceania,Oceania,,
+TKM,Turkmenistan,Asia,Central and Southern Asia,Europe,Europe and Central Asia
+TLS,Timor,Asia,Eastern and South-Eastern Asia,South-East Asia,East Asia and Pacific
+TON,Tonga,Oceania,Oceania,Western Pacific,East Asia and Pacific
+TTO,Trinidad and Tobago,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+TUN,Tunisia,Africa,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+TUR,Turkey,Asia,Northern Africa and Western Asia,Europe,Europe and Central Asia
+TUV,Tuvalu,Oceania,Oceania,Western Pacific,East Asia and Pacific
+TWN,Taiwan,Asia,,,
+TZA,Tanzania,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+UGA,Uganda,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+UKR,Ukraine,Europe,Europe and Northern America,Europe,Europe and Central Asia
+UMI,United States Minor Outlying Islands,Oceania,,,
+URY,Uruguay,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+USA,United States,North America,Europe and Northern America,Americas,North America
+UZB,Uzbekistan,Asia,Central and Southern Asia,Europe,Europe and Central Asia
+VAT,Vatican,Europe,,,
+VCT,Saint Vincent and the Grenadines,North America,Latin America and Caribbean,Americas,Latin America and Caribbean
+VEN,Venezuela,South America,Latin America and Caribbean,Americas,Latin America and Caribbean
+VGB,British Virgin Islands,North America,Latin America and Caribbean,,Latin America and Caribbean
+VIR,United States Virgin Islands,North America,Latin America and Caribbean,,Latin America and Caribbean
+VNM,Vietnam,Asia,Eastern and South-Eastern Asia,Western Pacific,East Asia and Pacific
+VUT,Vanuatu,Oceania,Oceania,Western Pacific,East Asia and Pacific
+WLF,Wallis and Futuna,Oceania,Oceania,,
+WSM,Samoa,Oceania,Oceania,Western Pacific,East Asia and Pacific
+YEM,Yemen,Asia,Northern Africa and Western Asia,Eastern Mediterranean,Middle East and North Africa
+ZAF,South Africa,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+ZMB,Zambia,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
+ZWE,Zimbabwe,Africa,Sub-Saharan Africa,Africa,Sub-Saharan Africa
