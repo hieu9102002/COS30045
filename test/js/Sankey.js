@@ -18,7 +18,7 @@ Promise.all([
     d3.json("./data/sankey/attr.json"),
     d3.json("./data/sankey/groups.json"),
     d3.json("./data/sankey/values.json"),
-    d3.json("./data/sankey/owid-energy-data.json"),
+    // d3.json("./data/owid/owid-energy-data.json"),
 ]).then(function (files) {
     const jsondata = {
         ATTR: files[0],
@@ -26,13 +26,13 @@ Promise.all([
         VALUES: files[2],
     }
 
-    const OWID = files[3];
+    // const OWID = files[3];
 
-    console.log(OWID)
+    // console.log(OWID)
 
     Scatter(jsondata);
 
-    Scatter2(OWID);
+    // Scatter2(OWID);
 
     Main.TreemapSource.setData(jsondata.ATTR);
     Main.TreemapTarget.setData(jsondata.ATTR);

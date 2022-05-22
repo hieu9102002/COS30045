@@ -99,6 +99,8 @@ export default function Treemap(ID = "#treemap") {
 
             if (d.data.value != undefined) {
 
+                return this;
+
                 d.data.percent = d.data.value / rootsum;
             }
 
