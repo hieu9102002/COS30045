@@ -121,12 +121,12 @@ window.onload = () => {
             //create scales
             let rowScale = d3.scaleBand()
                 .domain(d3.range(maxRow))
-                .range([0, height])
+                .rangeRound([0, height])
                 .paddingInner(innerPadding);
 
             let colScale = d3.scaleBand()
                 .domain(d3.range(maxCol))
-                .range([0, width])
+                .rangeRound([0, width])
                 .paddingInner(innerPadding);
 
             let keys = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Coal", "Petroleum", "NaturalGas", "Nuclear"]
@@ -150,7 +150,7 @@ window.onload = () => {
 
             var xScale = d3.scaleBand()
                 .domain(statesCell[0].years.map(year => year.year))
-                .range([0, colBandwidth]);
+                .rangeRound([0, colBandwidth]);
 
             var yScale = d3.scaleLinear()
                 .domain([0, 1])
@@ -547,7 +547,7 @@ function createHighlightChart(data, color, keys, tooltip, stateData) {
 
     var xScale = d3.scaleBand()
         .domain(data.years.map(year => year.year))
-        .range([0, width]);
+        .rangeRound([0, width]);
 
     var yScale = d3.scaleLinear()
         .domain([0, 1])
