@@ -5,8 +5,6 @@
 
 import Treemap from "./Treemap.js";
 
-import {Scatter, Scatter2} from "./Scatter.js"
-
 let Main = {
     TreemapSource: new Treemap("#treemap-source"),
     TreemapTarget: new Treemap("#treemap-target"),
@@ -29,8 +27,6 @@ Promise.all([
     // const OWID = files[3];
 
     // console.log(OWID)
-
-    Scatter(jsondata);
 
     // Scatter2(OWID);
 
@@ -841,6 +837,15 @@ function SankeyDrawer(ID = "#sankey-chart") {
                 Main.TreemapSource.setTreedata(treedatasource).draw();
 
                 Main.TreemapTarget.setTreedata(treedatatarget).draw();
+                let sourceClicked = d.sourceLinks.length > 0;
+
+                if(sourceClicked){
+                    d3.select("#treemap-source").attr("hidden", true);
+                    d3.select("#treemap-target").attr("hidden", null);
+                } else {
+                    d3.select("#treemap-source").attr("hidden", null);
+                    d3.select("#treemap-target").attr("hidden", true);
+                }
             }
 
             else {
