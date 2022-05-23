@@ -3,13 +3,20 @@
 
 import { BubbleScale } from "./bubbledata.js"
 
-function format(d) {
-    try {
-        return d.toLocaleString("en-US");
+function format(d, d3format = undefined) {
+    let d_formatted = d;
+
+    if (d3format != undefined) {
+        try { d_formatted = d.toLocaleString("en-US"); }
+        catch { }
     }
-    catch {
-        return d;
+    else {
+        try { d_formatted = d.toLocaleString("en-US"); }
+        catch { }
     }
+
+
+    return d_formatted;
 }
 
 function formatid(d) {
@@ -27,9 +34,11 @@ function formatid(d) {
 
 export class BubbleDraw extends BubbleScale {
 
-    constructor(data, x, y, z, t, id = "#scatter-plot") {
+    constructor(info, data, x, y, z, t, id) {
 
         super(data, x, y, z, t);
+
+        this.info = info
 
         this.data = this.data.map(d => ({
             ...d, ...{
@@ -57,6 +66,9 @@ export class BubbleDraw extends BubbleScale {
         this.DRAW.param.zCircleX = this.DRAW.param.width + this.DRAW.param.margin.left + 40
         this.DRAW.param.zCircleY = this.DRAW.param.height - 100
         this.DRAW.param.zLabelX = this.DRAW.param.zCircleX + 50
+
+        this.DRAW.param.tLegendX = this.DRAW.param.width + this.DRAW.param.margin.left + 150
+        this.DRAW.param.tLegendY = 100
 
         this.Scale = {
             X: this.scaleX.domain(this.domainX),
@@ -95,57 +107,65 @@ export class BubbleDraw extends BubbleScale {
         // Add X axis scale
         self.Scale.X = self.scaleX
             .domain(self.domainX(self.data))
-            .rangeRound([0, self.DRAW.param.width])
+            .range([0, self.DRAW.param.width])
             .unknown(0);
 
         // Add X axis
         self.DRAW.xAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(0, ${self.DRAW.param.height + self.DRAW.param.padding.outer.x})`)
-            .call(d3.axisBottom(self.Scale.X).tickValues([
-                d3.min(self.data, self.dataX),
-                d3.mean(self.data, self.dataX),
-                d3.median(self.data, self.dataX),
-                d3.max(self.data, self.dataX)
-            ]));
+            .call(d3.axisBottom(self.Scale.X)
+                .tickValues([
+                    d3.min(self.data, self.dataX),
+                    d3.mean(self.data, self.dataX),
+                    d3.median(self.data, self.dataX),
+                    d3.max(self.data, self.dataX)
+                ])
+            );
 
         console.log(d3.axisBottom(self.Scale.X).scale().ticks())
 
         // Add X axis label:
         self.DRAW.xLabel = self.DRAW.svg.append("text")
-            .attr("text-anchor", "start")
-            .attr("dominant-baseline", "middle")
-            .attr("x", self.DRAW.param.width + 20)
-            .attr("y", self.DRAW.param.height + self.DRAW.param.padding.outer.x)
-            .text(self.x);
+            .attr("text-anchor", "middle")
+            .attr("x", self.DRAW.param.width / 2)
+            .attr("y", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 30)
+            .text(self.info[self.x].name);
 
         // Add Y axis scale
         self.Scale.Y = self.scaleY
             .domain(self.domainY(self.data))
-            .rangeRound([self.DRAW.param.height, 0])
+            .range([self.DRAW.param.height, 0])
             .unknown(self.DRAW.param.height);
 
         // Add Y axis
         self.DRAW.yAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(${-self.DRAW.param.padding.outer.y}, 0)`)
-            .call(d3.axisLeft(self.Scale.Y).tickValues([
-                d3.min(self.data, self.dataY),
-                d3.mean(self.data, self.dataY),
-                d3.median(self.data, self.dataY),
-                d3.max(self.data, self.dataY)
-            ]));
+            .call(d3.axis("left").scale(self.Scale.Y)
+                .tickValues([
+                    self.info[self.y].lower,
+                    d3.min(self.data, self.dataY),
+                    d3.mean(self.data, self.dataY),
+                    d3.median(self.data, self.dataY),
+                    d3.max(self.data, self.dataY),
+                    self.info[self.y].upper,
+                ].filter(d => d != undefined
+                    && d >= self.domainYMin(self.data)
+                    && d <= self.domainYMax(self.data)
+                ))
+            );
 
         // Add Y axis label:
         self.DRAW.yLabel = self.DRAW.svg.append("text")
-            .attr("text-anchor", "end")
-            .attr("x", 0)
-            .attr("y", -20)
-            .text(self.y)
-            .attr("text-anchor", "start")
+            .attr("text-anchor", "middle")
+            .attr("x", - self.DRAW.param.height / 2)
+            .attr("y", -50)
+            .attr("transform", `rotate(-90)`)
+            .text(self.info[self.y].name)
 
         // Add a scale for bubble size
         self.Scale.Z = self.scaleZ
             .domain(self.domainZ(self.data))
-            .rangeRound([0, 30])
+            .range([0, 30])
             .clamp(true)
             .unknown(0);
 
@@ -498,7 +518,7 @@ export class BubbleDraw extends BubbleScale {
         self.DRAW.legendCircleTitle = self.DRAW.svg.append("text")
             .attr('x', zCircleX)
             .attr("y", zCircleY + 20)
-            .text(self.z)
+            .text(self.info[self.z].name)
             .attr("text-anchor", "middle")
 
         self.addLegendsGroup();
@@ -522,16 +542,16 @@ export class BubbleDraw extends BubbleScale {
             .append("div")
             .style("overflow", "auto")
             .style("position", "absolute")
-            .style("right", "200px")
-            .style("top", "60px")
-            .style("width", "200px")
+            .style("left", `${this.DRAW.param.tLegendX}px`)
+            .style("top", `${this.DRAW.param.tLegendY}px`)
+            .style("width", "260px")
             .style("height", "200px")
 
         const svg = div
             .append("svg")
             .attr("x", zCircleX)
             .attr("y", 10)
-            .attr("width", 150)
+            .attr("width", 250)
         // notice that svg height is not updated yet
 
         self.DRAW.legendGroups = svg
@@ -602,62 +622,52 @@ export class BubbleDraw extends BubbleScale {
         // Update X Axis scale
         self.Scale.X = self.scaleX
             .domain(self.domainX(self.data))
-            .rangeRound([0, self.DRAW.param.width])
+            .range([0, self.DRAW.param.width])
             .unknown(0);
-        
-            console.log(self.domainX(self.data), self.Scale.X)
 
         // Update X Axis
-        self.DRAW.xAxis
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
-            .call(d3.axisBottom(self.Scale.X))
-            // .tickValues([
-            //     d3.min(self.data, self.dataX),
-            //     d3.mean(self.data, self.dataX),
-            //     d3.median(self.data, self.dataX),
-            //     d3.max(self.data, self.dataX)
-            // ]));
-
-        console.log(d3.axisBottom(self.Scale.X).scale().ticks())
+        transit(self.DRAW.xAxis)
+            .call(d3.axisBottom(self.Scale.X)
+                // .tickValues([
+                //     d3.min(self.data, self.dataX),
+                //     d3.mean(self.data, self.dataX),
+                //     d3.median(self.data, self.dataX),
+                //     d3.max(self.data, self.dataX)
+                // ])
+            );
 
         // Update X axis label:
-        self.DRAW.xLabel
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
-            .text(self.x);
+        transit(self.DRAW.xLabel)
+            .text(self.info[self.x].name);
 
         // Update Y axis scale
         self.Scale.Y = self.scaleY
             .domain(self.domainY(self.data))
-            .rangeRound([self.DRAW.param.height, 0])
+            .range([self.DRAW.param.height, 0])
             .unknown(0);
 
         // Update Y Axis
-        self.DRAW.yAxis
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
-            .call(d3.axisLeft(self.Scale.Y).tickValues([
-                d3.min(self.data, self.dataY),
-                d3.mean(self.data, self.dataY),
-                d3.median(self.data, self.dataY),
-                d3.max(self.data, self.dataY)
-            ]));
+        transit(self.DRAW.yAxis)
+            .call(d3.axisLeft(self.Scale.Y)
+                // .tickValues([
+                //     d3.min(self.data, self.dataY),
+                //     d3.mean(self.data, self.dataY),
+                //     d3.median(self.data, self.dataY),
+                //     d3.max(self.data, self.dataY)
+                // ])
+            );
 
         // Update Y axis label:
         self.DRAW.yLabel
             .transition("update")
             .duration(500)
-            .ease(d3.easeLinear)
-            .text(self.y)
+            .ease(d3.easePolyOut)
+            .text(self.info[self.y].name)
 
         // Update scale for bubble size
         self.Scale.Z = self.scaleZ
             .domain(self.domainZ(self.data))
-            .rangeRound([0, 30])
+            .range([0, 30])
             .unknown(0)
             .clamp(true);
 
@@ -673,10 +683,7 @@ export class BubbleDraw extends BubbleScale {
         // ---------------------------//
 
         // reset visibility
-        self.DRAW.Points
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points)
             .style("visibility", d => {
                 if (isNaN(parseInt(self.dataX(d)))
                     || isNaN(parseInt(self.dataY(d)))
@@ -689,20 +696,20 @@ export class BubbleDraw extends BubbleScale {
                 else return "hidden";
             })
 
+        function transit(selection) {
+            return selection
+                .transition("update")
+                .duration(500)
+                .ease(d3.easePolyOut)
+        }
 
-        self.DRAW.Points.select(".bubble-circle")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points.select(".bubble-circle"))
             .attr("cx", d => self.Scale.X(self.dataX(d)))
             .attr("cy", d => self.Scale.Y(self.dataY(d)))
             .attr("r", d => self.Scale.Z(self.dataZ(d)))
             .attr("fill", d => self.Scale.T(self.dataT(d)))
 
-        self.DRAW.Points.select(".bubble-text")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points.select(".bubble-text"))
             .text(d => d.data["country"])
             .attr("x", d => self.Scale.X(self.dataX(d)) + self.Scale.Z(self.dataZ(d)))
             .attr("y", d => self.Scale.Y(self.dataY(d)) - self.Scale.Z(self.dataZ(d)))
@@ -714,36 +721,24 @@ export class BubbleDraw extends BubbleScale {
         //    CIRCLES ANNOTATIONS     //
         // ---------------------------//
 
-        self.DRAW.Points.select(".bubble-line-x").select("line")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points.select(".bubble-line-x").select("line"))
             .attr("x1", d => self.Scale.X(self.dataX(d)))
             .attr("x2", d => self.Scale.X(self.dataX(d)))
             .attr("y1", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 20)
             .attr("y2", d => self.Scale.Y(self.dataY(d)))
 
-        self.DRAW.Points.select(".bubble-line-x").select("text")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points.select(".bubble-line-x").select("text"))
             .attr("x", d => self.Scale.X(self.dataX(d)))
             .attr("y", self.DRAW.param.height + self.DRAW.param.padding.outer.x + 20)
             .text(d => format(self.dataX(d)))
 
-        self.DRAW.Points.select(".bubble-line-y").select("line")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points.select(".bubble-line-y").select("line"))
             .attr("x1", -self.DRAW.param.padding.outer.y - 10)
             .attr("x2", d => self.Scale.X(self.dataX(d)))
             .attr("y1", d => self.Scale.Y(self.dataY(d)))
             .attr("y2", d => self.Scale.Y(self.dataY(d)))
 
-        self.DRAW.Points.select(".bubble-line-y").select("text")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.Points.select(".bubble-line-y").select("text"))
             .attr("x", -self.DRAW.param.padding.outer.y - 10)
             .attr("y", d => self.Scale.Y(self.dataY(d)))
             .text(d => format(self.dataY(d)))
@@ -780,10 +775,7 @@ export class BubbleDraw extends BubbleScale {
         const zCircleY = self.DRAW.param.zCircleY
         const zLabelX = self.DRAW.param.zLabelX
 
-        self.DRAW.legendCircle.select("circle")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.legendCircle.select("circle"))
             .attr("cx", zCircleX)
             .attr("cy", d => zCircleY - self.Scale.Z(d.value))
             .attr("r", d => self.Scale.Z(d.value))
@@ -794,10 +786,7 @@ export class BubbleDraw extends BubbleScale {
         let potentialY = zCircleY - self.Scale.Z(self.DRAW.legendCircleValues[0].value);
 
         // Add legend: labels
-        self.DRAW.legendCircle.select("text")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.legendCircle.select("text"))
             .text(d => `${d.name}: ${format(d.value)}`)
             .attr("font-size", 12)
             .attr('x', zLabelX)
@@ -827,21 +816,15 @@ export class BubbleDraw extends BubbleScale {
         }
 
         // Add legend: segments
-        self.DRAW.legendCircle.select("line")
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
+        transit(self.DRAW.legendCircle.select("line"))
             .attr('x1', d => d.x1)
             .attr('x2', d => d.x2)
             .attr('y1', d => d.y1)
             .attr('y2', d => d.y2)
 
         // Legend title
-        self.DRAW.legendCircleTitle
-            .transition("update")
-            .duration(500)
-            .ease(d3.easeLinear)
-            .text(self.z)
+        transit(self.DRAW.legendCircleTitle)
+            .text(self.info[self.z].name)
 
         // ---------------------------//
         //       LEGEND FOR GROUPS    //
