@@ -20,11 +20,11 @@ export default function Treemap(ID = "#treemap") {
 
     // append the svg object to the body of the page
     const svg = d3.select(ID)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // .append("svg")
+        // .attr("width", width + margin.left + margin.right)
+        // .attr("height", height + margin.top + margin.bottom)
+        // .append("g")
+        // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     this.setData = (attr) => {
 
@@ -75,7 +75,6 @@ export default function Treemap(ID = "#treemap") {
     }
 
     this.draw = () => {
-
         // Give the data to this cluster layout:
         const root = d3.hierarchy(TREEDATA)
             .sum(function (d) {
@@ -92,15 +91,13 @@ export default function Treemap(ID = "#treemap") {
             (root)
 
         const rootsum = root.leaves().reduce(function (sum, next) { return sum + next.value; }, 0);
-
         let texts;
+
+        let tooltip = "";
 
         for (let d of root.leaves()) {
 
             if (d.data.value != undefined) {
-
-                return this;
-
                 d.data.percent = d.data.value / rootsum;
             }
 
@@ -122,7 +119,8 @@ export default function Treemap(ID = "#treemap") {
                 }
             }
 
-            texts.name.text = ATTR[d.data.name] == undefined ? d.data.name : ATTR[d.data.name].name
+            texts.name.text = ATTR[d.data.name] == undefined ? d.data.name : ATTR[d.data.name].name;
+            tooltip +=  ATTR[d.data.name] == undefined ? "<b>"+d.data.name : "<b>"+ATTR[d.data.name].name + "</b><br/>";
 
             if (d.value == undefined) {
                 if (d.data.value == undefined) {
@@ -130,10 +128,14 @@ export default function Treemap(ID = "#treemap") {
                 }
                 d.value = d.data.value;
                 texts.value.text = d.data.value.toLocaleString('en-US') + " BBtu";
+                tooltip += texts.value.text = d.data.value.toLocaleString('en-US') + " BBtu" + "<br/>";
             }
             texts.value.text = d.value.toLocaleString('en-US') + " BBtu";
+            tooltip += texts.value.text = d.data.value.toLocaleString('en-US') + " BBtu" + "<br/>";
+
 
             texts.percent.text = `${Math.round(d.data.percent * 100 * 100) / 100} %`
+            tooltip += `${Math.round(d.data.percent * 100 * 100) / 100} %` + "<br>";
 
             d.text = [
                 texts.percent,
@@ -147,6 +149,8 @@ export default function Treemap(ID = "#treemap") {
             }
         }
 
+        console.log(tooltip)
+
         const tiles = svg.selectAll(".tiles")
             .data(root.leaves())
             .enter()
@@ -154,80 +158,81 @@ export default function Treemap(ID = "#treemap") {
             .attr("class", "tiles")
 
 
-        // use this information to add rectangles:
-        tiles.append("rect")
-            .attr('x', function (d) { return d.x0; })
-            .attr('y', function (d) { return d.y0; })
-            .attr('width', function (d) {
-                d.rectWidth1 = d.x1 - d.x0;
-                return d.x1 - d.x0;
-            })
-            .attr('height', function (d) { return d.y1 - d.y0; })
-            .style("stroke", "black")
-            .style("fill", (d) => {
-                return ATTR[d.data.name] == undefined ? 0 : ATTR[d.data.name].color;
-            })
-            .each(function (d) {
-                d.rectBBox = this.getBBox();
-            });
+        // // use this information to add rectangles:
+        // // tiles.append("rect")
+        // //     .attr('x', function (d) { return d.x0; })
+        // //     .attr('y', function (d) { return d.y0; })
+        // //     .attr('width', function (d) {
+        // //         d.rectWidth1 = d.x1 - d.x0;
+        // //         return d.x1 - d.x0;
+        // //     })
+        // //     .attr('height', function (d) { return d.y1 - d.y0; })
+        // //     .style("stroke", "black")
+        // //     .style("fill", (d) => {
+        // //         return ATTR[d.data.name] == undefined ? 0 : ATTR[d.data.name].color;
+        // //     })
+        // //     .each(function (d) {
+        // //         d.rectBBox = this.getBBox();
+        // //     });
+        
+        // // const labels = tiles.selectAll("text")
+        // //     .data((d) => {
+        // //         d.text.sort((a, b) => (a.row - b.row));
+        // //         return d.text;
+        // //     })
+        // //     .enter()
+        // //     .append("text")
+        // //     .attr("font-size", textSize + "px")
+        // //     .attr("fill", "white")
+        // //     .text(d => d.text)
+        // //     .attr("x", d => d.x)
+        // //     .each(function (d) {
+        // //         d.BBox = this.getBBox();
+        // //     })
 
-        const labels = tiles.selectAll("text")
-            .data((d) => {
-                d.text.sort((a, b) => (a.row - b.row));
-                return d.text;
-            })
-            .enter()
-            .append("text")
-            .attr("font-size", textSize + "px")
-            .attr("fill", "white")
-            .text(d => d.text)
-            .attr("x", d => d.x)
-            .each(function (d) {
-                d.BBox = this.getBBox();
-                console.log(d);
-            })
+        // // // reevaluate texts
+        // // for (let d of root.leaves()) {
 
-        // reevaluate texts
-        for (let d of root.leaves()) {
+        // //     d.text.sort((a, b) => (a.order - b.order));
 
-            d.text.sort((a, b) => (a.order - b.order));
+        // //     let allTextHeight = textPadding + textSize;
 
-            let allTextHeight = textPadding + textSize;
+        // //     for (let _text of d.text) {
+        // //         if (_text.BBox.width + textPadding >= d.rectBBox.width) {
+        // //             _text.visible = false;
+        // //         }
+        // //         else {
+        // //             if (allTextHeight + textSize + lineSpacing >= d.rectBBox.height) {
 
-            for (let _text of d.text) {
-                if (_text.BBox.width + textPadding >= d.rectBBox.width) {
-                    _text.visible = false;
-                }
-                else {
-                    if (allTextHeight + textSize + lineSpacing >= d.rectBBox.height) {
+        // //                 _text.visible = false;
+        // //             }
 
-                        _text.visible = false;
-                    }
+        // //             else {
+        // //                 _text.y = d.y0 + allTextHeight;
+        // //                 _text.visible = true;
+        // //             }
 
-                    else {
-                        _text.y = d.y0 + allTextHeight;
-                        _text.visible = true;
-                    }
+        // //             allTextHeight += textSize + lineSpacing;
 
-                    allTextHeight += textSize + lineSpacing;
+        // //         }
+        // //     }
 
-                }
-            }
+        // //     d.text.sort((a, b) => (a.row - b.row));
 
-            d.text.sort((a, b) => (a.row - b.row));
+        // //     let nextY = d.y0 + textPadding + textSize;
 
-            let nextY = d.y0 + textPadding + textSize;
+        // //     for (let _text of d.text) {
+        // //         if (_text.visible) {
+        // //             _text.y = nextY;
+        // //             nextY += textSize + lineSpacing;
+        // //         }
+        // //     }
+        // // }
 
-            for (let _text of d.text) {
-                if (_text.visible) {
-                    _text.y = nextY;
-                    nextY += textSize + lineSpacing;
-                }
-            }
-        }
+        // // labels.attr("y", d => d.y)
+        // //     .attr("visibility", (d) => d.visible ? "visible" : "hidden");
 
-        labels.attr("y", d => d.y)
-            .attr("visibility", (d) => d.visible ? "visible" : "hidden");
+        d3.select(ID).append("p").html(tooltip)
 
         return this;
 

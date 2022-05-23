@@ -14,37 +14,25 @@
     <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
     <!-- <script src="js/States.js" type="module"></script> -->
     <script src="test/js/Sankey.js" type="module"></script>
-    <script src="test/js/States.js" type="module"></script>
     <script src="test/js/Treemap.js" type="module"></script>
-    <script src="test/js/Scatter.js" type="module"></script>
     <!-- <script src="test/js/States2.js" type="module"></script> -->
-    <title>Renewable energy usage profile of the United States</title>
+    <title>Usage of renewable energy</title>
 </head>
 
 <body>
     <h1>Renewable energy usage profile by state in the US</h1>
+    <h2>Usage of renewable energy</h2>
     <div class="container">
         <div class="row">
+            <div class="col" id="sankey-chart">
+            </div>
             <div class="col">
-                <select id="state-filter" class="form-select form-control">
-                    <option value="all">All states</option>
-                    <option value="over-mean">Higher renewable energy usage than US mean</option>
-                    <option value="under-mean">Lower renewable energy usage than US mean</option>
-                </select>
+                <div id="treemap-source"></div>
+                <div id="treemap-target"></div>
             </div>
-            <div class="col autocomplete">
-                <input type="text" class="form-control" placeholder="State name" aria-label="State" id="state-search">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col"><strong>Power consumption,<br/> by source</strong></div>
-            <div id="svg-overall" class="col"></div>
-            <div id="svg-label" class="col"></div>
         </div>
     </div>
-    <div id="svg-div"></div>
-    <p>BBTU: Billion British Thermal unit</p>
-
+    <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
