@@ -86,7 +86,7 @@ class BubbleSelection extends BubbleDraw {
 
         self.selectVarY = new Selections(self.SELECTIONS);
         self.selectVarY
-            .OptionsData(self.infoarray.filter(d => d.type == "metric"))
+            .OptionsData(self.infoarray.filter(d => d.type == "metric" && ["renewables_share_energy", "renewables_consumption"].includes(d.value)))
             .DefaultValue(self.y)
             .OnSelect(function (option) {
 
@@ -95,7 +95,7 @@ class BubbleSelection extends BubbleDraw {
 
         self.selectVarZ = new Selections(self.SELECTIONS);
         self.selectVarZ
-            .OptionsData(self.infoarray.filter(d => d.type == "metric" && +d.lower == 0))
+            .OptionsData(self.infoarray.filter(d => d.type == "metric" && d.value == "area" && +d.lower == 0))
             .DefaultValue(self.z)
             .OnSelect(function (option) {
 
@@ -273,7 +273,7 @@ Promise.all([
 
     console.log(DATA)
 
-    let x = new BubbleSelection(infodata, DATA, "area", "renewables_share_energy", "population", "IncomeGroup")
+    let x = new BubbleSelection(infodata, DATA, "area", "renewables_share_energy", "area", "IncomeGroup")
 
 }).catch(function (err) {
     console.error(err);

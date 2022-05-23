@@ -114,12 +114,13 @@ export class BubbleDraw extends BubbleScale {
         self.DRAW.xAxis = self.DRAW.svg.append("g")
             .attr("transform", `translate(0, ${self.DRAW.param.height + self.DRAW.param.padding.outer.x})`)
             .call(d3.axisBottom(self.Scale.X)
-                .tickValues([
-                    d3.min(self.data, self.dataX),
-                    d3.mean(self.data, self.dataX),
-                    d3.median(self.data, self.dataX),
-                    d3.max(self.data, self.dataX)
-                ])
+                .ticks(4)
+                // .tickValues([
+                //     d3.min(self.data, self.dataX),
+                //     d3.mean(self.data, self.dataX),
+                //     d3.median(self.data, self.dataX),
+                //     d3.max(self.data, self.dataX)
+                // ])
             );
 
         console.log(d3.axisBottom(self.Scale.X).scale().ticks())
@@ -628,6 +629,7 @@ export class BubbleDraw extends BubbleScale {
         // Update X Axis
         transit(self.DRAW.xAxis)
             .call(d3.axisBottom(self.Scale.X)
+            .ticks(4)
                 // .tickValues([
                 //     d3.min(self.data, self.dataX),
                 //     d3.mean(self.data, self.dataX),
