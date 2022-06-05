@@ -53,6 +53,8 @@ class _BubbleView {
 
     ScaleX; ScaleY; ScaleZ; ScaleT;
 
+    radiusMax; radiusMin;
+
 
 }
 
@@ -93,7 +95,11 @@ export class BubbleView extends BubbleModel {
             { name: "Max", value: d3.max(data, this.dataZ) }
         ].sort((a, b) => (a.value - b.value))
 
-        this.updateDrawPlot(false, true)
+        this.VIEW.radiusMin = () => +document.getElementById('bubble-radius-range-min').value
+
+        this.VIEW.radiusMax = () => +document.getElementById('bubble-radius-range-max').value
+
+        this.updateDrawPlot(false)
 
         return this;
     }
@@ -158,7 +164,7 @@ export class BubbleView extends BubbleModel {
         // Set a scale for bubble size
         VIEW.ScaleZ = MODEL.scaleZ
             .domain(MODEL.domainZ(data))
-            .range([0, 30])
+            .range([VIEW.radiusMin(), VIEW.radiusMax()])
             .clamp(true)
             .unknown(0);
 
@@ -203,9 +209,7 @@ export class BubbleView extends BubbleModel {
                 .style("pointer-events", "fill")
                 .style("cursor", "move").call(VIEW.zoom),
 
-            update => update.transition("update")
-                .duration(500)
-                .ease(d3.easePolyOut)
+            update => transit(update)
                 .call(VIEW.zoom.transform, d3.zoomIdentity)
 
         )
@@ -260,7 +264,7 @@ export class BubbleView extends BubbleModel {
 
         d3.select("#Reset").on("click", () => {
             VIEW.zoomArea
-                .transition("update")
+                .transition("reset-zoom")
                 .duration(500)
                 .ease(d3.easePolyOut)
                 .call(VIEW.zoom.transform, d3.zoomIdentity);
@@ -354,7 +358,7 @@ export class BubbleView extends BubbleModel {
                         .attr("cy", d => VIEW.ScaleY(MODEL.dataY(d)))
                         .attr("fill", d => VIEW.ScaleT(MODEL.dataT(d)))
                         .attr("r", d => 0)
-                        .transition("update")
+                        .transition("enter")
                         .duration(500)
                         .ease(d3.easePolyOut)
                         .attr("r", d => VIEW.ScaleZ(MODEL.dataZ(d)))

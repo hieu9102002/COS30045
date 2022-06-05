@@ -28,6 +28,12 @@
             <button id="Reset">Reset Scale</button>
             <button id="Deselect">Deselect All Bubbles</button>
             <div id="bubble-plot-selections"></div>
+            <p>Max radius</p>
+            <input type="range" id="bubble-radius-range-max" min="0" max="30" value="30" oninput="this.nextElementSibling.value = this.value">
+            <output>30</output>
+            <p>Min radius</p>
+            <input type="range" id="bubble-radius-range-min" min="0" max="30" value="0" oninput="this.nextElementSibling.value = this.value">
+            <output>0</output>
         </div>
     </div>
     <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>

@@ -273,6 +273,13 @@ class BubbleSelection extends BubbleView {
                 self.updateT(option).updateDrawPlot()
             });
 
+        d3.select("#bubble-radius-range-max").on("change", () => {
+            self.updateDrawPlot()
+        })
+        d3.select("#bubble-radius-range-min").on("change", () => {
+            self.updateDrawPlot()
+        })
+
 
         self.selectVarY.DrawSelection();
         self.selectVarX.DrawSelection();
