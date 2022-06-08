@@ -200,13 +200,6 @@ window.onload = () => {
                 .attr("id", d => d.code + "-highlight")
                 .style("opacity", 0);
 
-            //create background
-            state.append("rect")
-                .attr("height", rowBandwidth)
-                .attr("width", colBandwidth)
-                .attr("class", "small-multiples-background")
-                .attr("id", d => d.code + "-background")
-
             //create the stacked bar charts
             var groups = state.selectAll("g.stacked-group")
                 .data(d => stack(d.years))
