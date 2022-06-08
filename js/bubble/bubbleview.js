@@ -8,18 +8,23 @@ class _BubbleViewParam {
 
     width = 500; height = 500;
 
-    margin = { left: 150, bottom: 100, top: 60, right: 450 }
+    margin = { left: 150, bottom: 100, top: 60, right: 100 }
 
     padding = {
         inner: { left: 10, bottom: 10, top: 10, right: 10 },
         outer: { left: 30, bottom: 30, top: 40, right: 100 }
     }
 
-    zCircleX = this.width + this.margin.left + 40;
+    zLegend = {
+        circleX: 100,
+        circleY: 150,
+        svgWidth: 350,
+        svgHeight: 200,
+    }
 
-    zCircleY = this.height - 100;
-
-    zLabelX = this.zCircleX + 50;
+    zCircleX = 150;
+    zCircleY = 100;
+    zCircleSVGHeight = 20;
 
     tLegendX = this.width + this.margin.left + 150;
 
@@ -118,9 +123,10 @@ export class BubbleView extends BubbleModel {
         const VIEW = MODEL.VIEW;
         const PARAM = VIEW.param;
 
-        const zCircleX = PARAM.zCircleX
-        const zCircleY = PARAM.zCircleY
-        const zLabelX = PARAM.zLabelX
+        console.log(PARAM.zLegend.circleY)
+
+        const zCircleX = PARAM.zLegend.circleX
+        const zCircleY = PARAM.zLegend.circleY
 
         // ------------------------------------- //
         //             DATA                      //
@@ -593,7 +599,7 @@ export class BubbleView extends BubbleModel {
 
             const d = point.datum()
 
-            const pointLegend = point.append("g")
+            const pointLegend = VIEW.legendBubble.parent.append("g")
                 .attr("class", "bubble-circle-legend")
 
             pointLegend.append("circle")
@@ -624,22 +630,31 @@ export class BubbleView extends BubbleModel {
 
         function hideBubbleInLegends(point) {
 
-            point.selectAll(".bubble-circle-legend").remove()
+            d3.selectAll(".bubble-circle-legend").remove()
         }
 
         // ---------------------------//
         //       LEGEND BUBBLES       //
         // ---------------------------//
 
-        if (isnew) VIEW.legendBubble = new LegendBubbles(VIEW.ScaleZ, VIEW.SVG, zCircleX, zCircleY);
+        // add new div and svg for legend bubbles
+        const lb_svg = d3.select(VIEW.id)
+            .append("div")
+            .style("width", PARAM.zLegend.svgWidth + "px")
+            .style("height", PARAM.zLegend.svgHeight + "px")
+            .append("svg")
+            .attr("width", PARAM.zLegend.svgWidth)
+            .attr("height", PARAM.zLegend.svgHeight)
+
+        if (isnew) VIEW.legendBubble = new LegendBubbles(VIEW.ScaleZ, lb_svg, zCircleX, zCircleY);
 
         VIEW.legendBubble.update(MODEL.legendBubbleValues(data))
 
         // label for legends of bubbles
 
-        VIEW.SVG.selectAll("#bubble-z-label").data([`${MODEL.info[MODEL.z].name} ${
-            MODEL.info[MODEL.z].unit ? `(${MODEL.info[MODEL.z].unit})` : ""
-        }`])
+        VIEW.legendBubble.parent.selectAll("bubble-z-label")
+            .data([`${MODEL.info[MODEL.z].name} ${MODEL.info[MODEL.z].unit ? `(${MODEL.info[MODEL.z].unit})` : ""
+                }`])
             .join(
                 enter => enter.append("text")
                     .attr("id", "bubble-z-label")
