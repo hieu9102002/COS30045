@@ -445,7 +445,7 @@ export class Tooltip {
 
 export class Selections {
 
-    constructor(selectionarea) {
+    constructor(selectionarea,label) {
 
         this.SELECTIONAREA = selectionarea;
 
@@ -454,6 +454,7 @@ export class Selections {
         this.Options
         this.defaultvalue
         this.onSelect
+        this.label = label
 
     }
 
@@ -516,8 +517,16 @@ export class Selections {
     DrawSelection() {
 
         const self = this;
-
-        self.Selection = self.SELECTIONAREA.append("select");
+        var selectionDiv = self.SELECTIONAREA
+            .append("div")
+            .attr("class", "row");
+        
+        selectionDiv.append("label")
+            .attr("class","col")
+            .html(self.label);
+        self.Selection = selectionDiv
+            .append("select")
+            .attr("class", "col");
 
         self.Options = self.Selection.selectAll("option")
             .data(self.optionsarray)

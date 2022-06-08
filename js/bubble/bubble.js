@@ -73,7 +73,7 @@ class BubbleSelection extends BubbleView {
 
         const self = this;
 
-        self.selectVarX = new Selections(self.SELECTIONS)
+        self.selectVarX = new Selections(self.SELECTIONS, "X axis")
         self.selectVarX
             .OptionsData(self.infoarray.filter(d => d.type == "metric"
                 && [
@@ -96,7 +96,7 @@ class BubbleSelection extends BubbleView {
             });
 
 
-        self.selectVarY = new Selections(self.SELECTIONS);
+        self.selectVarY = new Selections(self.SELECTIONS, "Y axis");
         self.selectVarY
             .OptionsData(self.infoarray.filter(d => d.type == "metric"
                 && [
@@ -113,7 +113,7 @@ class BubbleSelection extends BubbleView {
                 self.updateY(option).updateDrawPlot()
             });
 
-        self.selectVarZ = new Selections(self.SELECTIONS);
+        self.selectVarZ = new Selections(self.SELECTIONS, "Area");
         self.selectVarZ
             .OptionsData(self.infoarray.filter(d => d.type == "metric"
                 && [
@@ -276,7 +276,7 @@ class BubbleSelection extends BubbleView {
                     .updateDrawPlot()
             });
 
-        self.selectVarT = new Selections(self.SELECTIONS);
+        self.selectVarT = new Selections(self.SELECTIONS, "Groups");
         self.selectVarT
             .OptionsData(self.infoarray.filter(d => d.type == "categorical"
                 // && ["renewables_share_energy", "renewables_consumption"].includes(d.value)
