@@ -276,8 +276,14 @@ class BubbleSelection extends BubbleView {
 
         self.selectVarT = new Selections(self.SELECTIONS, "Groups");
         self.selectVarT
-            .OptionsData(self.infoarray.filter(d => d.type == "categorical"
-                // && ["renewables_share_energy", "renewables_consumption"].includes(d.value)
+            .OptionsData(self.infoarray.filter(d => d.type == "categorical" &&
+                [
+                    "group_is_USA",
+                    "group_OWID_Continent",
+                    "group_WHO_Region",
+                    "group_WB_incomeLevel",
+                    "group_WB_lendingType"
+                ].includes(d.value)
             ))
             .DefaultValue(self.t)
             .OnSelect(function (option) {
