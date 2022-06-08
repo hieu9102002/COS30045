@@ -522,11 +522,11 @@ export class Selections {
             .attr("class", "row");
         
         selectionDiv.append("label")
-            .attr("class","col")
+            .attr("class","col-sm-2 col-form-label")
             .html(self.label);
         self.Selection = selectionDiv
             .append("select")
-            .attr("class", "col");
+            .attr("class", "col-sm-10");
 
         self.Options = self.Selection.selectAll("option")
             .data(self.optionsarray)
