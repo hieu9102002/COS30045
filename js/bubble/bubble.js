@@ -103,9 +103,7 @@ class BubbleSelection extends BubbleView {
                     "renewables_share_energy",
                     "renewables_share_elec",
                     "renewables_consumption",
-                    "renewables_electricity",
-                    "group_WB_longitude",
-                    "group_WB_latitude"
+                    "renewables_electricity"
                 ].includes(d.value)))
             .DefaultValue(self.y)
             .OnSelect(function (option) {
