@@ -75,7 +75,21 @@ class BubbleSelection extends BubbleView {
 
         self.selectVarX = new Selections(self.SELECTIONS)
         self.selectVarX
-            .OptionsData(self.infoarray.filter(d => d.type == "metric"))
+            .OptionsData(self.infoarray.filter(d => d.type == "metric"
+                && [
+                    "area",
+                    "population",
+                    "gdp",
+                    "gdp_per_captia",
+                    "coal_production",
+                    "electricity_demand",
+                    "electricity_generation",
+                    "fossil_fuel_consumption",
+                    "gas_production",
+                    "greenhouse_gas_emissions",
+                    "oil_production"
+                ].includes(d.value)
+            ))
             .DefaultValue(self.x)
             .OnSelect(function (option) {
                 self.updateX(option).updateDrawPlot()
