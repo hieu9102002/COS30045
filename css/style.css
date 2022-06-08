@@ -21,10 +21,6 @@ body {background-color: lightgrey;}
     fill:black;
 }
 
-.small-multiples-background{
-    fill:purple;
-}
-
 .vertical-line{
     stroke:#000; 
     stroke-width: '1px';
