@@ -327,16 +327,9 @@ function SankeyInput() {
             links: []
         }
 
-        selectedNodes.sort((node1id, node2id) => {
+        selectedNodes.sort((node1id, node2id) => (NEEDEDNODES.indexOf(node2id) - NEEDEDNODES.indexOf(node1id)) );
 
-            const node1 = ATTR[node1id];
-            const node2 = ATTR[node2id];
-
-            if (node2.column != node1.column) {
-                return node1.column - node2.column;
-            }
-            return (node1.order - node2.order);
-        });
+        console.log(selectedNodes)
 
         let nodeidmap = {};
 
@@ -437,7 +430,9 @@ function SankeyInput() {
             }
         }
 
-        sankeyinputdata.nasa = 10;
+        sankeyinputdata.links.sort((l1, l2) => l2.target - l1.target)
+
+        console.log(sankeyinputdata)
 
         return sankeyinputdata;
     }
@@ -465,7 +460,7 @@ function SankeyDrawer(ID = "#sankey-chart") {
     // Set the sankey diagram properties
     const d3sankeygraph = d3.sankey()
         .nodeWidth(nodeWidth)
-        // .nodePadding(sankeyNodePadding)
+        // .nodePadding(nodePadding)
         .size([width, height]);
 
     // select svg chart
@@ -909,15 +904,16 @@ export default function Sankey() {
     let ATTR, GROUPS, VALUES,
         STATE = "US", YEAR = 2019,
         NEEDEDNODES = [
-            "Solar",
-            "Wind",
-            "Geothermal",
-            "Hydropower",
             "Biomass",
+            "Geothermal",
+            "Wind",
+            "Solar",
+            "Hydropower",
+            // "FossilFuel",
             // "Coal", "Petroleum", "NaturalGas",
             // "Nuclear",
             "ElectricPower",
-            "ElectricLoss",
+            // "ElectricLoss",
             "Transportation",
             "Industrial",
             "Commercial",
