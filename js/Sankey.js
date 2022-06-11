@@ -58,7 +58,7 @@ const
     minVisibleLink = 0,
     minVisibleNode = 0;
 
-// set the styles of the graph
+// set the styles of the chart
 
 const
     svgWidth = 700,

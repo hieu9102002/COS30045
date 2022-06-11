@@ -60,6 +60,8 @@ class _BubbleView {
 
     radiusMax; radiusMin;
 
+    textPadding;
+
 
 }
 
@@ -123,8 +125,6 @@ export class BubbleView extends BubbleModel {
         const VIEW = MODEL.VIEW;
         const STYLE = VIEW.style;
 
-        console.log(STYLE.zLegend.circleY)
-
         const zCircleX = STYLE.zLegend.circleX
         const zCircleY = STYLE.zLegend.circleY
 
@@ -176,7 +176,7 @@ export class BubbleView extends BubbleModel {
 
         // Set a scale for bubble color
         VIEW.ScaleT = MODEL.scaleT
-            .domain(MODEL.domainT(data))
+            .domain(MODEL.domainT(MODEL.data))
             .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]);
 
         const isnew = d3.select(VIEW.id).select("svg").empty()
@@ -243,8 +243,8 @@ export class BubbleView extends BubbleModel {
 
             // Update point text position
             VIEW.points.select(".bubble-text")
-                .attr("x", d => newX(MODEL.dataX(d)) + VIEW.ScaleZ(MODEL.dataZ(d)))
-                .attr("y", d => newY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)))
+                .attr("x", d => newX(MODEL.dataX(d)))
+                .attr("y", d => newY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)) - 20)
 
             // Update annotations position
 
@@ -263,6 +263,24 @@ export class BubbleView extends BubbleModel {
 
             VIEW.points.select(".bubble-line-y").select("text")
                 .attr("y", d => newY(MODEL.dataY(d)))
+
+            // remove annotations if bubble is "out of chart"
+
+            VIEW.points
+            .style("visibility", "visible")
+            .filter(
+                function (d, i) {
+                    const point = d3.select(this).select(".bubble-circle"),
+                        x = point.attr("cx"),
+                        y = point.attr("cy")
+                        
+                    return (x > STYLE.width
+                        || x < 0
+                        || y > STYLE.height
+                        || y < 0
+                    );
+                }
+            ).style("visibility", "hidden")
 
         }
 
@@ -293,7 +311,7 @@ export class BubbleView extends BubbleModel {
 
 
         // Add X axis label:
-        VIEW.SVG.selectAll("#bubble-x-label").data([`${MODEL.info[MODEL.x].name} ${MODEL.info[MODEL.x].unit ? `(${MODEL.info[MODEL.x].unit})` : ""
+        VIEW.SVG.selectAll("#bubble-x-label").data([`X Axis: ${MODEL.info[MODEL.x].name} ${MODEL.info[MODEL.x].unit ? `(${MODEL.info[MODEL.x].unit})` : ""
             }`]).join(
 
                 enter => enter.append("text")
@@ -320,7 +338,7 @@ export class BubbleView extends BubbleModel {
 
 
         // Add Y axis label:
-        VIEW.SVG.selectAll("#bubble-y-label").data([`${MODEL.info[MODEL.y].name} ${MODEL.info[MODEL.y].unit ? `(${MODEL.info[MODEL.y].unit}` : ""
+        VIEW.SVG.selectAll("#bubble-y-label").data([`Y Axis: ${MODEL.info[MODEL.y].name} ${MODEL.info[MODEL.y].unit ? `(${MODEL.info[MODEL.y].unit}` : ""
             })`]).join(
 
                 enter => enter.append("text")
@@ -371,14 +389,15 @@ export class BubbleView extends BubbleModel {
 
                     enter.append("text")
                         .attr("class", "bubble-text")
+                        .attr("text-anchor", "middle")
                         .attr("clip-path", "url(#bubble-clip)")
                         .text(d => d.data["country"])
                         .style("visibility", d => {
                             if (d.data["iso_code"] == "USA") return "visible"
                             else return "hidden"
                         })
-                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)) + VIEW.ScaleZ(MODEL.dataZ(d)))
-                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)))
+                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)))
+                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)) - 20)
                         .attr("fill", d => VIEW.ScaleT(MODEL.dataT(d)))
 
                     enter
@@ -399,8 +418,8 @@ export class BubbleView extends BubbleModel {
 
                     transit(update.select(".bubble-text"))
                         .text(d => d.data["country"])
-                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)) + VIEW.ScaleZ(MODEL.dataZ(d)))
-                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)))
+                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)))
+                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d) - 20))
                         .attr("fill", d => VIEW.ScaleT(MODEL.dataT(d)))
 
 
@@ -552,7 +571,9 @@ export class BubbleView extends BubbleModel {
                 }` +
                 `<br>X axis: ${format(MODEL.dataX(d), MODEL.info[MODEL.x].format)} ${MODEL.info[MODEL.x].unit_name ? `(${MODEL.info[MODEL.x].unit_name})` : ""
                 }` +
-                `<br>${MODEL.info[MODEL.z].name}: ${format(MODEL.dataZ(d))}`
+                `<br>${MODEL.info[MODEL.z].name}: ${format(MODEL.dataZ(d))} 
+                ${MODEL.info[MODEL.z].unit_name ? `(${MODEL.info[MODEL.z].unit_name})` : ""
+                }`
 
             VIEW.tooltip.html(html).show(e.x, e.y);
 
@@ -638,7 +659,7 @@ export class BubbleView extends BubbleModel {
         // ---------------------------//
 
         if (isnew) {
-            
+
             // add new div and svg for legend bubbles
             const legendBubblesDiv = d3.select(VIEW.id)
                 .append("div")

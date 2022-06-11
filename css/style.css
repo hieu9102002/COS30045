@@ -123,3 +123,112 @@ body {
 #container-bubble {
     position: relative;
 }
+
+header {
+    padding: 20px 0;
+    text-align: center;
+    background-color: steelblue;
+    background-color: seagreen;
+    background-color: darkcyan;
+    background-color: lightskyblue;
+    background-color: teal;
+
+    color: white;
+}
+
+.header-index {
+    padding: 10% 0;
+}
+
+
+header .header-paragraph {
+    font-size: 20px;
+}
+
+header a {
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    height: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    background-color: black;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap
+}
+
+header a:hover {
+    color: #000;
+    background-color: #ccc;
+}
+
+nav,
+.nav-background {
+    height: 40px;
+    width: 100%;
+    background-color: black;
+    color: white;
+}
+
+nav {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+}
+
+.nav-background {
+    z-index: 0;
+    color: red;
+    position: relative;
+}
+
+nav * {
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0;
+    height: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap
+}
+
+nav a:hover,
+.nav-current {
+    color: #000;
+    background-color: #ccc;
+}
+
+h1 {
+    text-align: center;
+}
+
+footer {
+    /* Used for making the footer */
+    /* color: grey; */
+    clear: both;
+    display: flex;
+    justify-content: space-between;
+    background-color: goldenrod;
+    bottom: 0;
+}
+
+footer p {
+    height: 100%;
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    display: inline;
+    width: 40%;
+}
