@@ -317,8 +317,8 @@ class BubbleSelection extends BubbleView {
 
 
 Promise.all([
-    d3.json("./data/bubble/owid.json"),
-    d3.json("./data/bubble/info/info.json"),
+    d3.json("./data/countries/final/data.json"),
+    d3.json("./data/countries/info/info.json"),
 ]).then(function (files) {
     const jsondata = files[0]
     const infodata = files[1]

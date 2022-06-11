@@ -1,3 +1,5 @@
+
+
 //US states dictionary
 const USStates = {
     "Alabama": "AL",
@@ -51,16 +53,12 @@ const USStates = {
     "Wisconsin": "WI",
     "Wyoming": "WY"
 };
-window.onload = () => {
-    //setup margin
-    var margin = { top: 10, right: 10, bottom: 20, left: 10 },
-        width = 900 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
-    var textMargin = 14;
-    var innerPadding = 0.05;
+// https://raw.githubusercontent.com/thanhan910/Courseworks/main/Swinburne/COS30045/data/main/usstates_data.csv
 
+const KEYS = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Coal", "Petroleum", "NaturalGas", "Nuclear"]
 
-    d3.csv("./data/publication-grids.csv", d => { //Read in US grid file
+Promise.all([
+    d3.csv("./data/tilegrid/publication-grids.csv", d => { //Read in US grid file
         return {
             code: d.code,
             row: +d.row - 1,
@@ -68,327 +66,390 @@ window.onload = () => {
             years: [],
             renewable_percentage_2019: 0
         }
-    }).then(statesCell => {
-        d3.json("./data/transformed.json").then(stateData => { //Read in data file
-            //combine two files
+    }),
+    d3.json("./data/usstates/final/states.json"),
+    d3.json("./data/usstates/info/info.json"),
+]).then(function (files) {
+    let statesCell = files[0]
+    let stateData = files[1]
+    let attrINFO = files[2]
+    console.log(files)
+    var ss = {}
 
-            statesCell.forEach(stateCell => {
-                const data = stateData.data.find(state => state.code == stateCell.code);
-                stateCell.years = data.years.map(year => {
-                    return {
-                        year: year.year,
-                        Biomass: year.Biomass / year.Total,
-                        Geothermal: year.Geothermal / year.Total,
-                        Hydropower: year.Hydropower / year.Total,
-                        Solar: year.Solar / year.Total,
-                        Wind: year.Wind / year.Total,
-                        Coal: year.Coal / year.Total,
-                        Petroleum: year.Petroleum / year.Total,
-                        NaturalGas: year.NaturalGas / year.Total,
-                        Nuclear: year.Nuclear / year.Total
-                    }
-                })
-                stateCell.renewable_percentage_2019 = data.years.at(-1).Renewable / data.years.at(-1).Total;
-            });
+    // stateData.forEach(t => {
 
-            //calculate rows and columns of small multiples
-            var maxRow = d3.max(statesCell, d => parseInt(d.row)) + 1;
-            var maxCol = d3.max(statesCell, d => parseInt(d.col)) + 1;
+    //     t.year = t.Year;
+    //     t.state = t.StateCode;
 
-            //calculate constants
-            var USdata = stateData.data.find(state => state.code == "US");
-            var USData = {
-                code: "US",
-                years: USdata.years.map(year => {
-                    return {
-                        year: year.year,
-                        Biomass: year.Biomass / year.Total,
-                        Geothermal: year.Geothermal / year.Total,
-                        Hydropower: year.Hydropower / year.Total,
-                        Solar: year.Solar / year.Total,
-                        Wind: year.Wind / year.Total,
-                        Coal: year.Coal / year.Total,
-                        Petroleum: year.Petroleum / year.Total,
-                        NaturalGas: year.NaturalGas / year.Total,
-                        Nuclear: year.Nuclear / year.Total,
-                        TotalRenewable: year.Renewable / year.Total,
-                    }
-                })
-            }
-            const USdata2019 = USData.years.at(-1);
-            const USRenewablePercentage2019 = USdata2019.TotalRenewable;
+    //     delete t.Year, t.StateCode;
 
-            //create scales
-            let rowScale = d3.scaleBand()
-                .domain(d3.range(maxRow))
-                .rangeRound([0, height])
-                .paddingInner(innerPadding);
+    //     for (let k in t) {
+    //         if (k == "year" || k == "state") {
+    //             continue
+    //         }
+    //         if (!(KEYS + ["Total"]).includes(k)) {
+    //             delete t[k];
+    //         }
+    //         else {
+    //             t[k] = +t[k]
+    //         }
+    //     }
 
-            let colScale = d3.scaleBand()
-                .domain(d3.range(maxCol))
-                .rangeRound([0, width])
-                .paddingInner(innerPadding);
+    //     if (ss[t.state] == undefined) {
+    //         ss[t.state] = {
+    //             code: t.state,
+    //             years: []
+    //         }
+    //     }
 
-            let keys = ["Hydropower", "Solar", "Wind", "Geothermal", "Biomass", "Coal", "Petroleum", "NaturalGas", "Nuclear"]
-            let stack = d3.stack()
-                .keys(keys);
+    //     if(t.year >= 2000)
 
-            let color = {
-                Hydropower: "#1aff1a",
-                Solar: "#71ff5b",
-                Wind: "#9cfe85",
-                Geothermal: "#befcac",
-                Biomass: "#dcfad1",
-                Coal: "#4b0092",
-                Petroleum: "#723ca7",
-                NaturalGas: "#956abb",
-                Nuclear: "#b797cf"
-            };
+    //     {ss[t.state].years.push(t)}
+    // })
 
-            var colBandwidth = colScale.bandwidth();
-            var rowBandwidth = rowScale.bandwidth();
+    // stateData = { data: Object.values(ss) }
 
-            var xScale = d3.scaleBand()
-                .domain(statesCell[0].years.map(year => year.year))
-                .rangeRound([0, colBandwidth]);
+    
+    fromStateData(statesCell, stateData, attrINFO)
+})
 
-            var yScale = d3.scaleLinear()
-                .domain([0, 1])
-                .range([rowBandwidth, 0]);
 
-            //create svg
-            var svg = d3.select("#svg-div")
-                .append("svg")
-                .attr("width", width + margin.right + margin.left)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            //create small multiples
-            var state = svg.selectAll(".state")
-                .data(statesCell)
-                .enter()
-                .append("g")
-                .attr("class", d => {
-                    let result = "state ";
-                    if (d.renewable_percentage_2019 >= USRenewablePercentage2019) result += "over-mean";
-                    else result += "under-mean";
-                    return result;
-                })
-                .attr("id", d => d.code)
-                .attr("transform", d => "translate(" + colScale(d.col) + "," + rowScale(d.row) + ")")
-                .style("opacity", 1)
-                .attr("visibility", "visible")
-                .on("mouseenter", onSmallMultiplesMouseEnter)
-                .on("mouseleave", onSmallMultiplesMouseLeave)
-                .on("mousemove", onSmallMultiplesMouseMove);
+function fromStateData(statesCell, stateData, attrINFO) {  
 
-            //create highlight for state search
-            var highlight = state.append("rect")
-                .attr("height", rowBandwidth + 4)
-                .attr("width", colBandwidth + 4)
-                .attr("x", -2)
-                .attr("y", -2)
-                .attr("class", "small-multiples-highlight")
-                .attr("id", d => d.code + "-highlight")
-                .style("opacity", 0);
+    //setup margin
+    var margin = { top: 10, right: 10, bottom: 20, left: 10 },
+        width = 900 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+    var textMargin = 14;
+    var innerPadding = 0.05;
 
-            //create the stacked bar charts
-            var groups = state.selectAll("g.stacked-group")
-                .data(d => stack(d.years))
-                .enter()
-                .append("g")
-                .attr("class", "stacked-group")
-                .style("fill", (d) => color[d.key]);
+    //combine two files
 
-            groups.selectAll("rect.state-data")
-                .data(d => d)
-                .enter()
-                .append("rect")
-                .attr("x", (d) => xScale(d.data.year))
-                .attr("y", d => yScale(d[1]))
-                .attr("height", d => yScale(d[0]) - yScale(d[1]))
-                .attr("width", xScale.bandwidth())
-                .attr("class", "state-data")
-                .on("mouseover", onDataMouseOver)
-                .on("mousemove", onDataMouseMove)
-                .on("mouseleave", onDataMouseLeave);
-
-            //create the state names
-            state.append("text")
-                .attr("class", "state-label")
-                .text(d => d.code)
-                .attr("x", 0)
-                .attr("y", textMargin);
-
-            //create seeker line
-            let seekerLine = svg.append("line")
-                .attr("class", "vertical-line")
-                .attr("visibility", "hidden");
-
-            //implement state filter function
-            let stateFilter = document.getElementById("state-filter")
-            stateFilter.onchange = () => {
-                let selected = stateFilter.value;
-                switch (selected) {
-                    case "all":
-                        state.transition()
-                            .style("opacity", 1)
-                            .attr("visibility", "visible");
-                        break;
-                    case "over-mean":
-                        svg.selectAll(".state.over-mean")
-                            .transition()
-                            .style("opacity", 1)
-                            .attr("visibility", "visible");
-                        svg.selectAll(".state.under-mean")
-                            .transition()
-                            .style("opacity", 0)
-                            .attr("visibility", "hidden");
-                        break;
-                    case "under-mean":
-                        svg.selectAll(".state.under-mean")
-                            .transition()
-                            .style("opacity", 1)
-                            .attr("visibility", "visible");
-                        svg.selectAll(".state.over-mean")
-                            .style("opacity", 0)
-                            .attr("visibility", "hidden");
-                        break;
-                }
-            }
-
-            // ----------------
-            // Create a tooltip
-            // ----------------
-            var tooltip = d3.select("#svg-div")
-                .append("div")
-                .style("opacity", 0)
-                .attr("class", "tooltip");
-
-            var highlightSvg = createHighlightChart(USData, color, keys, tooltip, stateData);
-            var label = drawLabel(color);
-
-            //implement state search function
-            let stateSearch = document.getElementById("state-search");
-            autocomplete(stateSearch, USStates);
-            stateSearch.onchange = () => {
-                setTimeout(() => {
-                    highlightSearchedState();
-                }, 500);
-            }
-
-            function highlightSearchedState() {
-                highlight
-                    .style("opacity", function () {
-                        let id = d3.select(this.parentNode).attr("id");
-                        return +(id === USStates[stateSearch.value]);
-                    })
-                let state = statesCell.find(state => state.code === USStates[stateSearch.value])
-                if (state == undefined) state = USData;
-                redrawHighlight(state);
-            }
-
-            function onDataMouseOver(e, d) {
-
-                const state = d3.select(this.parentNode.parentNode).datum().code;
-                const year = d.data.year;
-
-                let yearData = "";
-                yearData += "Year: " + year + "<br/>";
-
-                var countryData = stateData.data.find(d => d.code === state);
-                var data = countryData.years.find(d => d.year === year);
-
-                Object.keys(color)
-                    .reverse()
-                    .forEach(
-                        k => yearData += k + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
-                    )
-
-                tooltip
-                    .html("State: " + Object.keys(USStates).find(key => USStates[key] === state) + "<br>" + yearData)
-                    .style("opacity", 1);
-
-            }
-
-            function onDataMouseMove(e, d) {
-                let y = e.pageY > 650 ? 650 : e.pageY;
-                tooltip.style("transform", "translateY(-55%)")
-                    .style("left", (e.pageX) + colBandwidth + "px")
-                    .style("top", y + "px")
-            }
-
-            function onDataMouseLeave(e, d) {
-                tooltip
-                    .style("opacity", 0)
-                    .style("left", "-100px")
-                    .style("top", "-100px");
-            }
-
-            function onSmallMultiplesMouseEnter(e, data) {
-                svg.selectAll(".vertical-line")
-                    .attr("visibility", "visible");
-
-                //remove all other highlights
-                highlight.style("opacity", d => +(d.code == data.code));
-
-                //highlight the one that is moused
-                d3.select(this)
-                    .select(".small-multiples-highlight")
-                    .style("opacity", 1);
-
-                redrawHighlight(data);
-            }
-
-            function onSmallMultiplesMouseLeave(e, d) {
-                svg.selectAll(".vertical-line")
-                    .attr("visibility", "hidden");
-
-                //remove highlight of current one
-                d3.select(this)
-                    .select(".small-multiples-highlight")
-                    .style("opacity", 0);
-
-                //re-highlight search if available
-                if (stateSearch.value != '')
-                    highlightSearchedState()
-                else
-                    redrawHighlight(USData);
-            }
-
-            function onSmallMultiplesMouseMove(e, d) {
-                let coords = d3.pointer(e, svg);
-                seekerLine
-                    .attr("x1", coords[0] - margin.left)
-                    .attr("x2", coords[0] - margin.left)
-                    .attr("y1", rowScale(d.row))
-                    .attr("y2", rowScale(d.row) + rowBandwidth);
-            }
-
-            function redrawHighlight(data) {
-                var yScaleRedraw = d3.scaleLinear()
-                    .domain([0, 1])
-                    .range([160, 0]);
-
-                var groupsRedraw = highlightSvg.selectAll("g.stacked-group")
-                    .data(stack(data.years));
-
-                groupsRedraw.selectAll("rect.state-data")
-                    .data(d => d)
-                    .transition()
-                    .attr("y", d => yScaleRedraw(d[1]))
-                    .attr("height", d => yScaleRedraw(d[0]) - yScaleRedraw(d[1]))
-
-                //create the state names
-                highlightSvg.selectAll(".state-label")
-                    .attr("class", "state-label")
-                    .text(data.code)
-                    .attr("x", 0)
-                    .attr("y", textMargin);
+    statesCell.forEach(stateCell => {
+        const data = stateData.data.find(state => state.code == stateCell.code);
+        stateCell.years = data.years.map(year => {
+            return {
+                state: stateCell.code,
+                year: year.year,
+                Biomass: year.Biomass / year.Total,
+                Geothermal: year.Geothermal / year.Total,
+                Hydropower: year.Hydropower / year.Total,
+                Solar: year.Solar / year.Total,
+                Wind: year.Wind / year.Total,
+                Coal: year.Coal / year.Total,
+                Petroleum: year.Petroleum / year.Total,
+                NaturalGas: year.NaturalGas / year.Total,
+                Nuclear: year.Nuclear / year.Total
             }
         })
-    })
+        stateCell.renewable_percentage_2019 = data.years.at(-1).Renewable / data.years.at(-1).Total;
+    });
+
+    //calculate rows and columns coordinates of cells
+    var maxRow = d3.max(statesCell, d => parseInt(d.row)) + 1;
+    var maxCol = d3.max(statesCell, d => parseInt(d.col)) + 1;
+
+    //calculate constants
+    var USdata = stateData.data.find(state => state.code == "US");
+    var USData = {
+        code: "US",
+        years: USdata.years.map(year => {
+            return {
+                year: year.year,
+                Biomass: year.Biomass / year.Total,
+                Geothermal: year.Geothermal / year.Total,
+                Hydropower: year.Hydropower / year.Total,
+                Solar: year.Solar / year.Total,
+                Wind: year.Wind / year.Total,
+                Coal: year.Coal / year.Total,
+                Petroleum: year.Petroleum / year.Total,
+                NaturalGas: year.NaturalGas / year.Total,
+                Nuclear: year.Nuclear / year.Total,
+                TotalRenewable: year.Renewable / year.Total,
+            }
+        })
+    }
+    const USdata2019 = USData.years.at(-1);
+    const USRenewablePercentage2019 = USdata2019.TotalRenewable;
+
+    //create scales
+    let rowScale = d3.scaleBand()
+        .domain(d3.range(maxRow))
+        .rangeRound([0, height])
+        .paddingInner(innerPadding);
+
+    let colScale = d3.scaleBand()
+        .domain(d3.range(maxCol))
+        .rangeRound([0, width])
+        .paddingInner(innerPadding);
+
+    let keys = KEYS
+    let stack = d3.stack()
+        .keys(keys);
+
+    let color = {
+        Hydropower: "#1aff1a",
+        Solar: "#71ff5b",
+        Wind: "#9cfe85",
+        Geothermal: "#befcac",
+        Biomass: "#dcfad1",
+        Coal: "#4b0092",
+        Petroleum: "#723ca7",
+        NaturalGas: "#956abb",
+        Nuclear: "#b797cf"
+    };
+
+    var colBandwidth = colScale.bandwidth();
+    var rowBandwidth = rowScale.bandwidth();
+
+    var xScale = d3.scaleBand()
+        .domain(statesCell[0].years.map(year => year.year))
+        .rangeRound([0, colBandwidth]);
+
+    var yScale = d3.scaleLinear()
+        .domain([0, 1])
+        .range([rowBandwidth, 0]);
+
+    //create svg
+    var svg = d3.select("#svg-div")
+        .append("svg")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    //create cells
+    var state = svg.selectAll(".state")
+        .data(statesCell)
+        .enter()
+        .append("g")
+        .attr("class", d => {
+            let result = "state ";
+            if (d.renewable_percentage_2019 >= USRenewablePercentage2019) result += "over-mean";
+            else result += "under-mean";
+            return result;
+        })
+        .attr("id", d => d.code)
+        .attr("transform", d => "translate(" + colScale(d.col) + "," + rowScale(d.row) + ")")
+        .style("opacity", 1)
+        .attr("visibility", "visible")
+        .on("mouseenter", onSmallMultiplesMouseEnter)
+        .on("mouseleave", onSmallMultiplesMouseLeave)
+        .on("mousemove", onSmallMultiplesMouseMove);
+
+    //create highlight for state search
+    var highlight = state.append("rect")
+        .attr("height", rowBandwidth + 4)
+        .attr("width", colBandwidth + 4)
+        .attr("x", -2)
+        .attr("y", -2)
+        .attr("class", "small-multiples-highlight")
+        .attr("id", d => d.code + "-highlight")
+        .style("opacity", 0);
+
+    //create background
+    state.append("rect")
+        .attr("height", rowBandwidth)
+        .attr("width", colBandwidth)
+        .attr("class", "small-multiples-background")
+        .attr("id", d => d.code + "-background")
+
+    //create the stacked bar charts
+    var groups = state.selectAll("g.stacked-group")
+        .data(d => stack(d.years))
+        .enter()
+        .append("g")
+        .attr("class", "stacked-group")
+        .style("fill", (d) => color[d.key]);
+
+    groups.selectAll("rect.state-data")
+        .data(d => d)
+        .enter()
+        .append("rect")
+        .attr("x", (d) => xScale(d.data.year))
+        .attr("y", d => yScale(d[1]))
+        .attr("height", d => yScale(d[0]) - yScale(d[1]))
+        .attr("width", xScale.bandwidth())
+        .attr("class", "state-data")
+        .on("mouseover", onDataMouseOver)
+        .on("mousemove", onDataMouseMove)
+        .on("mouseleave", onDataMouseLeave)
+        ;
+
+    //create the state names
+    state.append("text")
+        .attr("class", "state-label")
+        .text(d => d.code)
+        .attr("x", 0)
+        .attr("y", textMargin);
+
+    //create seeker line
+    let seekerLine = svg.append("line")
+        .attr("class", "vertical-line")
+        .attr("visibility", "hidden");
+
+    //implement state filter function
+    let stateFilter = document.getElementById("state-filter")
+    stateFilter.onchange = () => {
+        let selected = stateFilter.value;
+        switch (selected) {
+            case "all":
+                state.transition()
+                    .style("opacity", 1)
+                    .attr("visibility", "visible");
+                break;
+            case "over-mean":
+                svg.selectAll(".state.over-mean")
+                    .transition()
+                    .style("opacity", 1)
+                    .attr("visibility", "visible");
+                svg.selectAll(".state.under-mean")
+                    .transition()
+                    .style("opacity", 0)
+                    .attr("visibility", "hidden");
+                break;
+            case "under-mean":
+                svg.selectAll(".state.under-mean")
+                    .transition()
+                    .style("opacity", 1)
+                    .attr("visibility", "visible");
+                svg.selectAll(".state.over-mean")
+                    .style("opacity", 0)
+                    .attr("visibility", "hidden");
+                break;
+        }
+    }
+
+    // ----------------
+    // Create a tooltip
+    // ----------------
+    var tooltip = d3.select("#svg-div")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip");
+
+    var highlightSvg = createHighlightChart(USData, color, keys, tooltip, stateData);
+    var label = drawLabel(color);
+
+    //implement state search function
+    let stateSearch = document.getElementById("state-search");
+    autocomplete(stateSearch, USStates);
+    stateSearch.onchange = () => {
+        setTimeout(() => {
+            highlightSearchedState();
+        }, 500);
+    }
+
+    function highlightSearchedState() {
+        highlight
+            .style("opacity", function () {
+                let id = d3.select(this.parentNode).attr("id");
+                return +(id === USStates[stateSearch.value]);
+            })
+        let state = statesCell.find(state => state.code === USStates[stateSearch.value])
+        if (state == undefined) state = USData;
+        redrawHighlight(state);
+    }
+
+    function onDataMouseOver(e, d) {
+
+        const state = d3.select(this.parentNode.parentNode).datum().code;
+        const year = d.data.year;
+
+        let yearData = "";
+        yearData += "Year: " + year + "<br/>";
+
+        var countryData = stateData.data.find(d => d.code === state);
+        var data = countryData.years.find(d => d.year === year);
+
+        Object.keys(color)
+            .reverse()
+            .forEach(
+                k => yearData += attrINFO[k].name + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
+            )
+
+        tooltip
+            .html("State: " + Object.keys(USStates).find(key => USStates[key] === state) + "<br>" + yearData)
+            .style("opacity", 1);
+
+    }
+
+    function onDataMouseMove(e, d) {
+        let y = e.pageY > 650 ? 650 : e.pageY;
+        tooltip.style("transform", "translateY(-55%)")
+            .style("left", (e.pageX) + colBandwidth + "px")
+            .style("top", y + "px")
+    }
+
+    function onDataMouseLeave(e, d) {
+        tooltip
+            .style("opacity", 0)
+            .style("left", "-100px")
+            .style("top", "-100px");
+    }
+
+    function onSmallMultiplesMouseEnter(e, data) {
+        svg.selectAll(".vertical-line")
+            .attr("visibility", "visible");
+
+        //remove all other highlights
+        highlight.style("opacity", d => +(d.code == data.code));
+
+        //highlight the one that is moused
+        d3.select(this)
+            .select(".small-multiples-highlight")
+            .style("opacity", 1);
+
+        redrawHighlight(data);
+    }
+
+    function onSmallMultiplesMouseLeave(e, d) {
+        svg.selectAll(".vertical-line")
+            .attr("visibility", "hidden");
+
+        //remove highlight of current one
+        d3.select(this)
+            .select(".small-multiples-highlight")
+            .style("opacity", 0);
+
+        //re-highlight search if available
+        if (stateSearch.value != '')
+            highlightSearchedState()
+        else
+            redrawHighlight(USData);
+    }
+
+    function onSmallMultiplesMouseMove(e, d) {
+        let coords = d3.pointer(e, svg);
+        seekerLine
+            .attr("x1", coords[0] - margin.left)
+            .attr("x2", coords[0] - margin.left)
+            .attr("y1", rowScale(d.row))
+            .attr("y2", rowScale(d.row) + rowBandwidth);
+    }
+
+    function redrawHighlight(data) {
+        var yScaleRedraw = d3.scaleLinear()
+            .domain([0, 1])
+            .range([160, 0]);
+
+        var groupsRedraw = highlightSvg.selectAll("g.stacked-group")
+            .data(stack(data.years));
+
+        groupsRedraw.selectAll("rect.state-data")
+            .data(d => d)
+            .transition()
+            .attr("y", d => yScaleRedraw(d[1]))
+            .attr("height", d => yScaleRedraw(d[0]) - yScaleRedraw(d[1]))
+
+        //create the state names
+        highlightSvg.selectAll(".state-label")
+            .attr("class", "state-label")
+            .text(data.code)
+            .attr("x", 0)
+            .attr("y", textMargin);
+    }
 }
 
 function autocomplete(inp, input_arr) {
@@ -611,7 +672,7 @@ function createHighlightChart(data, color, keys, tooltip, stateData) {
             .reverse()
             .forEach(
                 k => yearData += k + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
-        )
+            )
 
         tooltip
             .html(yearData)

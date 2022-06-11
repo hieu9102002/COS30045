@@ -1,0 +1,21 @@
+Column,Description,Source
+Code,"Country Code of all entities in the dataset. We prioritize OWID codes, then WB codes, and finally WEO codes","OWID, WB, WEO"
+Entity,"The Entity name. We prioritize the shortest, most English Alphabetic name","OWID, WB, WEO"
+OWID,Entity's OWID ISO code,OWID
+OWID_Name,Entity's Name according to OWID. The names come from different datasets of OWID,OWID
+OWID_Continent,Entity's Continent. Sourced from Our World in Data,OWID's World map region definitions
+OWID_WHO_Region,Entity's WHO region. Sourced from Our World in Data,OWID's World map region definitions
+OWID_WB_Region,Entity's region according to the World Bank.  Sourced from Our World in Data,OWID's World map region definitions
+OWID_UN_Region,Entity's region according to the United Nations. Sourced from Our World in Data.,OWID's World map region definitions
+WB,Entity's World Bank ISO3 code,WB
+WB_ISO2,Entity's World Bank ISO2 code,WB
+WB_Name,Entity's name according to the World Bank,WB
+WB_region,Entity's World Bank region,WB
+WB_adminregion,Entity's World Bank administrative region,WB
+WB_incomeLevel,Entity's income level according to the World Bank,WB
+WB_lendingType,Entity's World Bank lending type,WB
+WB_capitalCity,Entity's capital city according to the World Bank,WB
+WB_longitude,Entity's capital city according to the World Bank,WB
+WB_latitude,Entity's capital city according to the World Bank,WB
+WEO,Entity's WEO ISO code,WEO
+WEO_Country,Entity's name according to the World Economic Outlook,WEO
