@@ -304,6 +304,11 @@ function formatSankeyData(DATASET, INFO, state, year, needednodes, strict = true
 
 }
 
+// colors
+
+var colorPalete = ["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]
+// var colorPalete =  ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
+
 // the function for initializing the graph object from d3.sankey()
 function graphInitialize(sankeydata) {
 
@@ -316,9 +321,10 @@ function graphInitialize(sankeydata) {
 
     graph = Object.assign({}, graph, sankeydataclone);
 
-    graph.nodes.forEach(d => {
+    graph.nodes.forEach((d,i) => {
         d.rectHeight = d.y1 - d.y0;
-        d.color = d.data.color;
+        d.color = colorPalete[i]
+        d.data.color = d.color 
         d.selected = false;
         d.visible = true;
         console.log("POP", d.data)

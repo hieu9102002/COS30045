@@ -177,7 +177,12 @@ export class BubbleView extends BubbleModel {
         // Set a scale for bubble color
         VIEW.ScaleT = MODEL.scaleT
             .domain(MODEL.domainT(MODEL.data))
-            .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]);
+            .range(
+                ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
+            );
+
+        // ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
+        // ["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]
 
         const isnew = d3.select(VIEW.id).select("svg").empty()
 
@@ -267,20 +272,20 @@ export class BubbleView extends BubbleModel {
             // remove annotations if bubble is "out of chart"
 
             VIEW.points
-            .style("visibility", "visible")
-            .filter(
-                function (d, i) {
-                    const point = d3.select(this).select(".bubble-circle"),
-                        x = point.attr("cx"),
-                        y = point.attr("cy")
-                        
-                    return (x > STYLE.width
-                        || x < 0
-                        || y > STYLE.height
-                        || y < 0
-                    );
-                }
-            ).style("visibility", "hidden")
+                .style("visibility", "visible")
+                .filter(
+                    function (d, i) {
+                        const point = d3.select(this).select(".bubble-circle"),
+                            x = point.attr("cx"),
+                            y = point.attr("cy")
+
+                        return (x > STYLE.width
+                            || x < 0
+                            || y > STYLE.height
+                            || y < 0
+                        );
+                    }
+                ).style("visibility", "hidden")
 
         }
 
