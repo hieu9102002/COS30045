@@ -306,7 +306,7 @@ function formatSankeyData(DATASET, INFO, state, year, needednodes, strict = true
 
 // colors
 
-var colorPalete = ["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]
+var colorPalete = ["#4e79a7", "#f28e2c", "#e15759", "#76b7b2", "#59a14f", "#edc949", "#af7aa1", "#ff9da7", "#9c755f", "#bab0ab"]
 // var colorPalete =  ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
 
 // the function for initializing the graph object from d3.sankey()
@@ -321,10 +321,10 @@ function graphInitialize(sankeydata) {
 
     graph = Object.assign({}, graph, sankeydataclone);
 
-    graph.nodes.forEach((d,i) => {
+    graph.nodes.forEach((d, i) => {
         d.rectHeight = d.y1 - d.y0;
         d.color = colorPalete[i]
-        d.data.color = d.color 
+        d.data.color = d.color
         d.selected = false;
         d.visible = true;
         console.log("POP", d.data)
@@ -536,8 +536,8 @@ function nodeOnClick(event, d) {
         }
 
         const nodesdata = {
-            sources: d.targetLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.source]: link.data.value}), {}),
-            targets: d.sourceLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.target]: link.data.value}), {}),
+            sources: d.targetLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.source]: link.data.value }), {}),
+            targets: d.sourceLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.target]: link.data.value }), {}),
         }
 
         const treedatasource = Main.TreemapSource.formatToTree(nodesdata.sources, d.data.id, d.value, d.data.id);
@@ -611,8 +611,8 @@ function nodeOnClick(event, d) {
 function onClickFormatSankeyNode(d) {
 
     return {
-        sources: d.targetLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.source]: link.data.value}), {}),
-        targets: d.sourceLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.target]: link.data.value}), {}),
+        sources: d.targetLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.source]: link.data.value }), {}),
+        targets: d.sourceLinks.reduce((prevobj, link) => ({ ...prevobj, [link.data.target]: link.data.value }), {}),
     }
 
 }
@@ -623,7 +623,10 @@ function linkOnEnter(link) {
         .attr("class", link_class)
 
     // add path
-    link.append("path")
+    link
+        .append("path")
+        .transition()
+        .duration(200)
         .attr("d", d3.sankeyLinkHorizontal())
         .attr("fill", "none")
         .attr("stroke-width", (d) => Math.max(d.width, minVisibleLink));
@@ -692,11 +695,11 @@ function Treemap(ID = "#treemap") {
 
     // append the svg object to the body of the page
     const svg = d3.select(ID)
-        // .append("svg")
-        // .attr("width", width + margin.left + margin.right)
-        // .attr("height", height + margin.top + margin.bottom)
-        // .append("g")
-        // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // .append("svg")
+    // .attr("width", width + margin.left + margin.right)
+    // .attr("height", height + margin.top + margin.bottom)
+    // .append("g")
+    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     this.setData = (attr) => {
 
@@ -792,7 +795,7 @@ function Treemap(ID = "#treemap") {
             }
 
             texts.name.text = ATTR[d.data.name] == undefined ? d.data.name : ATTR[d.data.name].name;
-            tooltip +=  ATTR[d.data.name] == undefined ? "<b>"+d.data.name : "<b>"+ATTR[d.data.name].name + "</b><br/>";
+            tooltip += ATTR[d.data.name] == undefined ? "<b>" + d.data.name : "<b>" + ATTR[d.data.name].name + "</b><br/>";
 
             if (d.value == undefined) {
                 if (d.data.value == undefined) {
@@ -846,7 +849,7 @@ function Treemap(ID = "#treemap") {
         // //     .each(function (d) {
         // //         d.rectBBox = this.getBBox();
         // //     });
-        
+
         // // const labels = tiles.selectAll("text")
         // //     .data((d) => {
         // //         d.text.sort((a, b) => (a.row - b.row));
