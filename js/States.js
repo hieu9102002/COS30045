@@ -284,7 +284,8 @@ function fromStateData(statesCell, stateData, attrINFO) {
         .attr("class", "state-label")
         .text(d => d.code)
         .attr("x", 0)
-        .attr("y", textMargin);
+        .attr("y", textMargin)
+        .attr("pointer-events", "none");
 
     //create seeker line
     let seekerLine = svg.append("line")
@@ -654,7 +655,8 @@ function createHighlightChart(data, color, keys, tooltip, stateData) {
         .attr("class", "state-label")
         .text(data.code)
         .attr("x", 0)
-        .attr("y", textMargin);
+        .attr("y", textMargin)
+        .attr("pointer-events", "none");
 
 
     svg.append("g").call(xAxis);

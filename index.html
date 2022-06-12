@@ -16,20 +16,21 @@
 </head>
 
 <body>
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-sm bg-dark p-0 container-fluid d-flex justify-content-center align-items-center">
         <!-- Links -->
-        <ul class="navbar-nav">
-            <li class="nav-item">
+        <ul class="navbar-nav d-flex flex-row justify-content-center flex-fill">
+            <li class="nav-item w-25 text-center">
                 <a class="nav-link active bg-light text-dark" aria-current="page" href="#">Home</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item w-25 text-center">
                 <a class="nav-link text-light" href="States.html">States use</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item w-25 text-center">
                 <a class="nav-link text-light" href="Sankey.html">Energy flow</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item w-25 text-center">
                 <a class="nav-link text-light" href="Bubble.html">Global comparison</a>
             </li>
         </ul>
@@ -37,114 +38,118 @@
     </nav>
     <!-- Navbar -->
 
+    <!-- header -->
     <header>
-
         <!-- Background image -->
         <div class="p-0 text-center bg-image  d-flex align-items-end" style="
             background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/041.webp');
             height: 400px;
           ">
+            <!-- header -->
             <div class="mask container-fluid" style="
             background: linear-gradient(
                 to bottom,
-                hsla(0, 0%, 0%, 0),
-                hsla(0, 0%, 0%, 0.5)
+                hsla(0, 0%, 0%, 0.5),
+                hsla(0, 0%, 0%, 0.8)
               );
               ">
                 <div class="d-flex justify-content-center align-items-center h-100">
-                    <div class="text-light text-center">
-                        <h1 class="mb-3">United States renewable energy usage profile</h1>
+                    <div class="text-light text-center p-2">
+                        <h1>United States renewable energy usage profile</h1>
                         <p>Vu Duy Hieu, Nguyen Thanh An</p>
-                        <p class="mb-3">
-                            What is the current situation of the Unites States renewable energy usage?
-                            We have built three visualisations to analyse this.</p>
+                        <div class="d-flex justify-content-center">
+                            <a href="States.html" class="btn btn-primary m-2 shadow">Tile Grid Map</a>
+                            <a href="Sankey.html" class="btn btn-primary m-2 shadow">Sankey Chart</a>
+                            <a href="Bubble.html" class="btn btn-primary m-2 shadow">Bubble Chart</a>
+                        </div>
                     </div>
                 </div>
-
             </div>
+            <!-- header -->
+
         </div>
         <!-- Background image -->
 
     </header>
+    <!-- header -->
 
-    <!-- Topic Cards -->
-    <div id="topic-container">
-        <div class="container">
-            <div class="row">
+    <!-- main -->
+    <main style="padding: 25px 25%;">
+        <section class="container-fluid text-center">
+            <p class="m-2">
+                What is the current situation of the Unites States renewable energy usage?
+                We have built three visualisations to analyse this.
+            </p>
+        </section>
 
-                <!-- Card -->
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <a href="States.html" class="d-flex justify-content-center align-items-center">
-                        <div class="card-flyer">
-                            <div class="text-box">
-                                <div class="text-container">
-                                    <h6>States Energy Usage</h6>
-                                </div>
-                                <div class="image-box">
-                                    <img src="https://cdn.pixabay.com/photo/2018/03/30/15/11/deer-3275594_960_720.jpg"
-                                        alt="" />
-                                </div>
-                                <div class="text-container">
-                                    <p>Click here to see US States Energy Consumptions from 2000-2019</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+        <!-- Chart selection -->
+        <section class="container">
+
+            <h2 class="container-fluid text-center">Visualisations</h2>
+
+            <div class="d-flex flex-row justify-content-center flex-fill">
+
+                <style>
+                    .card {
+                        cursor: pointer;
+                        transition: all 0.2s ease-in;
+                        box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.40);
+                        width: 33%;
+                    }
+
+                    .card:hover {
+                        background: #fff;
+                        transition: all 0.2s ease-in;
+                        box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+                    }
+                </style>
+
+                <!-- card -->
+                <div class="card m-2 text-center text-dark">
+                    <img class="card-img-top" src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="States.html" class="card-link stretched-link">Tile Grid Map & Stacked Bar chart</a>
+                    </div>
                 </div>
-                <!-- Card -->
+                <!-- card -->
 
-                <!-- Card -->
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <a href="Sankey.html" class="d-flex justify-content-center align-items-center">
-                        <div class="card-flyer">
-
-                            <div class="text-box">
-                                <div class="text-container">
-                                    <h6>Renewable Energy Flow</h6>
-                                </div>
-                                <div class="image-box">
-                                    <img src="https://cdn.pixabay.com/photo/2018/03/30/15/11/deer-3275594_960_720.jpg"
-                                        alt="" />
-                                </div>
-                                <div class="text-container">
-                                    <p>Click here to see US States Energy Consumptions from 2000-2019</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </a>
+                <!-- card -->
+                <div class="card m-2 text-center text-dark">
+                    <img class="card-img-top" src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="Sankey.html" class="card-link stretched-link">Sankey Chart</a>
+                    </div>
                 </div>
-                <!-- Card -->
+                <!-- card -->
 
-                <!-- Card -->
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <a href="Bubble.html" class="d-flex justify-content-center align-items-center">
-                        <div class="card-flyer">
-
-                            <div class="text-box">
-                                <div class="text-container">
-                                    <h6>Global Energy Use Comparison</h6>
-                                </div>
-                                <div class="image-box">
-                                    <img src="https://cdn.pixabay.com/photo/2018/03/30/15/11/deer-3275594_960_720.jpg"
-                                        alt="" />
-                                </div>
-                                <div class="text-container">
-                                    <p>Click here to see US States Energy Consumptions from 2000-2019</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </a>
+                <!-- card -->
+                <div class="card m-2 text-center text-dark">
+                    <img class="card-img-top" src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="Bubble.html" class="card-link stretched-link">Bubble Chart</a>
+                    </div>
                 </div>
-                <!-- Card -->
+                <!-- card -->
 
             </div>
-        </div>
-    </div>
-    <!-- Topic Cards -->
+
+        </section>
+        <!-- Chart selection -->
 
 
+    </main>
+    <!-- main -->
+
+    <!-- footer -->
     <footer class="bg-dark text-light">
         <!-- Grid container -->
         <div class="container-fluid">
@@ -168,7 +173,9 @@
             </div>
             <!--Grid row-->
         </div>
+        <!-- Grid container -->
     </footer>
+    <!-- footer -->
 
     <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
