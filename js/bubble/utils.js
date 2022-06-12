@@ -419,6 +419,8 @@ export class Tooltip {
             .style("position", "fixed")
             .style("background-color", "white")
             .style("border", "1px solid black")
+            .style("border-radius", "5px")
+            .style("width", "300px")
             .style("padding", "10px")
             .style("color", "black")
             .style("pointer-events", "none")

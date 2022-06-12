@@ -16,10 +16,10 @@ class _BubbleViewStyle {
     }
 
     zLegend = {
-        circleX: 50,
+        circleX: 150,
         circleY: 150,
-        svgWidth: 350,
-        svgHeight: 200,
+        svgWidth: 400,
+        svgHeight: 160,
     }
 
     zCircleX = 150;
@@ -424,7 +424,7 @@ export class BubbleView extends BubbleModel {
                     transit(update.select(".bubble-text"))
                         .text(d => d.data["country"])
                         .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)))
-                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d) - 20))
+                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)) - 20)
                         .attr("fill", d => VIEW.ScaleT(MODEL.dataT(d)))
 
 
@@ -479,6 +479,7 @@ export class BubbleView extends BubbleModel {
 
                 const xLine = point.append("g")
                     .attr("class", "bubble-line-x")
+                    .attr("pointer-events", "none")
 
                 xLine.append("line")
                     .attr("stroke", "black")
@@ -508,6 +509,7 @@ export class BubbleView extends BubbleModel {
 
                 const yLine = point.append("g")
                     .attr("class", "bubble-line-y")
+                    .attr("pointer-events", "none")
 
                 yLine.append("line")
                     .attr("stroke", "black")
@@ -571,10 +573,10 @@ export class BubbleView extends BubbleModel {
         function pointOnMouseOver(e, d) {
 
             const html = `Country: ${d.data["country"]}` +
-                `<br>Group: ${MODEL.dataT(d)}` +
-                `<br>Y axis: ${format(MODEL.dataY(d), MODEL.info[MODEL.y].format)} ${MODEL.info[MODEL.y].unit_name ? `(${MODEL.info[MODEL.y].unit_name})` : ""
+                `<br>${MODEL.info[MODEL.t].name}: ${MODEL.dataT(d)}` +
+                `<br>${MODEL.info[MODEL.y].name}: ${format(MODEL.dataY(d), MODEL.info[MODEL.y].format)} ${MODEL.info[MODEL.y].unit_name ? `(${MODEL.info[MODEL.y].unit_name})` : ""
                 }` +
-                `<br>X axis: ${format(MODEL.dataX(d), MODEL.info[MODEL.x].format)} ${MODEL.info[MODEL.x].unit_name ? `(${MODEL.info[MODEL.x].unit_name})` : ""
+                `<br>${MODEL.info[MODEL.x].name}: ${format(MODEL.dataX(d), MODEL.info[MODEL.x].format)} ${MODEL.info[MODEL.x].unit_name ? `(${MODEL.info[MODEL.x].unit_name})` : ""
                 }` +
                 `<br>${MODEL.info[MODEL.z].name}: ${format(MODEL.dataZ(d))} 
                 ${MODEL.info[MODEL.z].unit_name ? `(${MODEL.info[MODEL.z].unit_name})` : ""
@@ -638,16 +640,16 @@ export class BubbleView extends BubbleModel {
                 .attr('x1', zCircleX)
                 .attr('x2', zCircleX)
                 .attr('y1', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) - 80)
-                .attr('y2', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)))
+                .attr('y2', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) * 2)
                 .attr('stroke', 'black')
                 .style('stroke-dasharray', ('2,2'))
 
             pointLegend.append("text")
-                .text(`${`${MODEL.info[MODEL.z].name}`}: ${format(MODEL.dataZ(d), MODEL.info[MODEL.z].format)}`)
+                .text(`${`${d.data.country}`}: ${format(MODEL.dataZ(d), MODEL.info[MODEL.z].format)} ${MODEL.info[MODEL.z].unit}`)
                 .attr("font-size", 12)
                 .attr('text-anchor', 'middle')
                 .attr('x', zCircleX)
-                .attr('y', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) - 80)
+                .attr('y', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) - 82)
 
             VIEW.legendBubble.selections().raise()
 
@@ -672,8 +674,9 @@ export class BubbleView extends BubbleModel {
                 .style("width", STYLE.zLegend.svgWidth + "px")
                 .style("height", STYLE.zLegend.svgHeight + "px")
                 .style("position", "absolute")
-                .style("left", `${STYLE.tLegendX}px`)
-                .style("bottom", `${STYLE.tLegendY}px`)
+                .style("left", `${700}px`)
+                .style("bottom", `${200}px`)
+
 
             const legendBubbleSVG = legendBubblesDiv
                 .append("svg")
@@ -688,15 +691,21 @@ export class BubbleView extends BubbleModel {
         // label for legends of bubbles
 
         d3.select("#legend-radius-div").selectAll("#bubble-z-label")
-            .data([`${MODEL.info[MODEL.z].name} ${MODEL.info[MODEL.z].unit ? `(${MODEL.info[MODEL.z].unit})` : ""
-                }`])
+            .data([`Circle Area: <br/>
+            ${MODEL.info[MODEL.z].name} (${MODEL.info[MODEL.z].unit_name})
+            `])
             .join(
                 enter => enter.append("div")
                     .attr("id", "bubble-z-label")
+                    .attr("class", "text-center")
                     .attr('x', zCircleX)
                     .attr("y", zCircleY + 20)
                     .html(text => text)
-                    .attr("text-anchor", "middle"),
+                    .attr("text-anchor", "middle")
+                    .style("margin-left", "0")
+                    .style("margin-right", "100px")
+                // .style("pointer-events", "none")
+                ,
                 update => update
                     .html(text => text)
                     .attr("text-anchor", "middle")
@@ -710,7 +719,7 @@ export class BubbleView extends BubbleModel {
             .map((d) => ({ id: MODEL.t + d, value: d, color: VIEW.ScaleT(d) }))
 
         if (MODEL.info[MODEL.t].order != undefined) {
-            console.log(MODEL.info[MODEL.t].order)
+
             let order = MODEL.info[MODEL.t].order.slice()
             groups.sort((a, b) => {
                 if (order.indexOf(a.value) != -1 && order.indexOf(b.value) != -1) {
@@ -762,6 +771,26 @@ export class BubbleView extends BubbleModel {
             .on("mouseover", highlight)
             .on("mouseleave", noHighlight)
 
+        // label for legends of groups
+
+        d3.select(VIEW.id).selectAll("#bubble-t-label")
+            .data([`Colour (Groups): 
+            <br/>${MODEL.info[MODEL.t].name}`])
+            .join(
+                enter => enter.append("div")
+                    .attr("id", "bubble-t-label")
+                    .style("overflow", "auto")
+                    .style("position", "absolute")
+                    .style("left", `${STYLE.tLegendX}px`)
+                    .style("top", `${40}px`)
+                    .style("width", "260px")
+                    .html(text => text)
+                ,
+                update => update
+                    .html(text => text)
+                    .attr("text-anchor", "middle")
+            )
+
 
         // ---------------------------//
         //       HIGHLIGHT GROUP      //
@@ -788,10 +817,15 @@ export class BubbleView extends BubbleModel {
         d3.select("#Deselect").on("click", () => {
             VIEW.points.each(function (d) {
                 const point = d3.select(this);
+
                 removeAnnotations(point);
-                pointOnMouseOut(0, d);
+
                 d.render.selected = false;
-                pointOnMouseOut(0, d);
+
+                VIEW.SVG.selectAll(".bubble-circle").style("opacity", 0.8)
+
+                point.select(".bubble-text").style("visibility", d => d.data["iso_code"] == "USA" ? "visible" : "hidden")
+
             })
         })
 

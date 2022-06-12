@@ -69,6 +69,13 @@ class BubbleDataInit {
 
         this.info = info
 
+        // clean `info` - the data dictionary
+        for (const k in this.info) {
+            this.info[k].unit = this.info[k].unit ? this.info[k].unit : "";
+            this.info[k].unit_name = this.info[k].unit_name ? this.info[k].unit_name : "";
+            this.info[k].unit_description = this.info[k].unit_description ? this.info[k].unit_description : "";
+        }
+
         return this;
     }
 }

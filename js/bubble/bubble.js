@@ -111,7 +111,7 @@ class BubbleSelection extends BubbleView {
                 self.updateY(option).updateDrawPlot()
             });
 
-        self.selectVarZ = new Selections(self.SELECTIONS, "Area");
+        self.selectVarZ = new Selections(self.SELECTIONS, "Circle Area");
         self.selectVarZ
             .OptionsData(self.infoarray.filter(d => d.type == "metric"
                 && [
@@ -274,7 +274,7 @@ class BubbleSelection extends BubbleView {
                     .updateDrawPlot()
             });
 
-        self.selectVarT = new Selections(self.SELECTIONS, "Groups");
+        self.selectVarT = new Selections(self.SELECTIONS, "Colour (Groups)");
         self.selectVarT
             .OptionsData(self.infoarray.filter(d => d.type == "categorical" &&
                 [
