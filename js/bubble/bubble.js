@@ -87,7 +87,8 @@ class BubbleSelection extends BubbleView {
                     "fossil_fuel_consumption",
                     "gas_production",
                     "greenhouse_gas_emissions",
-                    "oil_production"
+                    "oil_production",
+                    // "primary_energy_consumption"
                 ].includes(d.value)
             ))
             .DefaultValue(self.x)
