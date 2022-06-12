@@ -19,14 +19,26 @@
 </head>
 
 <body>
-    <nav>
-        <a href="/index.html">Home</a>
-        <a href="#" class="nav-current">States use</a>
-        <a href="/Sankey.html">Energy flow</a>
-        <a href="/Bubble.html">Global comparison</a>
-        <p>Renewable energy usage profile by state in the US</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-dark p-0 container-fluid d-flex justify-content-center align-items-center">
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active bg-light text-dark" aria-current="page" href="#">States use</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="Sankey.html">Energy flow</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="Bubble.html">Global comparison</a>
+            </li>
+        </ul>
+        <!-- Links -->
     </nav>
-    <div class="nav-background"></div>
+    <!-- Navbar -->
 
     <header>
         <h1>Renewable energy usage profile by state in the US</h1>
@@ -54,9 +66,29 @@
     <div id="svg-div"></div>
     <div class="container"><p>BBTU: Billion British Thermal unit</p></div>
     
-    <footer>
-        <p>COS30045 Data Visualisation</p>
-        <p>Vu Duy Hieu, Nguyen Thanh An</p>
+    <footer class="bg-dark text-light">
+        <!-- Grid container -->
+        <div class="container-fluid">
+            <!--Grid row-->
+            <div class="row p-2">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-end mb-0">
+                        COS30045 Data Visualisation
+                    </p>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-start mb-0">
+                        Vu Duy Hieu, Nguyen Thanh An
+                    </p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
     </footer>
 
 </body>

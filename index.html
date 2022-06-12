@@ -16,30 +16,161 @@
 </head>
 
 <body>
-    <nav>
-        <a href="#" class="nav-current">Home</a>
-        <a href="/States.html">States use</a>
-        <a href="/Sankey.html">Energy flow</a>
-        <a href="/Bubble.html">Global comparison</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-dark p-0 container-fluid d-flex justify-content-center align-items-center">
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active bg-light text-dark" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="States.html">States use</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="Sankey.html">Energy flow</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="Bubble.html">Global comparison</a>
+            </li>
+        </ul>
+        <!-- Links -->
     </nav>
+    <!-- Navbar -->
 
-    <header class="header-index">
-        <h1>United States renewable energy usage profile</h1>
-        <p>Vu Duy Hieu, Nguyen Thanh An</p>
-        <p class="header-paragraph">What is the current situation of the Unites States renewable energy usage?
-            <br />
-            We have built three visualisations to analyse this.
-            <br />
-        </p>
-        <a href="/States.html">States use comparison</a>
-        <a href="/Sankey.html">Renewable usage flow</a>
-        <a href="/Bubble.html">Global comparison</a>
+    <header>
+
+        <!-- Background image -->
+        <div class="p-0 text-center bg-image  d-flex align-items-end" style="
+            background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/041.webp');
+            height: 400px;
+          ">
+            <div class="mask container-fluid" style="
+            background: linear-gradient(
+                to bottom,
+                hsla(0, 0%, 0%, 0),
+                hsla(0, 0%, 0%, 0.5)
+              );
+              ">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-light text-center">
+                        <h1 class="mb-3">United States renewable energy usage profile</h1>
+                        <p>Vu Duy Hieu, Nguyen Thanh An</p>
+                        <p class="mb-3">
+                            What is the current situation of the Unites States renewable energy usage?
+                            We have built three visualisations to analyse this.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Background image -->
+
     </header>
 
-    <footer>
-        <p>COS30045 Data Visualisation</p>
-        <p>Vu Duy Hieu, Nguyen Thanh An</p>
+    <!-- Topic Cards -->
+    <div id="topic-container">
+        <div class="container">
+            <div class="row">
+
+                <!-- Card -->
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <a href="States.html" class="d-flex justify-content-center align-items-center">
+                        <div class="card-flyer">
+                            <div class="text-box">
+                                <div class="text-container">
+                                    <h6>States Energy Usage</h6>
+                                </div>
+                                <div class="image-box">
+                                    <img src="https://cdn.pixabay.com/photo/2018/03/30/15/11/deer-3275594_960_720.jpg"
+                                        alt="" />
+                                </div>
+                                <div class="text-container">
+                                    <p>Click here to see US States Energy Consumptions from 2000-2019</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Card -->
+
+                <!-- Card -->
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <a href="Sankey.html" class="d-flex justify-content-center align-items-center">
+                        <div class="card-flyer">
+
+                            <div class="text-box">
+                                <div class="text-container">
+                                    <h6>Renewable Energy Flow</h6>
+                                </div>
+                                <div class="image-box">
+                                    <img src="https://cdn.pixabay.com/photo/2018/03/30/15/11/deer-3275594_960_720.jpg"
+                                        alt="" />
+                                </div>
+                                <div class="text-container">
+                                    <p>Click here to see US States Energy Consumptions from 2000-2019</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+                <!-- Card -->
+
+                <!-- Card -->
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <a href="Bubble.html" class="d-flex justify-content-center align-items-center">
+                        <div class="card-flyer">
+
+                            <div class="text-box">
+                                <div class="text-container">
+                                    <h6>Global Energy Use Comparison</h6>
+                                </div>
+                                <div class="image-box">
+                                    <img src="https://cdn.pixabay.com/photo/2018/03/30/15/11/deer-3275594_960_720.jpg"
+                                        alt="" />
+                                </div>
+                                <div class="text-container">
+                                    <p>Click here to see US States Energy Consumptions from 2000-2019</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+                <!-- Card -->
+
+            </div>
+        </div>
+    </div>
+    <!-- Topic Cards -->
+
+
+    <footer class="bg-dark text-light">
+        <!-- Grid container -->
+        <div class="container-fluid">
+            <!--Grid row-->
+            <div class="row p-2">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-end mb-0">
+                        COS30045 Data Visualisation
+                    </p>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-start mb-0">
+                        Vu Duy Hieu, Nguyen Thanh An
+                    </p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
     </footer>
+
+    <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
