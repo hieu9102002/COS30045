@@ -419,6 +419,8 @@ export class Tooltip {
             .style("position", "fixed")
             .style("background-color", "white")
             .style("border", "1px solid black")
+            .style("border-radius", "5px")
+            .style("width", "300px")
             .style("padding", "10px")
             .style("color", "black")
             .style("pointer-events", "none")
@@ -445,7 +447,7 @@ export class Tooltip {
 
 export class Selections {
 
-    constructor(selectionarea) {
+    constructor(selectionarea,label) {
 
         this.SELECTIONAREA = selectionarea;
 
@@ -454,6 +456,7 @@ export class Selections {
         this.Options
         this.defaultvalue
         this.onSelect
+        this.label = label
 
     }
 
@@ -516,8 +519,16 @@ export class Selections {
     DrawSelection() {
 
         const self = this;
-
-        self.Selection = self.SELECTIONAREA.append("select");
+        var selectionDiv = self.SELECTIONAREA
+            .append("div")
+            .attr("class", "row");
+        
+        selectionDiv.append("label")
+            .attr("class","col-sm-2 col-form-label")
+            .html(self.label);
+        self.Selection = selectionDiv
+            .append("select")
+            .attr("class", "col-sm-10");
 
         self.Options = self.Selection.selectAll("option")
             .data(self.optionsarray)

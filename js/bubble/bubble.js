@@ -73,25 +73,38 @@ class BubbleSelection extends BubbleView {
 
         const self = this;
 
-        self.selectVarX = new Selections(self.SELECTIONS)
+        self.selectVarX = new Selections(self.SELECTIONS, "X axis")
         self.selectVarX
-            .OptionsData(self.infoarray.filter(d => d.type == "metric"))
+            .OptionsData(self.infoarray.filter(d => d.type == "metric"
+                && [
+                    "area",
+                    "population",
+                    "gdp",
+                    "gdp_per_captia",
+                    "coal_production",
+                    "electricity_demand",
+                    "electricity_generation",
+                    "fossil_fuel_consumption",
+                    "gas_production",
+                    "greenhouse_gas_emissions",
+                    "oil_production",
+                    // "primary_energy_consumption"
+                ].includes(d.value)
+            ))
             .DefaultValue(self.x)
             .OnSelect(function (option) {
                 self.updateX(option).updateDrawPlot()
             });
 
 
-        self.selectVarY = new Selections(self.SELECTIONS);
+        self.selectVarY = new Selections(self.SELECTIONS, "Y axis");
         self.selectVarY
             .OptionsData(self.infoarray.filter(d => d.type == "metric"
                 && [
                     "renewables_share_energy",
                     "renewables_share_elec",
                     "renewables_consumption",
-                    "renewables_electricity",
-                    "group_WB_longitude",
-                    "group_WB_latitude"
+                    "renewables_electricity"
                 ].includes(d.value)))
             .DefaultValue(self.y)
             .OnSelect(function (option) {
@@ -99,7 +112,7 @@ class BubbleSelection extends BubbleView {
                 self.updateY(option).updateDrawPlot()
             });
 
-        self.selectVarZ = new Selections(self.SELECTIONS);
+        self.selectVarZ = new Selections(self.SELECTIONS, "Circle Area");
         self.selectVarZ
             .OptionsData(self.infoarray.filter(d => d.type == "metric"
                 && [
@@ -262,10 +275,16 @@ class BubbleSelection extends BubbleView {
                     .updateDrawPlot()
             });
 
-        self.selectVarT = new Selections(self.SELECTIONS);
+        self.selectVarT = new Selections(self.SELECTIONS, "Colour (Groups)");
         self.selectVarT
-            .OptionsData(self.infoarray.filter(d => d.type == "categorical"
-                // && ["renewables_share_energy", "renewables_consumption"].includes(d.value)
+            .OptionsData(self.infoarray.filter(d => d.type == "categorical" &&
+                [
+                    "group_is_USA",
+                    "group_OWID_Continent",
+                    "group_WHO_Region",
+                    "group_WB_incomeLevel",
+                    "group_WB_lendingType"
+                ].includes(d.value)
             ))
             .DefaultValue(self.t)
             .OnSelect(function (option) {
@@ -299,14 +318,14 @@ class BubbleSelection extends BubbleView {
 
 
 Promise.all([
-    d3.json("./data/bubble/owid.json"),
-    d3.json("./data/bubble/info/info.json"),
+    d3.json("./data/countries/final/data.json"),
+    d3.json("./data/countries/info/info.json"),
 ]).then(function (files) {
     const jsondata = files[0]
     const infodata = files[1]
     let DATA = jsondata.filter(d => d.year == 2019).map((d, i) => ({ id: i, data: d }));
 
-    let x = new BubbleSelection(infodata, DATA, "gdp", "renewables_share_energy", "area", "group_is_USA")
+    let x = new BubbleSelection(infodata, DATA, "gdp", "renewables_share_energy", "area", "group_WHO_Region")
 
 }).catch(function (err) {
     console.error(err);

@@ -4,22 +4,27 @@
 import { BubbleModel } from "./bubblemodel.js"
 import { LegendBubbles, LegendGroups, Tooltip, format } from "./utils.js"
 
-class _BubbleViewParam {
+class _BubbleViewStyle {
 
     width = 500; height = 500;
 
-    margin = { left: 150, bottom: 100, top: 60, right: 450 }
+    margin = { left: 150, bottom: 100, top: 60, right: 100 }
 
     padding = {
         inner: { left: 10, bottom: 10, top: 10, right: 10 },
         outer: { left: 30, bottom: 30, top: 40, right: 100 }
     }
 
-    zCircleX = this.width + this.margin.left + 40;
+    zLegend = {
+        circleX: 150,
+        circleY: 150,
+        svgWidth: 400,
+        svgHeight: 160,
+    }
 
-    zCircleY = this.height - 100;
-
-    zLabelX = this.zCircleX + 50;
+    zCircleX = 150;
+    zCircleY = 100;
+    zCircleSVGHeight = 20;
 
     tLegendX = this.width + this.margin.left + 150;
 
@@ -32,7 +37,7 @@ class _BubbleView {
         this.id = id;
     }
 
-    param = new _BubbleViewParam();
+    style = new _BubbleViewStyle();
 
     SVG;
 
@@ -54,6 +59,8 @@ class _BubbleView {
     ScaleX; ScaleY; ScaleZ; ScaleT;
 
     radiusMax; radiusMin;
+
+    textPadding;
 
 
 }
@@ -116,11 +123,10 @@ export class BubbleView extends BubbleModel {
 
         const MODEL = this;
         const VIEW = MODEL.VIEW;
-        const PARAM = VIEW.param;
+        const STYLE = VIEW.style;
 
-        const zCircleX = PARAM.zCircleX
-        const zCircleY = PARAM.zCircleY
-        const zLabelX = PARAM.zLabelX
+        const zCircleX = STYLE.zLegend.circleX
+        const zCircleY = STYLE.zLegend.circleY
 
         // ------------------------------------- //
         //             DATA                      //
@@ -152,14 +158,14 @@ export class BubbleView extends BubbleModel {
         // Set X axis scale
         VIEW.ScaleX = MODEL.scaleX
             .domain(MODEL.domainX(data))
-            .range([0, PARAM.width])
+            .range([0, STYLE.width])
             .unknown(0);
 
         // Set Y axis scale
         VIEW.ScaleY = MODEL.scaleY
             .domain(MODEL.domainY(data))
-            .range([PARAM.height, 0])
-            .unknown(PARAM.height);
+            .range([STYLE.height, 0])
+            .unknown(STYLE.height);
 
         // Set a scale for bubble size
         VIEW.ScaleZ = MODEL.scaleZ
@@ -170,18 +176,23 @@ export class BubbleView extends BubbleModel {
 
         // Set a scale for bubble color
         VIEW.ScaleT = MODEL.scaleT
-            .domain(MODEL.domainT(data))
-            .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]);
+            .domain(MODEL.domainT(MODEL.data))
+            .range(
+                ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
+            );
+
+        // ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
+        // ["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]
 
         const isnew = d3.select(VIEW.id).select("svg").empty()
 
         if (isnew) {
 
             VIEW.SVG = d3.select(VIEW.id).append("svg")
-                .attr("width", PARAM.width + PARAM.margin.left + PARAM.margin.right)
-                .attr("height", PARAM.height + PARAM.margin.top + PARAM.margin.bottom)
+                .attr("width", STYLE.width + STYLE.margin.left + STYLE.margin.right)
+                .attr("height", STYLE.height + STYLE.margin.top + STYLE.margin.bottom)
                 .append("g")
-                .attr("transform", `translate(${PARAM.margin.left},${PARAM.margin.top})`)
+                .attr("transform", `translate(${STYLE.margin.left},${STYLE.margin.top})`)
 
             VIEW.tooltip = new Tooltip(d3.select(VIEW.id));
         }
@@ -192,7 +203,7 @@ export class BubbleView extends BubbleModel {
         // set zoom call function
         VIEW.zoom = d3.zoom()
         VIEW.zoom.scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
-            .extent([[0, 0], [PARAM.width, PARAM.height]])
+            .extent([[0, 0], [STYLE.width, STYLE.height]])
             .on("zoom", onZoom);
 
         // set plotarea for zooming
@@ -201,10 +212,10 @@ export class BubbleView extends BubbleModel {
             enter => enter
                 .append("rect")
                 .attr("id", "bubble-zoom-area")
-                .attr("x", -PARAM.padding.outer.left)
-                .attr("y", -PARAM.padding.outer.top)
-                .attr("width", PARAM.padding.outer.left + PARAM.width + PARAM.padding.outer.right)
-                .attr("height", PARAM.padding.outer.top + PARAM.height + PARAM.padding.outer.bottom)
+                .attr("x", -STYLE.padding.outer.left)
+                .attr("y", -STYLE.padding.outer.top)
+                .attr("width", STYLE.padding.outer.left + STYLE.width + STYLE.padding.outer.right)
+                .attr("height", STYLE.padding.outer.top + STYLE.height + STYLE.padding.outer.bottom)
                 .style("fill", "none")
                 .style("pointer-events", "fill")
                 .style("cursor", "move").call(VIEW.zoom),
@@ -237,8 +248,8 @@ export class BubbleView extends BubbleModel {
 
             // Update point text position
             VIEW.points.select(".bubble-text")
-                .attr("x", d => newX(MODEL.dataX(d)) + VIEW.ScaleZ(MODEL.dataZ(d)))
-                .attr("y", d => newY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)))
+                .attr("x", d => newX(MODEL.dataX(d)))
+                .attr("y", d => newY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)) - 20)
 
             // Update annotations position
 
@@ -257,6 +268,24 @@ export class BubbleView extends BubbleModel {
 
             VIEW.points.select(".bubble-line-y").select("text")
                 .attr("y", d => newY(MODEL.dataY(d)))
+
+            // remove annotations if bubble is "out of chart"
+
+            VIEW.points
+                .style("visibility", "visible")
+                .filter(
+                    function (d, i) {
+                        const point = d3.select(this).select(".bubble-circle"),
+                            x = point.attr("cx"),
+                            y = point.attr("cy")
+
+                        return (x > STYLE.width
+                            || x < 0
+                            || y > STYLE.height
+                            || y < 0
+                        );
+                    }
+                ).style("visibility", "hidden")
 
         }
 
@@ -279,22 +308,22 @@ export class BubbleView extends BubbleModel {
                     .append("SVG:clipPath")
                     .attr("id", "bubble-clip")
                     .append("SVG:rect")
-                    .attr("x", -PARAM.padding.outer.left)
-                    .attr("y", -PARAM.padding.outer.top)
-                    .attr("width", PARAM.padding.outer.left + PARAM.width + PARAM.padding.outer.right)
-                    .attr("height", PARAM.padding.outer.top + PARAM.height + PARAM.padding.outer.bottom)
+                    .attr("x", -STYLE.padding.outer.left)
+                    .attr("y", -STYLE.padding.outer.top)
+                    .attr("width", STYLE.padding.outer.left + STYLE.width + STYLE.padding.outer.right)
+                    .attr("height", STYLE.padding.outer.top + STYLE.height + STYLE.padding.outer.bottom)
             )
 
 
         // Add X axis label:
-        VIEW.SVG.selectAll("#bubble-x-label").data([`${MODEL.info[MODEL.x].name} ${MODEL.info[MODEL.x].unit ? `(${MODEL.info[MODEL.x].unit})` : ""
+        VIEW.SVG.selectAll("#bubble-x-label").data([`X Axis: ${MODEL.info[MODEL.x].name} ${MODEL.info[MODEL.x].unit ? `(${MODEL.info[MODEL.x].unit})` : ""
             }`]).join(
 
                 enter => enter.append("text")
                     .attr("id", "bubble-x-label")
                     .attr("text-anchor", "middle")
-                    .attr("x", PARAM.width / 2)
-                    .attr("y", PARAM.height + PARAM.padding.outer.bottom + 40)
+                    .attr("x", STYLE.width / 2)
+                    .attr("y", STYLE.height + STYLE.padding.outer.bottom + 40)
                     .text(text => text)
                 ,
                 update => transit(update).text(text => text)
@@ -306,7 +335,7 @@ export class BubbleView extends BubbleModel {
             enter => enter
                 .append("g")
                 .attr("id", "bubble-x-axis")
-                .attr("transform", `translate(0, ${PARAM.height + PARAM.padding.outer.bottom})`)
+                .attr("transform", `translate(0, ${STYLE.height + STYLE.padding.outer.bottom})`)
                 .call(MODEL.xAxisCall(VIEW.ScaleX)),
 
             update => transit(update).call(MODEL.xAxisCall(VIEW.ScaleX))
@@ -314,14 +343,14 @@ export class BubbleView extends BubbleModel {
 
 
         // Add Y axis label:
-        VIEW.SVG.selectAll("#bubble-y-label").data([`${MODEL.info[MODEL.y].name} ${MODEL.info[MODEL.y].unit ? `(${MODEL.info[MODEL.y].unit}` : ""
+        VIEW.SVG.selectAll("#bubble-y-label").data([`Y Axis: ${MODEL.info[MODEL.y].name} ${MODEL.info[MODEL.y].unit ? `(${MODEL.info[MODEL.y].unit}` : ""
             })`]).join(
 
                 enter => enter.append("text")
                     .attr("id", "bubble-y-label")
                     .attr("text-anchor", "middle")
-                    .attr("x", - PARAM.height / 2)
-                    .attr("y", -50 - PARAM.padding.outer.left)
+                    .attr("x", - STYLE.height / 2)
+                    .attr("y", -50 - STYLE.padding.outer.left)
                     .attr("transform", `rotate(-90)`)
                     .text(text => text)
                 ,
@@ -334,7 +363,7 @@ export class BubbleView extends BubbleModel {
             enter => enter
                 .append("g")
                 .attr("id", "bubble-y-axis")
-                .attr("transform", `translate(${-PARAM.padding.outer.left}, 0)`)
+                .attr("transform", `translate(${-STYLE.padding.outer.left}, 0)`)
                 .call(MODEL.yAxisCall(VIEW.ScaleY)),
 
             update => transit(update).call(MODEL.yAxisCall(VIEW.ScaleY))
@@ -365,14 +394,15 @@ export class BubbleView extends BubbleModel {
 
                     enter.append("text")
                         .attr("class", "bubble-text")
+                        .attr("text-anchor", "middle")
                         .attr("clip-path", "url(#bubble-clip)")
                         .text(d => d.data["country"])
                         .style("visibility", d => {
                             if (d.data["iso_code"] == "USA") return "visible"
                             else return "hidden"
                         })
-                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)) + VIEW.ScaleZ(MODEL.dataZ(d)))
-                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)))
+                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)))
+                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)) - 20)
                         .attr("fill", d => VIEW.ScaleT(MODEL.dataT(d)))
 
                     enter
@@ -393,8 +423,8 @@ export class BubbleView extends BubbleModel {
 
                     transit(update.select(".bubble-text"))
                         .text(d => d.data["country"])
-                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)) + VIEW.ScaleZ(MODEL.dataZ(d)))
-                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)))
+                        .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)))
+                        .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)) - VIEW.ScaleZ(MODEL.dataZ(d)) - 20)
                         .attr("fill", d => VIEW.ScaleT(MODEL.dataT(d)))
 
 
@@ -406,22 +436,22 @@ export class BubbleView extends BubbleModel {
                     transit(update.select(".bubble-line-x").select("line"))
                         .attr("x1", d => VIEW.ScaleX(MODEL.dataX(d)))
                         .attr("x2", d => VIEW.ScaleX(MODEL.dataX(d)))
-                        .attr("y1", VIEW.param.height + VIEW.param.padding.outer.bottom + 20)
+                        .attr("y1", VIEW.style.height + VIEW.style.padding.outer.bottom + 20)
                         .attr("y2", d => VIEW.ScaleY(MODEL.dataY(d)))
 
                     transit(update.select(".bubble-line-x").select("text"))
                         .attr("x", d => VIEW.ScaleX(MODEL.dataX(d)))
-                        .attr("y", VIEW.param.height + VIEW.param.padding.outer.bottom + 20)
+                        .attr("y", VIEW.style.height + VIEW.style.padding.outer.bottom + 20)
                         .text(d => format(MODEL.dataX(d)))
 
                     transit(update.select(".bubble-line-y").select("line"))
-                        .attr("x1", -VIEW.param.padding.outer.left - 10)
+                        .attr("x1", -VIEW.style.padding.outer.left - 10)
                         .attr("x2", d => VIEW.ScaleX(MODEL.dataX(d)))
                         .attr("y1", d => VIEW.ScaleY(MODEL.dataY(d)))
                         .attr("y2", d => VIEW.ScaleY(MODEL.dataY(d)))
 
                     transit(update.select(".bubble-line-y").select("text"))
-                        .attr("x", -VIEW.param.padding.outer.left - 10)
+                        .attr("x", -VIEW.style.padding.outer.left - 10)
                         .attr("y", d => VIEW.ScaleY(MODEL.dataY(d)))
                         .text(d => format(MODEL.dataY(d)))
 
@@ -449,13 +479,14 @@ export class BubbleView extends BubbleModel {
 
                 const xLine = point.append("g")
                     .attr("class", "bubble-line-x")
+                    .attr("pointer-events", "none")
 
                 xLine.append("line")
                     .attr("stroke", "black")
                     .attr("stroke-dasharray", "4")
                     .attr("x1", pointX)
                     .attr("x2", pointX)
-                    .attr("y1", PARAM.height + PARAM.padding.outer.bottom + 20)
+                    .attr("y1", STYLE.height + STYLE.padding.outer.bottom + 20)
                     .attr("y2", pointY)
 
                 xLine.append("text")
@@ -466,7 +497,7 @@ export class BubbleView extends BubbleModel {
                     .attr("dominant-baseline", "text-before-edge")
                     .attr("font-size", "10px")
                     .attr("x", pointX)
-                    .attr("y", PARAM.height + PARAM.padding.outer.bottom + 20)
+                    .attr("y", STYLE.height + STYLE.padding.outer.bottom + 20)
                     .text(format(MODEL.dataX(d)))
 
                 point.raise()
@@ -478,11 +509,12 @@ export class BubbleView extends BubbleModel {
 
                 const yLine = point.append("g")
                     .attr("class", "bubble-line-y")
+                    .attr("pointer-events", "none")
 
                 yLine.append("line")
                     .attr("stroke", "black")
                     .attr("stroke-dasharray", "4")
-                    .attr("x1", -PARAM.padding.outer.left - 10)
+                    .attr("x1", -STYLE.padding.outer.left - 10)
                     .attr("x2", pointX)
                     .attr("y1", pointY)
                     .attr("y2", pointY)
@@ -494,7 +526,7 @@ export class BubbleView extends BubbleModel {
                     .attr("font-size", "10px")
                     .attr("dominant-baseline", "middle")
                     .attr("text-anchor", "end")
-                    .attr("x", -PARAM.padding.outer.left - 10)
+                    .attr("x", -STYLE.padding.outer.left - 10)
                     .attr("y", pointY)
                     .text(format(MODEL.dataY(d)))
 
@@ -541,12 +573,14 @@ export class BubbleView extends BubbleModel {
         function pointOnMouseOver(e, d) {
 
             const html = `Country: ${d.data["country"]}` +
-                `<br>Group: ${MODEL.dataT(d)}` +
-                `<br>Y axis: ${format(MODEL.dataY(d), MODEL.info[MODEL.y].format)} ${MODEL.info[MODEL.y].unit_name ? `(${MODEL.info[MODEL.y].unit_name})` : ""
+                `<br>${MODEL.info[MODEL.t].name}: ${MODEL.dataT(d)}` +
+                `<br>${MODEL.info[MODEL.y].name}: ${format(MODEL.dataY(d), MODEL.info[MODEL.y].format)} ${MODEL.info[MODEL.y].unit_name ? `(${MODEL.info[MODEL.y].unit_name})` : ""
                 }` +
-                `<br>X axis: ${format(MODEL.dataX(d), MODEL.info[MODEL.x].format)} ${MODEL.info[MODEL.x].unit_name ? `(${MODEL.info[MODEL.x].unit_name})` : ""
+                `<br>${MODEL.info[MODEL.x].name}: ${format(MODEL.dataX(d), MODEL.info[MODEL.x].format)} ${MODEL.info[MODEL.x].unit_name ? `(${MODEL.info[MODEL.x].unit_name})` : ""
                 }` +
-                `<br>${MODEL.info[MODEL.z].name}: ${format(MODEL.dataZ(d))}`
+                `<br>${MODEL.info[MODEL.z].name}: ${format(MODEL.dataZ(d))} 
+                ${MODEL.info[MODEL.z].unit_name ? `(${MODEL.info[MODEL.z].unit_name})` : ""
+                }`
 
             VIEW.tooltip.html(html).show(e.x, e.y);
 
@@ -593,7 +627,7 @@ export class BubbleView extends BubbleModel {
 
             const d = point.datum()
 
-            const pointLegend = point.append("g")
+            const pointLegend = VIEW.legendBubble.parent.append("g")
                 .attr("class", "bubble-circle-legend")
 
             pointLegend.append("circle")
@@ -606,16 +640,16 @@ export class BubbleView extends BubbleModel {
                 .attr('x1', zCircleX)
                 .attr('x2', zCircleX)
                 .attr('y1', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) - 80)
-                .attr('y2', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)))
+                .attr('y2', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) * 2)
                 .attr('stroke', 'black')
                 .style('stroke-dasharray', ('2,2'))
 
             pointLegend.append("text")
-                .text(`${`${MODEL.info[MODEL.z].name}`}: ${format(MODEL.dataZ(d), MODEL.info[MODEL.z].format)}`)
+                .text(`${`${d.data.country}`}: ${format(MODEL.dataZ(d), MODEL.info[MODEL.z].format)} ${MODEL.info[MODEL.z].unit}`)
                 .attr("font-size", 12)
                 .attr('text-anchor', 'middle')
                 .attr('x', zCircleX)
-                .attr('y', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) - 80)
+                .attr('y', zCircleY - VIEW.ScaleZ(MODEL.dataZ(d)) - 82)
 
             VIEW.legendBubble.selections().raise()
 
@@ -624,31 +658,56 @@ export class BubbleView extends BubbleModel {
 
         function hideBubbleInLegends(point) {
 
-            point.selectAll(".bubble-circle-legend").remove()
+            d3.selectAll(".bubble-circle-legend").remove()
         }
 
         // ---------------------------//
         //       LEGEND BUBBLES       //
         // ---------------------------//
 
-        if (isnew) VIEW.legendBubble = new LegendBubbles(VIEW.ScaleZ, VIEW.SVG, zCircleX, zCircleY);
+        if (isnew) {
+
+            // add new div and svg for legend bubbles
+            const legendBubblesDiv = d3.select(VIEW.id)
+                .append("div")
+                .attr("id", "legend-radius-div")
+                .style("width", STYLE.zLegend.svgWidth + "px")
+                .style("height", STYLE.zLegend.svgHeight + "px")
+                .style("position", "absolute")
+                .style("left", `${700}px`)
+                .style("bottom", `${200}px`)
+
+
+            const legendBubbleSVG = legendBubblesDiv
+                .append("svg")
+                .attr("width", STYLE.zLegend.svgWidth)
+                .attr("height", STYLE.zLegend.svgHeight)
+
+            VIEW.legendBubble = new LegendBubbles(VIEW.ScaleZ, legendBubbleSVG, zCircleX, zCircleY);
+        }
 
         VIEW.legendBubble.update(MODEL.legendBubbleValues(data))
 
         // label for legends of bubbles
 
-        VIEW.SVG.selectAll("#bubble-z-label").data([`${MODEL.info[MODEL.z].name} ${
-            MODEL.info[MODEL.z].unit ? `(${MODEL.info[MODEL.z].unit})` : ""
-        }`])
+        d3.select("#legend-radius-div").selectAll("#bubble-z-label")
+            .data([`Circle Area: <br/>
+            ${MODEL.info[MODEL.z].name} (${MODEL.info[MODEL.z].unit_name})
+            `])
             .join(
-                enter => enter.append("text")
+                enter => enter.append("div")
                     .attr("id", "bubble-z-label")
+                    .attr("class", "text-center")
                     .attr('x', zCircleX)
                     .attr("y", zCircleY + 20)
-                    .text(text => text)
-                    .attr("text-anchor", "middle"),
-                update => transit(update)
-                    .text(text => text)
+                    .html(text => text)
+                    .attr("text-anchor", "middle")
+                    .style("margin-left", "0")
+                    .style("margin-right", "100px")
+                // .style("pointer-events", "none")
+                ,
+                update => update
+                    .html(text => text)
                     .attr("text-anchor", "middle")
             )
 
@@ -660,7 +719,7 @@ export class BubbleView extends BubbleModel {
             .map((d) => ({ id: MODEL.t + d, value: d, color: VIEW.ScaleT(d) }))
 
         if (MODEL.info[MODEL.t].order != undefined) {
-            console.log(MODEL.info[MODEL.t].order)
+
             let order = MODEL.info[MODEL.t].order.slice()
             groups.sort((a, b) => {
                 if (order.indexOf(a.value) != -1 && order.indexOf(b.value) != -1) {
@@ -691,8 +750,8 @@ export class BubbleView extends BubbleModel {
                 .append("div")
                 .style("overflow", "auto")
                 .style("position", "absolute")
-                .style("left", `${PARAM.tLegendX}px`)
-                .style("top", `${PARAM.tLegendY}px`)
+                .style("left", `${STYLE.tLegendX}px`)
+                .style("top", `${STYLE.tLegendY}px`)
                 .style("width", "260px")
                 .style("height", "200px")
 
@@ -711,6 +770,26 @@ export class BubbleView extends BubbleModel {
         VIEW.legendGroups.selections()
             .on("mouseover", highlight)
             .on("mouseleave", noHighlight)
+
+        // label for legends of groups
+
+        d3.select(VIEW.id).selectAll("#bubble-t-label")
+            .data([`Colour (Groups): 
+            <br/>${MODEL.info[MODEL.t].name}`])
+            .join(
+                enter => enter.append("div")
+                    .attr("id", "bubble-t-label")
+                    .style("overflow", "auto")
+                    .style("position", "absolute")
+                    .style("left", `${STYLE.tLegendX}px`)
+                    .style("top", `${40}px`)
+                    .style("width", "260px")
+                    .html(text => text)
+                ,
+                update => update
+                    .html(text => text)
+                    .attr("text-anchor", "middle")
+            )
 
 
         // ---------------------------//
@@ -738,10 +817,15 @@ export class BubbleView extends BubbleModel {
         d3.select("#Deselect").on("click", () => {
             VIEW.points.each(function (d) {
                 const point = d3.select(this);
+
                 removeAnnotations(point);
-                pointOnMouseOut(0, d);
+
                 d.render.selected = false;
-                pointOnMouseOut(0, d);
+
+                VIEW.SVG.selectAll(".bubble-circle").style("opacity", 0.8)
+
+                point.select(".bubble-text").style("visibility", d => d.data["iso_code"] == "USA" ? "visible" : "hidden")
+
             })
         })
 

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Data Visualisation Assignment" />
+    <meta name="keywords" content="HTML, CSS, JS, D3" />
+    <meta name="author" content="Vu Duy Hieu, Nguyen Thanh An" />
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-5.1.3-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <title>Renewable energy usage profile of the United States</title>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-dark p-0 container-fluid d-flex justify-content-center align-items-center">
+        <!-- Links -->
+        <ul class="navbar-nav d-flex flex-row justify-content-center flex-fill">
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link active bg-success text-light" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link text-light" href="States.html">States use</a>
+            </li>
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link text-light" href="Sankey.html">Energy flow</a>
+            </li>
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link text-light" href="Bubble.html">Global comparison</a>
+            </li>
+        </ul>
+        <!-- Links -->
+    </nav>
+    <!-- Navbar -->
+
+    <!-- header -->
+    <header>
+        <!-- Background image -->
+        <div class="p-0 text-center bg-image  d-flex align-items-end" style="
+            background-image: url('/image/Picture1.png');
+            background-size: cover;
+            height: 400px;
+          ">
+            <!-- header -->
+            <div class="mask container-fluid" style="
+            background: linear-gradient(
+                to bottom,
+                hsla(0, 0%, 0%, 0.5),
+                hsla(0, 0%, 0%, 0.8)
+              );
+              ">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-light text-center p-2">
+                        <h1>United States renewable energy usage profile</h1>
+                        <p>Vu Duy Hieu, Nguyen Thanh An</p>
+                        <!-- <div class="d-flex justify-content-center">
+                            <a href="States.html" class="btn btn-primary m-2 shadow">Tile Grid Map</a>
+                            <a href="Sankey.html" class="btn btn-primary m-2 shadow">Sankey Chart</a>
+                            <a href="Bubble.html" class="btn btn-primary m-2 shadow">Bubble Chart</a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <!-- header -->
+
+        </div>
+        <!-- Background image -->
+
+    </header>
+    <!-- header -->
+
+    <!-- main -->
+    <main style="padding: 25px 25%;">
+        <section class="container-fluid text-start">
+            <p class="m-2">
+                The purpose of this project is to visualise the current situation of renewable energy usage by the
+                United States; in particular, the trend of renewable energy usage among US states from 2000-2019, the
+                usage flow of renewable energy in the Unites States, and the comparison of renewable energy use between
+                the US and other countries.
+            </p>
+            <p class="m-2">We have built three visualisations for this project.
+                The first visualisation is a tile grid map, with a stacked bar chart in each cell, which visualises the trend and comparison of renewable energy use among the states in the United States. The second visualisation is a Sankey chart that visualises the usage flow of different renewable energy sources. The third visualisation is a bubble chart that visualises the comparison of US renewable energy use profile with other countries based on different statistics such as land area or gdp.
+            </p>
+
+            <p class="m-2">
+                Through the visualisations, we hope that our audience can learn interesting
+                details about the US energy consumption trend, better understand the composition of America’s energy
+                grid, and apply the knowledge to develop more and better renewable energy production and distribution
+                systems to lessen the US’s reliance on fossil fuel and reducing the greenhouse gas effect.
+            </p>
+        </section>
+
+        <!-- Chart selection -->
+        <section class="container">
+
+            <h2 class="container-fluid text-center">Visualisations</h2>
+
+            <div class="d-flex flex-row justify-content-center flex-fill">
+
+                <style>
+                    .card {
+                        cursor: pointer;
+                        transition: all 0.2s ease-in;
+                        box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.40);
+                        width: 33%;
+                    }
+
+                    .card:hover {
+                        background: #fff;
+                        transition: all 0.2s ease-in;
+                        box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+                    }
+                </style>
+
+                <!-- card -->
+                <!-- Source of icons: https://d3-graph-gallery.com/index.html-->
+                <div class="card m-2 text-center text-dark">
+                    <img class="card-img-top" src="image/StackedArea150.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Tile Grid Map</h5>
+                        <p class="card-text">What is the <strong>trend of renewable energy consumption</strong> in
+                            <strong>the United States</strong> in the last <strong>20 years</strong>, and what are the
+                            respective trends for <strong>every state?</strong>
+                        </p>
+                        <a href="States.html" class="card-link stretched-link"></a>
+                    </div>
+                </div>
+                <!-- card -->
+
+                <!-- card -->
+                <div class="card m-2 text-center text-dark">
+                    <img class="card-img-top" src="image/Sankey150.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Sankey Chart</h5>
+                        <p class="card-text">How is renewable energy <strong>consumed</strong> in the US?</p>
+                        <a href="Sankey.html" class="card-link stretched-link"></a>
+                    </div>
+                </div>
+                <!-- card -->
+
+                <!-- card -->
+                <div class="card m-2 text-center text-dark">
+                    <img class="card-img-top" src="image/BubblePlot150.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Bubble Chart</h5>
+                        <p class="card-text">How does the renewable energy usage profile of the US compare to the world?
+                        </p>
+                        <a href="Bubble.html" class="card-link stretched-link"></a>
+                    </div>
+                </div>
+                <!-- card -->
+
+            </div>
+
+        </section>
+        <!-- Chart selection -->
+
+
+    </main>
+    <!-- main -->
+
+    <!-- footer -->
+    <footer class="bg-dark text-light">
+        <!-- Grid container -->
+        <div class="container-fluid">
+            <!--Grid row-->
+            <div class="row p-2">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-end mb-0">
+                        COS30045 Data Visualisation
+                    </p>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-start mb-0">
+                        Vu Duy Hieu, Nguyen Thanh An
+                    </p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+    </footer>
+    <!-- footer -->
+
+    <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

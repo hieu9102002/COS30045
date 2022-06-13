@@ -8,22 +8,59 @@
     <meta name="description" content="Data Visualisation Assignment" />
     <meta name="keywords" content="HTML, CSS, JS, D3" />
     <meta name="author" content="Vu Duy Hieu, Nguyen Thanh An" />
+
     <link rel="stylesheet" type="text/css" href="css/bootstrap-5.1.3-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="test/css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
-    <!-- <script src="js/States.js" type="module"></script> -->
-    <script src="test/js/Sankey.js" type="module"></script>
-    <script src="test/js/States.js" type="module"></script>
-    <script src="test/js/Treemap.js" type="module"></script>
-    <script src="test/js/Scatter.js" type="module"></script>
-    <!-- <script src="test/js/States2.js" type="module"></script> -->
-    <title>Renewable energy usage profile of the United States</title>
+    <script src="./js/States.js" type="module"></script>
+
+    <title>Renewable energy usage profile by state in the US</title>
 </head>
 
 <body>
-    <h1>Renewable energy usage profile by state in the US</h1>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-dark p-0 container-fluid d-flex justify-content-center align-items-center">
+        <!-- Links -->
+        <ul class="navbar-nav d-flex flex-row justify-content-center flex-fill">
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link text-light" href="index.html">Home</a>
+            </li>
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link active bg-success text-light" aria-current="page" href="#">States use</a>
+            </li>
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link text-light" href="Sankey.html">Energy flow</a>
+            </li>
+            <li class="nav-item w-25 text-center">
+                <a class="nav-link text-light" href="Bubble.html">Global comparison</a>
+            </li>
+        </ul>
+        <!-- Links -->
+    </nav>
+    <!-- Navbar -->
+
+
+    <header class="bg-secondary shadow mb-2 p-2 text-center">
+        <h1 class="text-light text-center">
+            Renewable energy usage profile by state in the US
+        </h1>
+    </header>
+
     <div class="container">
+        <div class="row">
+            <p>
+                The United States is very slowly consuming more and more percentage of its energy from renewable sources
+                such as Hydropower and Solar energy. However, is this trend of renewable energy stagnation mirrored by
+                the 50 states of the US?
+            </p>
+            <p>
+                We can explore the trend of renewable energy consumption of the United States and its states using the
+                visualisation below, to see the percentage of renewable energy consumption of different sources relative
+                to all energy consumption. Absolute value of energy consumption data are also provided on hover, in
+                BBTUs (Billion British Thermal units)
+            </p>
+        </div>
         <div class="row">
             <div class="col">
                 <select id="state-filter" class="form-select form-control">
@@ -37,13 +74,40 @@
             </div>
         </div>
         <div class="row">
-            <div class="col"><strong>Power consumption,<br/> by source</strong></div>
+            <div class="col"><strong>Power consumption,<br /> by source</strong></div>
             <div id="svg-overall" class="col"></div>
             <div id="svg-label" class="col"></div>
         </div>
     </div>
     <div id="svg-div"></div>
-    <p>BBTU: Billion British Thermal unit</p>
+    <div class="container">
+        <p>BBTU: Billion British Thermal unit</p>
+    </div>
+
+    <footer class="bg-dark text-light">
+        <!-- Grid container -->
+        <div class="container-fluid">
+            <!--Grid row-->
+            <div class="row p-2">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-end mb-0">
+                        COS30045 Data Visualisation
+                    </p>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 align-middle">
+                    <p class="text-start mb-0">
+                        Vu Duy Hieu, Nguyen Thanh An
+                    </p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+    </footer>
 
 </body>
 
