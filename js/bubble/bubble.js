@@ -325,7 +325,7 @@ Promise.all([
     const infodata = files[1]
     let DATA = jsondata.filter(d => d.year == 2019).map((d, i) => ({ id: i, data: d }));
 
-    let x = new BubbleSelection(infodata, DATA, "gdp", "renewables_share_energy", "area", "group_is_USA")
+    let x = new BubbleSelection(infodata, DATA, "gdp", "renewables_share_energy", "area", "group_WHO_Region")
 
 }).catch(function (err) {
     console.error(err);
