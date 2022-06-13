@@ -73,7 +73,6 @@ Promise.all([
     let statesCell = files[0]
     let stateData = files[1]
     let attrINFO = files[2]
-    console.log(files)
     var ss = {}
 
     // stateData.forEach(t => {
@@ -144,7 +143,6 @@ function fromStateData(statesCell, stateData, attrINFO) {
             }
         })
         let stateData2019 = data.years.at(-1)
-        console.log(stateData2019)
         stateCell.renewable_percentage_2019 = stateData2019.Renewable / stateData2019.Total;
     });
 

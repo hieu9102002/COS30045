@@ -20,10 +20,6 @@ Promise.all([
     }),
 ]).then(function (files) {
 
-    // console.log(OWID)
-
-    // Scatter2(OWID);
-
     let s = formatSankeyData(files[0], files[1], STATE, YEAR, [
         "Biomass", "Geothermal", "Wind", "Solar", "Hydropower",
         "ElectricPower", "Transportation", "Industrial", "Commercial", "Residential",
@@ -33,8 +29,6 @@ Promise.all([
         // "ElectricLoss", "ElectricImport", "ElectricExport",
         // "NetInterstateImport", "NetInterstateExport",
     ])
-
-    console.log(s)
 
     Main.TreemapSource.setData(files[1]);
     Main.TreemapTarget.setData(files[1]);
@@ -153,9 +147,9 @@ function formatSankeyData(DATASET, INFO, state, year, needednodes, strict = true
     let neededleafs = []
 
     for (let node of needednodes) {
-        console.log(info[node]["type"])
+        
         if (info[node]["type"] == "group") {
-            console.log(info[node]["leafs"])
+            
             neededleafs = neededleafs.concat(info[node]["leafs"])
         }
         else {
@@ -327,7 +321,7 @@ function graphInitialize(sankeydata) {
         d.data.color = d.color
         d.selected = false;
         d.visible = true;
-        console.log("POP", d.data)
+        
         d.tooltip = `${d.data.name}
             <br>${d.data.value.toLocaleString('en-US')} BBtu
             <br>${STATE}, ${YEAR}`;
@@ -823,8 +817,6 @@ function Treemap(ID = "#treemap") {
                 _text.y = d.y0 + (textSize + textPadding);
             }
         }
-
-        console.log(tooltip)
 
         const tiles = svg.selectAll(".tiles")
             .data(root.leaves())
