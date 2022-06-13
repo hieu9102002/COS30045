@@ -332,7 +332,7 @@ function fromStateData(statesCell, stateData, attrINFO) {
         .style("opacity", 0)
         .attr("class", "tooltip");
 
-    var highlightSvg = createHighlightChart(USData, color, keys, tooltip, stateData);
+    var highlightSvg = createHighlightChart(USData, color, keys, tooltip, stateData, attrINFO);
     var label = drawLabel(color);
 
     //implement state search function
@@ -585,7 +585,7 @@ function drawLabel(color) {
     return svg;
 }
 
-function createHighlightChart(data, color, keys, tooltip, stateData) {
+function createHighlightChart(data, color, keys, tooltip, stateData, attrINFO) {
     var textMargin = 14;
     var innerPadding = 0.05;
 
@@ -675,7 +675,7 @@ function createHighlightChart(data, color, keys, tooltip, stateData) {
         Object.keys(color)
             .reverse()
             .forEach(
-                k => yearData += k + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
+                k => yearData += attrINFO[k].name + ": " + Number(data[k]).toLocaleString() + " BBtu<br>"
             )
 
         tooltip
