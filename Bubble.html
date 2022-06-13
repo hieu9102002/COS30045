@@ -40,7 +40,7 @@
         <!-- Links -->
     </nav>
     <style>
-        
+
     </style>
     <!-- Navbar -->
 
@@ -62,8 +62,92 @@
     <div class="container">
         <div class="row">
             <p>
-                Is there a correlation between renewable energy consumption and the GDP of a country? Or does renewable energy usage depends on the area the country can utilise to create renewable energy?
-                <br/>In this bubble plot, we aim to explore potential correlations between renewable energy usage of countries with some potentially relevant features of the country such as GDP, Population, Geometric Area. We also group countries based on editable categories like Region or Income level.
+
+                Compare to other countries around the world, does the US have a big area, large population, and/or large
+                gdp? And with that background, how good is the US renewable energy use status, compare to those
+                countries? Should the US improve?
+            </p>
+            <p>
+                In this bubble chart, we aim to explore potential correlations between renewable energy usage of
+                countries with some potentially relevant features of the country such as GDP, Population, Geometric
+                Area. We also group countries based on editable categories like Region or Income level.
+                We want to see how big the area, population, gdp, ..., of the United States is, and see with the
+                land size, population size, economy size,..., the US is having, how the US renewable usage status is
+                compare to other countries.
+            </p>
+            <p>
+                For this chart, we have chosen the following countries and entities to compare:
+            <p>
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Country list
+                </button>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <div class="row m-2">
+                    <ul class="col-sm-2">
+                        <li>Argentina</li>
+                        <li>Australia</li>
+                        <li>Austria</li>
+                        <li>Burundi</li>
+                        <li>Belgium</li>
+                        <li>Bangladesh</li>
+                        <li>Bulgaria</li>
+                        <li>Bolivia</li>
+                        <li>Brazil</li>
+                    </ul>
+                    <ul class="col-sm-2">
+                        <li>Canada</li>
+                        <li>Chile</li>
+                        <li>China</li>
+                        <li>Colombia</li>
+                        <li>Germany</li>
+                        <li>Denmark</li>
+                        <li>Ecuador</li>
+                        <li>Egypt</li>
+                        <li>France</li>
+                    </ul>
+                    <ul class="col-sm-2">
+                        <li>Greece</li>
+                        <li>Hungary</li>
+                        <li>Indonesia</li>
+                        <li>India</li>
+                        <li>Ireland</li>
+                        <li>Iran</li>
+                        <li>Italy</li>
+                        <li>Japan</li>
+                        <li>Mexico</li>
+                    </ul>
+                    <ul class="col-sm-2">
+                        <li>Mongolia</li>
+                        <li>Malaysia</li>
+                        <li>Netherlands</li>
+                        <li>Norway</li>
+                        <li>Pakistan</li>
+                        <li>Peru</li>
+                        <li>Philippines</li>
+                        <li>Poland</li>
+                        <li>Portugal</li>
+                    </ul>
+                    <ul class="col-sm-2">
+                        <li>Romania</li>
+                        <li>Spain</li>
+                        <li>South Africa</li>
+                        <li>South Korea</li>
+                        <li>Sweden</li>
+                        <li>Thailand</li>
+                        <li>Tunisia</li>
+                        <li>Turkey</li>
+                        <li>Taiwan</li>
+                    </ul>
+                    <ul class="col-sm-2">
+                        <li>United Kingdom</li>
+                        <li>United States</li>
+                        <li>Vietnam</li>
+                        <li>Europe</li>
+                    </ul>
+                </div>
+            </div>
             </p>
         </div>
         <div id="bubble-inputs">
@@ -97,7 +181,6 @@
     <div id="container-bubble">
         <div id="bubble-plot"></div>
     </div>
-    <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 
     <footer class="bg-dark text-light">
         <!-- Grid container -->
@@ -123,6 +206,7 @@
             <!--Grid row-->
         </div>
     </footer>
+    <script src="css/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
