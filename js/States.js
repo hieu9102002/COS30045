@@ -142,6 +142,7 @@ function fromStateData(statesCell, stateData, attrINFO) {
                 Nuclear: year.Nuclear / year.Total
             }
         })
+        let stateData2019 = data.years.at(-1)
         stateCell.renewable_percentage_2019 = stateData2019.Renewable / stateData2019.Total;
     });
 
