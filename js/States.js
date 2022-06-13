@@ -467,7 +467,7 @@ function autocomplete(inp, input_arr) {
         currentFocus = -1;
         /*create a DIV element that will contain the items (values):*/
         a = document.createElement("DIV");
-        a.setAttribute("id", this.id + " autocomplete-list");
+        a.setAttribute("id", this.id + "-autocomplete-list");
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
@@ -496,7 +496,7 @@ function autocomplete(inp, input_arr) {
     });
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function (e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
+        var x = document.getElementById(this.id + "-autocomplete-list");
         if (x) x = x.getElementsByTagName("div");
         if (e.keyCode == 40) {
             /*If the arrow DOWN key is pressed,
@@ -511,8 +511,8 @@ function autocomplete(inp, input_arr) {
             /*and and make the current item more visible:*/
             addActive(x);
         } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
+            // /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            // e.preventDefault();
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
                 if (x) x[currentFocus].click();
